@@ -34,6 +34,8 @@
 
 # Ignore the QT Build folder
 NimbleEditor/build/*
+#except our placeholder
+!NimbleEditor/build/.placeholder.txt
 
 # Ignore QT Project User Files
 *.pro.user
