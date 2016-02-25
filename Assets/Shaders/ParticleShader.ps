@@ -1,0 +1,15 @@
+Texture2D texture1;
+
+SamplerState SampleType;
+
+struct PixelInputType
+{
+	float4 Position : SV_POSITION;
+	float4 Color : COLOR0;
+	float2 TextureCoordinate : COLOR1;
+};
+
+float4 ParticlePixelShader(PixelInputType input) : SV_TARGET
+{
+	return texture1.Sample(SampleType, input.TextureCoordinate) * input.Color;
+}

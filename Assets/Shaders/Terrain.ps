@@ -1,0 +1,87 @@
+Texture2D grassTexture : register(t0);
+Texture2D slopeTexture : register(t1);
+Texture2D rockTexture  : register(t2);
+
+SamplerState SampleType;
+
+cbuffer LightBuffer
+{
+	// allows different intensities of different colors (bright white: 1.0f, 1.0f, 1.0f, a more natural
+	// evening/dusk: 0.6f, 0.6f, 0.6f. ambientLight is the light applied to all pixels regardless
+	// of their position or orientation.
+	float4 ambientColor;
+
+	// The color the light projects. If a pixel is lit, the intensity of the light striking it will
+	// be multiplied by this color (warm yellow could look like house lights mostly white should
+	// look like the sun.)
+	float4 diffuseColor;
+
+	// The normalized direction vector3 that describes the direction of the light as if the light
+	// was a (for all intents and purposes) infinite distance away (i.e. the sun).
+	float3 lightDirection;
+
+	// padding so we don't take performance hits when writing to this buffer
+	float padding;
+};
+
+struct PixelInputType
+{
+	float4 position : SV_POSITION;
+	float2 tex : TEXCOORD0;
+	float3 normal : NORMAL;
+};
+
+float4 TerrainPixelShader(PixelInputType input) : SV_TARGET
+{
+	float4 grassColor;
+	float4 slopeColor;
+	float4 rockColor;
+	float slope;
+	float blendAmount;
+	float4 textureColor = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	float3 lightDir;
+	float lightIntensity;
+	float4 color = ambientColor;
+
+	grassColor = grassTexture.Sample(SampleType, input.tex);
+
+	slopeColor = slopeTexture.Sample(SampleType, input.tex);
+
+	rockColor = rockTexture.Sample(SampleType, input.tex);
+
+	slope = 1.0f - input.normal.y;
+
+	if (slope < 0.2)
+	{
+		blendAmount = slope / 0.2f;
+		textureColor = lerp(grassColor, slopeColor, blendAmount);
+	}
+	
+	if((slope < 0.7) && (slope >= 0.2f))
+	{
+		blendAmount = (slope - 0.2f) * (1.0f / (0.7f - 0.2f));
+		textureColor = lerp(slopeColor, rockColor, blendAmount);
+	}
+
+	if (slope >= 0.7)
+	{
+		textureColor = rockColor;
+	}
+
+    	// Invert the light direction for calculations.
+    	lightDir = -lightDirection;
+
+	    // Calculate the amount of light on this pixel.
+    	lightIntensity = saturate(dot(input.normal, lightDir));
+	
+    	// Determine the final diffuse color based on the diffuse color and the amount of light intensity.
+    	color += (diffuseColor * lightIntensity);
+
+	    // Saturate the final light color.
+    	color = saturate(color);
+
+	    // Multiply the texture color and the final light color to get the result.
+    	color = color * textureColor;
+
+ 	return color;
+}

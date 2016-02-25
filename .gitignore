@@ -26,3 +26,25 @@
 *.exe
 *.out
 *.app
+
+### EDITOR ###
+
+# special exception on the directxtk folder
+!Externals/directxtk/lib/*
+
+# Ignore the QT Build folder
+NimbleEditor/build/*
+
+# Ignore QT Project User Files
+*.pro.user
+
+### GRAPHICS ###
+NimbleGraphics/Debug/*
+
+*.sdf
+
+NimbleGraphics/.vs/*
+
+NimbleGraphics/NimbleGraphics/x64/*
+
+*.vcxproj.user

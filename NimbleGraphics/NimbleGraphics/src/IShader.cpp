@@ -1,0 +1,286 @@
+#include "IShader.h"
+#include <d3dcompiler.h>
+#include "Graphics.h"
+
+
+bool IShader::Load(ComPtr<ID3D11Device> device)
+{
+	return this->Init(device);
+}
+
+IShader::IShader(IShader&& other)
+	: _vsFilename(0), _psFilename(0), _vertexShaderEntryPoint(0),
+	_pixelShaderEntryPoint(0), _vsVersion(0), _psVersion(0), _vertexShader(0), _pixelShader(), _layout(0), _matrixBuffer(0), _worldMatrix(),
+	_viewMatrix(), _projectionMatrix()
+{
+	LOG_INFO("IShader Move!");
+
+	_vsFilename = other._vsFilename;
+	_psFilename = other._psFilename;
+	_vertexShaderEntryPoint = other._vertexShaderEntryPoint;
+	_pixelShaderEntryPoint = other._pixelShaderEntryPoint;
+	_vsVersion = other._vsVersion;
+	_psVersion = other._psVersion;
+	_vertexShader = other._vertexShader;
+	_pixelShader = other._pixelShader;
+	_layout = other._layout;
+	_matrixBuffer = other._matrixBuffer;
+	_worldMatrix = other._worldMatrix;
+	_viewMatrix = other._viewMatrix;
+	_projectionMatrix = other._projectionMatrix;
+}
+
+IShader& IShader::operator=(IShader&& other)
+{
+	LOG_INFO("IShader op=!");
+	if (this != &other)
+	{
+		_vertexShader = other._vertexShader;
+		_pixelShader = other._pixelShader;
+		_layout = other._layout;
+		_matrixBuffer = other._matrixBuffer;
+		_worldMatrix = other._worldMatrix;
+		_viewMatrix = other._viewMatrix;
+		_projectionMatrix = other._projectionMatrix;
+
+		_vsFilename = other._vsFilename;
+		_psFilename = other._psFilename;
+		_vertexShaderEntryPoint = other._vertexShaderEntryPoint;
+		_pixelShaderEntryPoint = other._pixelShaderEntryPoint;
+		_vsVersion = other._vsVersion;
+		_psVersion = other._psVersion;
+	}
+
+	return *this;
+}
+
+void IShader::Unload()
+{
+	Shutdown();
+}
+
+IShader::IShader()
+{
+	LOG_INFO("IShader default c'tor");
+}
+
+IShader::~IShader()
+{
+	LOG_INFO("IShader Destruct!");
+}
+
+D3D11_BUFFER_DESC IShader::GetMatrixBufferDescription()
+{
+	D3D11_BUFFER_DESC matrixBufferDesc;
+
+	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	matrixBufferDesc.ByteWidth = sizeof(MatrixBuffer);
+	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	matrixBufferDesc.MiscFlags = 0;
+	matrixBufferDesc.StructureByteStride = 0;
+
+	return matrixBufferDesc;
+}
+
+bool IShader::SetShaderParameters(ComPtr<ID3D11DeviceContext> deviceContext)
+{
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+
+	result = deviceContext->Map(this->_matrixBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+
+	if (FAILED(result))
+	{
+        return false;
+	}
+
+	MatrixBuffer* dataPtr;
+
+	dataPtr = (MatrixBuffer*)mappedResource.pData;
+
+	_worldMatrix = _worldMatrix.Transpose();
+	_viewMatrix = _viewMatrix.Transpose();
+	_projectionMatrix = _projectionMatrix.Transpose();
+
+	// Copy the matrices into the constant buffer.
+	dataPtr->world = _worldMatrix;
+	dataPtr->view = _viewMatrix;
+	dataPtr->projection = _projectionMatrix;
+
+	deviceContext->Unmap(this->_matrixBuffer.Get(), 0);
+	deviceContext->VSSetConstantBuffers(0, 1, _matrixBuffer.GetAddressOf());
+
+	return true;
+}
+
+bool IShader::Init(ComPtr<ID3D11Device> device)
+{
+	HRESULT result;
+	ID3D10Blob* errorMessage;
+	ID3D10Blob* vertexShaderBuffer;
+	ID3D10Blob* pixelShaderBuffer;
+
+	// Initialize the pointers this function will use to null.
+	errorMessage = 0;
+	vertexShaderBuffer = 0;
+	pixelShaderBuffer = 0;
+
+	// Compile the vertex shader code.
+	result = D3DCompileFromFile(_vsFilename.c_str(), NULL, NULL, _vertexShaderEntryPoint.c_str(), _vsVersion.c_str(),
+		D3D10_SHADER_ENABLE_STRICTNESS, 0,
+		&vertexShaderBuffer, &errorMessage);
+	
+	if (FAILED(result))
+	{
+		if (errorMessage)
+		{
+			char* compileErrors = (char*)(errorMessage->GetBufferPointer());
+			size_t errorBufferSize = errorMessage->GetBufferSize();
+
+			for (unsigned int i = 0; i < errorBufferSize; ++i)
+			{
+				cout << compileErrors[i];
+			}
+		}
+		else
+		{
+			cout << "Could not find shader: " << _vsFilename.c_str() << endl;
+		}
+		return false;
+	}
+
+	// Compile the pixel shader code.
+	result = D3DCompileFromFile(_psFilename.c_str(), NULL, NULL, _pixelShaderEntryPoint.c_str(), _psVersion.c_str(),
+		D3D10_SHADER_ENABLE_STRICTNESS, 0,
+		&pixelShaderBuffer, &errorMessage);
+
+	if (FAILED(result))
+	{
+        if (errorMessage)
+        {
+            char* compileErrors = (char*)(errorMessage->GetBufferPointer());
+            size_t errorBufferSize = errorMessage->GetBufferSize();
+
+            for (size_t i = 0; i < errorBufferSize; ++i)
+            {
+                cout << compileErrors[i];
+            }
+        }
+        else
+        {
+            cout << "Could not find shader: " << _vsFilename.c_str() << endl;
+        }
+		return false;
+	}
+
+	// Create the vertex shader from the buffer.
+	result = device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(),
+		vertexShaderBuffer->GetBufferSize(), NULL, _vertexShader.GetAddressOf());
+	if (FAILED(result))
+	{
+		LOG_ERROR("Couldn't create vertex shader.");
+		return false;
+	}
+
+	// Create the pixel shader from the buffer.
+	result = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(),
+		pixelShaderBuffer->GetBufferSize(), NULL, _pixelShader.GetAddressOf());
+
+	if (FAILED(result))
+	{
+		LOG_ERROR("Couldn't create pixel shader.");
+		return false;
+	}
+
+	unsigned int numElements;
+	shared_ptr<D3D11_INPUT_ELEMENT_DESC> polygonLayout;
+
+	this->GetPolygonLayout(polygonLayout, numElements);
+
+	// Create the vertex input layout.
+	result = device->CreateInputLayout(polygonLayout.get(), numElements, vertexShaderBuffer->GetBufferPointer(),
+		vertexShaderBuffer->GetBufferSize(), _layout.GetAddressOf());
+	if (FAILED(result))
+	{
+		LOG_ERROR("Failed to create vertex input layout.");
+		return false;
+	}
+
+	// Release the vertex shader buffer and pixel shader buffer since they are no longer needed.
+	vertexShaderBuffer->Release();
+	vertexShaderBuffer = 0;
+
+	pixelShaderBuffer->Release();
+	pixelShaderBuffer = 0;
+
+	// Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
+	D3D11_BUFFER_DESC matrixBufferDesc = this->GetMatrixBufferDescription();
+
+	// Create the constant buffer pointer so we can access the vertex shader constant buffer
+	// from within this class.
+	result = device->CreateBuffer(&matrixBufferDesc, NULL, _matrixBuffer.GetAddressOf());
+	if (FAILED(result))
+	{
+		LOG_ERROR("Failed to create Matrix Buffer in IShader");
+		return false;
+	}
+	LOG_INFO("Created Matrix Buffer successfully.");
+
+	return true;
+}
+
+void IShader::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, WCHAR* shaderFilename)
+{
+	char* compileErrors;
+	size_t bufferSize, i;
+	ofstream fout;
+
+
+	// Get a pointer to the error message text buffer.
+	compileErrors = (char*)(errorMessage->GetBufferPointer());
+
+	// Get the length of the message.
+	bufferSize = errorMessage->GetBufferSize();
+
+	// Open a file to write the error message to.
+	fout.open("shader-error.txt");
+
+	// Write out the error message.
+	for (i = 0; i<bufferSize; i++)
+	{
+		fout << compileErrors[i];
+	}
+
+	// Close the file.
+	fout.close();
+
+	// Release the error message.
+	errorMessage->Release();
+	errorMessage = 0;
+
+	// Pop a message up on the screen to notify the user to check the text file for compile errors.
+	MessageBox(hwnd, L"Error compiling shader.  Check shader-error.txt for message.",
+		shaderFilename, MB_OK);
+
+	return;
+}
+
+void IShader::Shutdown()
+{
+}
+
+void IShader::SetWorldMatrix(Matrix worldMatrix)
+{
+	this->_worldMatrix = worldMatrix;
+}
+
+void IShader::SetViewMatrix(Matrix viewMatrix)
+{
+	this->_viewMatrix = viewMatrix;
+}
+
+void IShader::SetProjectionMatrix(Matrix projectionMatrix)
+{
+	this->_projectionMatrix = projectionMatrix;
+}

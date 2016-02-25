@@ -1,0 +1,76 @@
+#pragma once
+#include <iostream>
+#include <CommonStates.h>
+#include <SimpleMath.h>
+#include <chrono>
+#include "Logger.h"
+
+using DirectX::SimpleMath::Ray;
+using DirectX::CommonStates;
+using std::unique_ptr;
+
+inline void SetD3DDebugName(ID3D11DeviceChild* child, const std::string& name)
+{
+	if (child != nullptr)
+	{
+		child->SetPrivateData(WKPDID_D3DDebugObjectName, name.size(), name.c_str());
+	}
+}
+
+inline float lerp(float value1, float value2, float amount)
+{
+	return value1 + ((value2 - value1) * amount);
+}
+
+inline float frand()
+{
+	float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	return r;
+}
+
+inline float RandomFloat(float a, float b) 
+{
+	float random = ((float)rand()) / (float)RAND_MAX;
+	float diff = b - a;
+	float r = random * diff;
+	return a + r;
+}
+
+class StatesHelper
+{
+public:
+	static StatesHelper& GetInstance()
+	{
+		static StatesHelper instance;
+		return instance;
+	}
+
+	inline CommonStates* GetStates()
+	{
+		return states.get();
+	}
+
+	inline void Load(ComPtr<ID3D11Device> device)
+	{
+		states.reset(new CommonStates(device.Get()));
+	}
+
+private:
+	unique_ptr<CommonStates> states;
+};
+
+static std::chrono::time_point<std::chrono::system_clock> g_start;
+static std::chrono::time_point<std::chrono::system_clock> g_end;
+
+inline static void StartDebugTimer()
+{
+	g_start = std::chrono::system_clock::now();
+}
+
+inline static void EndDebugTimer(const std::string& label = "")
+{
+	g_end = std::chrono::system_clock::now();
+
+	std::chrono::duration<double> elapsed_seconds = g_end - g_start;
+	LOG_INFO(label, elapsed_seconds.count());
+}
