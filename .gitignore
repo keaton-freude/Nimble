@@ -50,3 +50,5 @@ NimbleGraphics/.vs/*
 NimbleGraphics/NimbleGraphics/x64/*
 
 *.vcxproj.user
+
+*.VC.opendb

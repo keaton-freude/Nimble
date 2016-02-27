@@ -1,15 +1,20 @@
 #pragma once
 #include <d3d11.h>
-#include <memory>
-#include <SimpleMath.h>
-#include "IResource.h"
+#include <fstream>
 #include <wrl\client.h>
+#include <memory>
+#include <d3dcompiler.h>
+#include <SimpleMath.h>
+
+#include "Logger.h"
+#include "IResource.h"
 
 using DirectX::SimpleMath::Matrix;
 using std::string;
 using std::wstring;
 using Microsoft::WRL::ComPtr;
 using std::shared_ptr;
+using std::ofstream;
 
 class IShader : public IResource
 {
@@ -33,8 +38,8 @@ protected:
 
 	virtual bool SetShaderParameters(ComPtr<ID3D11DeviceContext> deviceContext);
 	virtual bool Init(ComPtr<ID3D11Device> device);
-	virtual void OutputShaderErrorMessage(ID3D10Blob* errorMessage, 
-		HWND hwnd, WCHAR* shaderFilename);
+
+
 	virtual void Shutdown();
 
 protected:
