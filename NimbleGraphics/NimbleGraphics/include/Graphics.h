@@ -20,6 +20,7 @@
 #include "Light.h"
 #include "LineDrawable.h"
 #include "Logger.h"
+#include "ParticleEngine.h"
 #include <CommonStates.h>
 
 using DirectX::CommonStates;
@@ -67,7 +68,7 @@ public:
 	void SetAmbientLight(float r, float g, float b);
 	void SetDiffuseColor(float r, float g, float b);
 	bool Draw(RENDER_MODE mode, float dt);
-	shared_ptr<ParticleSystem> GetParticleSystem();
+	shared_ptr<ParticleEngine> GetParticleEngine();
 
 private:
 	bool RenderMinimap();
@@ -84,7 +85,7 @@ private:
 	shared_ptr<Light> _light0;
 	shared_ptr<Frustum> _frustum;
 	shared_ptr<LineDrawable> _line;
-	shared_ptr<ParticleSystem> particleSystem;
+	shared_ptr<ParticleEngine> particleEngine;
 
 	// How much time has passed since the last frame, used for smooth interpolation
 	float _dt;

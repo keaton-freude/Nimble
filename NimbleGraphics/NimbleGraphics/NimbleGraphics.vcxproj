@@ -35,6 +35,8 @@
     <ClInclude Include="include\LineDrawable.h" />
     <ClInclude Include="include\Logger.h" />
     <ClInclude Include="include\NimbleD3D.h" />
+    <ClInclude Include="include\ParticleEffect.h" />
+    <ClInclude Include="include\ParticleEngine.h" />
     <ClInclude Include="include\ParticleSettings.h" />
     <ClInclude Include="include\ParticleShader.h" />
     <ClInclude Include="include\ParticleSystem.h" />
@@ -56,6 +58,8 @@
     <ClInclude Include="src\Emitter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ParticleEffect.cpp" />
+    <ClCompile Include="src\ParticleEngine.cpp" />
     <ClCompile Include="src\ParticleSettings.cpp" />
     <ClCompile Include="src\ParticleShader.cpp" />
     <ClCompile Include="src\ParticleSystem.cpp" />

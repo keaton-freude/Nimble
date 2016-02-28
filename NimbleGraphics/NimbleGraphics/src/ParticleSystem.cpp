@@ -5,7 +5,7 @@
 
 using DirectX::Colors::Black;
 
-ParticleSystem::ParticleSystem(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext)
+ParticleSystem::ParticleSystem(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext, const ParticleSettings& settings)
 	: first_active_particle(0), first_free_particle(0), first_new_particle(0), first_retired_particle(0), current_time(0.0f),
 	startIndex(0), length(0)
 {
@@ -13,7 +13,6 @@ ParticleSystem::ParticleSystem(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceC
 	// constant shader values, and we can't stomp over another particle system's
 	// cbuffer space (alternative is to re-write these values per frame, instead of per
 	// lifetime of the system).
-	settings = ParticleSettings();
 
 	particle_shader.reset(new ParticleShader(device, settings));
 
@@ -25,7 +24,7 @@ ParticleSystem::ParticleSystem(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceC
 void ParticleSystem::Update(const Matrix& viewMatrix, const Matrix& projectionMatrix, float dt)
 {
 	current_time += dt;
-	for (int i = 0; i < 25; ++i)
+	for (int i = 0; i < 250; ++i)
 	{
 		Vector3 pos = Vector3(RandomFloat(-0.5f, 0.5f), 0.0f, RandomFloat(-0.5f, 0.5f));
 		AddParticle(pos);
@@ -52,7 +51,16 @@ void ParticleSystem::Draw(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContex
 
 	if (first_active_particle != first_free_particle)
 	{
-		deviceContext->OMSetBlendState(StatesHelper::GetInstance().GetStates()->NonPremultiplied(), Black, 0xFFFFFFFF);
+		if (settings.blend_state == BLEND_STATE::Alpha)
+		{
+			deviceContext->OMSetBlendState(StatesHelper::GetInstance().GetStates()->NonPremultiplied(), Black, 0xFFFFFFFF);
+		}
+		else if (settings.blend_state == BLEND_STATE::Additive)
+		{
+			deviceContext->OMSetBlendState(StatesHelper::GetInstance().GetStates()->Additive(), Black, 0xFFFFFFFF);
+		}
+			
+		
 		deviceContext->OMSetDepthStencilState(StatesHelper::GetInstance().GetStates()->DepthRead(), 0);
 
 		unsigned int stride = sizeof(ParticleVertex);
@@ -61,8 +69,6 @@ void ParticleSystem::Draw(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContex
 		deviceContext->IASetVertexBuffers(0, 1, vertex_buffer->GetVertexBuffer().GetAddressOf(), &stride, &offset);
 		deviceContext->IASetIndexBuffer(this->vertex_buffer->GetIndexBuffer().Get() , DXGI_FORMAT_R32_UINT, 0);
 		deviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-
 
 		if (first_active_particle < first_free_particle)
 		{

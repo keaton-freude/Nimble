@@ -15,7 +15,7 @@ using DirectX::SimpleMath::Ray;
 using namespace std;
 
 Graphics::Graphics()
-	: _dt(0.0f), _D3D(0), _camera(0)
+	: _dt(0.0f), _D3D(0), _camera(0), particleEngine(std::make_shared<ParticleEngine>())
 {
 	this->_light0 = shared_ptr<Light>(new Light());
 	LOG_INFO("Graphics constructed.");
@@ -91,8 +91,6 @@ bool Graphics::Init(int screenWidth, int screenHeight, HWND hwnd, bool fullScree
 
 	_frustum = make_shared<Frustum>();
 
-	particleSystem = make_shared<ParticleSystem>(_D3D->GetDevice(), _D3D->GetDeviceContext());
-
 	return true;
 }
 
@@ -136,9 +134,9 @@ bool Graphics::Draw(RENDER_MODE mode, float dt)
 	}
 }
 
-shared_ptr<ParticleSystem> Graphics::GetParticleSystem()
+shared_ptr<ParticleEngine> Graphics::GetParticleEngine()
 {
-	return particleSystem;
+	return particleEngine;
 }
 
 bool Graphics::RenderMinimap()
@@ -164,8 +162,11 @@ bool Graphics::RenderViewport()
 
 	//terrain->Draw(_D3D->GetDevice(), _D3D->GetDeviceContext(), viewMatrix, projectionMatrix, _light0, _frustum);
 
-	particleSystem->Update(*viewMatrix, *projectionMatrix, _dt);
-	particleSystem->Draw(_D3D->GetDevice(), _D3D->GetDeviceContext());
+	//particleSystem->Update(*viewMatrix, *projectionMatrix, _dt);
+	//particleSystem->Draw(_D3D->GetDevice(), _D3D->GetDeviceContext());
+	particleEngine->Update(*viewMatrix, *projectionMatrix, _dt);
+	particleEngine->Draw(_D3D->GetDevice(), _D3D->GetDeviceContext());
+
 	
 	StartDebugTimer();
 	_D3D->EndScene();
@@ -191,29 +192,30 @@ string Graphics::GetStatistics()
 	//
 	//stats += " | Terrain Draw Count: ";
 	//stats += std::to_string(terrain->GetDrawCount());
-	/*int total_particles = 0;
-	if (particleSystem->first_active_particle < particleSystem->first_free_particle)
-	{
-		total_particles = particleSystem->first_new_particle - particleSystem->first_active_particle;
-	}
-	else
-	{ 
-		total_particles += (particleSystem->settings.max_particles - particleSystem->first_active_particle);
 
-		if (particleSystem->first_free_particle > 0)
-		{
-			total_particles += particleSystem->first_free_particle;
-		}
-	}
+	//int total_particles = 0;
+	//if (particleSystem->first_active_particle < particleSystem->first_free_particle)
+	//{
+	//	total_particles = particleSystem->first_new_particle - particleSystem->first_active_particle;
+	//}
+	//else
+	//{ 
+	//	total_particles += (particleSystem->settings.max_particles - particleSystem->first_active_particle);
+
+	//	if (particleSystem->first_free_particle > 0)
+	//	{
+	//		total_particles += particleSystem->first_free_particle;
+	//	}
+	//}
 
 
-	stats = "Active: " + std::to_string(particleSystem->first_active_particle) +
-		"New: " + to_string(particleSystem->first_new_particle) +
-		"Free: " + to_string(particleSystem->first_free_particle) +
-		"Retired: " + to_string(particleSystem->first_retired_particle); +
-		" | Total Particles: " + to_string(total_particles);
+	//stats = "Active: " + std::to_string(particleSystem->first_active_particle) +
+	//	"New: " + to_string(particleSystem->first_new_particle) +
+	//	"Free: " + to_string(particleSystem->first_free_particle) +
+	//	"Retired: " + to_string(particleSystem->first_retired_particle); +
+	//	" | Total Particles: " + to_string(total_particles);
 
-	return "Total Particles " + to_string(total_particles);*/
+	//return "Total Particles " + to_string(total_particles);
 	return stats;
 }
 

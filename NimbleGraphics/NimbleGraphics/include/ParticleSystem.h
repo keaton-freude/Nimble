@@ -12,7 +12,8 @@ using std::unique_ptr;
 class ParticleSystem
 {
 public:
-	ParticleSystem(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext);
+	ParticleSystem(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext,
+		const ParticleSettings& settings);
 
 	void Update(const Matrix& viewMatrix, const Matrix& projectionMatrix, float dt);
 	void Draw(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext);
