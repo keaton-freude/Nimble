@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     qcustomplot.cpp \
     ../NimbleGraphics/NimbleGraphics/src/ParticleSettings.cpp \
     ../NimbleGraphics/NimbleGraphics/src/ParticleShader.cpp \
-    ../NimbleGraphics/NimbleGraphics/src/ParticleSystem.cpp
+    ../NimbleGraphics/NimbleGraphics/src/ParticleSystem.cpp \
+    ../NimbleGraphics/NimbleGraphics/src/*.cpp
 
 SOURCES += ..\NimbleGraphics\NimbleGraphics\src\*.cpp
 

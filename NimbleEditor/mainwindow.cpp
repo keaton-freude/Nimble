@@ -8,6 +8,7 @@
 #include <regex>
 #include <QColorDialog>
 #include <QFileDialog>
+#include "ParticleSettings.h"
 using std::vector;
 
 MainWindow::MainWindow(QWidget *parent)
@@ -425,111 +426,58 @@ bool GetVector3(string text, Vector3& vector)
 
 void MainWindow::on_btnUpdate_clicked()
 {
-/*
-    ParticleSystemConfig config;
-    config.name = ui->txtParticleSystemName->text().toStdString();
-    config.texture_name = "..\\..\\Assets\\Textures\\" + ui->txtTextureName->text().toStdString();
-    config.particles_per_second = std::stoi(ui->txtParticlesPerSecond->text().toStdString());
-    config.blend_mode = ui->cmbBlendMode->currentText().toStdString();
+    ParticleSettings settings;
 
-    if (GetMinMaxVector3(ui->txtPositionOffset->text().toStdString(), config.position_offset_min, config.position_offset_max))
+    settings.system_name = ui->txtParticleSystemName->text().toStdString();
+    settings.texture_name = "..\\..\\Assets\\Textures\\" + ui->txtTextureName->text().toStdString();
+    settings.particles_per_second = std::stof(ui->txtParticlesPerSecond->text().toStdString());
+    settings.max_particles = stof(ui->txtMaxParticles->text().toStdString());
+
+
+
+    if (ui->cmbBlendMode->currentText() == "Alpha")
     {
+        settings.blend_state = BLEND_STATE::Alpha;
     }
-    else
+    else if (ui->cmbBlendMode->currentText() == "Additive")
     {
-        // try for a regular Vector3
-        if (GetVector3(ui->txtPositionOffset->text().toStdString(), config.position_offset_min))
-        {
-            // do a copy into our max
-            config.position_offset_max = config.position_offset_min;
-        }
-        else
-        {
-            cout << "Input invalid!" << endl;
-            return;
-        }
+        settings.blend_state = BLEND_STATE::Additive;
     }
 
-    if (GetMinMaxVector3(ui->txtVelocity->text().toStdString(), config.velocity_min, config.velocity_max))
-    {
-    }
-    else
-    {
-        // try for a regular Vector3
-        if (GetVector3(ui->txtVelocity->text().toStdString(), config.velocity_min))
-        {
-            // do a copy into our max
-            config.velocity_max = config.velocity_min;
-        }
-        else
-        {
-            cout << "Input invalid!" << endl;
-            return;
-        }
-    }
+    settings.min_position = Vector3(ui->min_position_offset_x->value(), ui->min_position_offset_y->value(), ui->min_position_offset_z->value());
+    settings.max_position = Vector3(ui->max_position_offset_x->value(), ui->max_position_offset_y->value(), ui->max_position_offset_z->value());
 
-    if (GetMinMaxVector3(ui->txtAcceleration->text().toStdString(), config.acceleration_min, config.acceleration_max))
-    {
-    }
-    else
-    {
-        // try for a regular Vector3
-        if (GetVector3(ui->txtAcceleration->text().toStdString(), config.acceleration_min))
-        {
-            // do a copy into our max
-            config.acceleration_max = config.acceleration_min;
-        }
-        else
-        {
-            cout << "Input invalid!" << endl;
-            return;
-        }
-    }
+    settings.min_velocity = Vector3(ui->min_velocity_x->value(), ui->min_velocity_y->value(), ui->min_velocity_z->value());
+    settings.max_velocity = Vector3(ui->max_velocity_x->value(), ui->max_velocity_y->value(), ui->max_velocity_z->value());
 
-    auto start_color = ui->startColorWidget->palette().background().color();
-    auto end_color = ui->endColorWidget->palette().background().color();
+    settings.min_acceleration = Vector3(ui->min_acceleration_x->value(), ui->min_acceleration_y->value(), ui->min_acceleration_z->value());
+    settings.max_acceleration = Vector3(ui->max_acceleration_x->value(), ui->max_acceleration_y->value(), ui->max_acceleration_z->value());
 
-    Vector2 alpha;
+    settings.min_color = Color(ui->startColorWidget->palette().background().color().redF(),
+                               ui->startColorWidget->palette().background().color().greenF(),
+                               ui->startColorWidget->palette().background().color().blueF(),
+                               ui->alpha_start->value());
 
-    if (GetVector2(ui->txtAlpha->text().toStdString(), alpha))
-    {
-    }
-    else
-    {
-        cout << "Input invalid!" << endl;
-        return;
-    }
+    settings.max_color = Color(ui->endColorWidget->palette().background().color().redF(),
+                               ui->endColorWidget->palette().background().color().greenF(),
+                               ui->endColorWidget->palette().background().color().blueF(),
+                               ui->alpha_end->value());
 
-    if (GetVector2(ui->txtSize->text().toStdString(), config.size))
-    {
-    }
-    else
-    {
-        cout << "Input invalid!" << endl;
-        return;
-    }
+    float life_min = 0.0f;
+    float life_max = 0.0f;
+    life_min = ui->life_min->value();
+    life_max = ui->life_max->value();
 
-    config.start_color = Color(start_color.redF(), start_color.greenF(), start_color.blueF(), alpha.x);
-    config.end_color = Color(end_color.redF(), end_color.greenF(), end_color.blueF(), alpha.y);
-    config.gravity = Vector3(0.0f, -9.81f, 0.0f);
+    settings.duration = life_max;
+    settings.duration_randomness = life_max - life_min;
 
-    if (GetVector2(ui->txtLife->text().toStdString(), config.life))
-    {
-    }
-    else
-    {
-        cout << "Input invalid!" << endl;
+    settings.start_size = Vector2(ui->start_size_x->value(), ui->start_size_y->value());
+    settings.end_size = Vector2(ui->end_size_x->value(), ui->end_size_y->value());
 
-        return;
-    }
+    ui->viewport_2->GetGraphics()->GetParticleEngine()->Clear();
+    ui->viewport_2->GetGraphics()->GetParticleEngine()->Add(ui->viewport_2->GetGraphics()->GetD3D()->GetDevice(), ui->viewport_2->GetGraphics()->GetD3D()->GetDeviceContext(), vector<ParticleSettings>( { settings } ));
 
-    config.max_particles = std::stoi(ui->txtMaxParticles->text().toStdString());
 
-    //ui->viewport_2->UpdateParticle()
-    auto D3D = ui->viewport_2->GetGraphics()->GetD3D().get();
-
-    ui->viewport_2->GetGraphics()->GetParticleEngine()->SetParticleSystem(D3D->GetDevice(), D3D->GetDeviceContext(), config);
-    */
 }
 
 
