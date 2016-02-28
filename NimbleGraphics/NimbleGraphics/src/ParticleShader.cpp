@@ -66,8 +66,8 @@ void ParticleShader::CreateShaderConstants(ComPtr<ID3D11Device> device, Particle
 	parameters.MinColor = settings.min_color;
 	parameters.MaxColor = settings.max_color;
 	parameters.RotateSpeed = Vector2(settings.min_rotate_speed, settings.max_rotate_speed);
-	parameters.StartSize = Vector2(settings.min_start_size, settings.max_start_size);
-	parameters.EndSize = Vector2(settings.min_end_size, settings.max_end_size);
+	parameters.StartSize = settings.start_size;
+	parameters.EndSize = settings.end_size;
 
 	constantParticleBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
 	constantParticleBufferDesc.ByteWidth = sizeof(ConstantParticleParameters);

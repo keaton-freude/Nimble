@@ -23,7 +23,12 @@ public:
 	// max number of particles
 	int max_particles;
 
+	float particles_per_second;
+
+	string system_name;
+
 	// how long each particle will last in seconds
+	// between duration.x and duration.y
 	float duration;
 
 	// if greater than zero, some particles will last a shorter time than others
@@ -33,6 +38,10 @@ public:
 	// makes each particle has different velocities
 	Vector3 min_velocity;
 	Vector3 max_velocity;
+	Vector3 min_position;
+	Vector3 max_position;
+	Vector3 min_acceleration;
+	Vector3 max_acceleration;
 
 	Vector3 gravity;
 
@@ -47,11 +56,9 @@ public:
 	float min_rotate_speed;
 	float max_rotate_speed;
 
-	float min_start_size;
-	float max_start_size;
-
-	float min_end_size;
-	float max_end_size;
+	// actual value chosen randomly between start_size.x and start_size.y
+	Vector2 start_size;
+	Vector2 end_size;
 
 	BLEND_STATE blend_state;
 

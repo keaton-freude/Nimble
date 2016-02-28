@@ -150,7 +150,7 @@ bool Graphics::RenderMinimap()
 bool Graphics::RenderViewport()
 {
 	// Clear the buffers to begin the scene.
-	_D3D->BeginScene(CornflowerBlue);
+	_D3D->BeginScene(Black);
 
 	_camera->Update();
 
@@ -168,9 +168,9 @@ bool Graphics::RenderViewport()
 	particleEngine->Draw(_D3D->GetDevice(), _D3D->GetDeviceContext());
 
 	
-	StartDebugTimer();
+	//StartDebugTimer();
 	_D3D->EndScene();
-	EndDebugTimer("PS: ");
+	//EndDebugTimer("PS: ");
 
 	return true;
 }

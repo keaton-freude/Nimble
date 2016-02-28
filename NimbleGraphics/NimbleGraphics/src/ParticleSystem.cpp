@@ -7,7 +7,7 @@ using DirectX::Colors::Black;
 
 ParticleSystem::ParticleSystem(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext, const ParticleSettings& settings)
 	: first_active_particle(0), first_free_particle(0), first_new_particle(0), first_retired_particle(0), current_time(0.0f),
-	startIndex(0), length(0)
+	startIndex(0), length(0), timeLeftOver(0.0f), settings(settings)
 {
 	// each particle system needs it own particle shader because we rely on
 	// constant shader values, and we can't stomp over another particle system's
@@ -24,10 +24,30 @@ ParticleSystem::ParticleSystem(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceC
 void ParticleSystem::Update(const Matrix& viewMatrix, const Matrix& projectionMatrix, float dt)
 {
 	current_time += dt;
-	for (int i = 0; i < 250; ++i)
+
+	float timeBetweenParticles = 1.0f / settings.particles_per_second;
+
+	if (dt > 0)
 	{
-		Vector3 pos = Vector3(RandomFloat(-0.5f, 0.5f), 0.0f, RandomFloat(-0.5f, 0.5f));
-		AddParticle(pos);
+		float timeToSpend = timeLeftOver + dt;
+
+		float currentTime = -timeLeftOver;
+
+		while (timeToSpend > timeBetweenParticles)
+		{
+			currentTime += timeBetweenParticles;
+			timeToSpend -= timeBetweenParticles;
+
+			LOG_INFO("Adding particle...");
+
+			Vector3 pos = Vector3(
+				RandomFloat(settings.min_position.x, settings.max_position.x),
+				RandomFloat(settings.min_position.y, settings.max_position.y),
+				RandomFloat(settings.min_position.z, settings.max_position.z));
+			AddParticle(pos);
+		}
+
+		timeLeftOver = timeToSpend;
 	}
 
 	RetireActiveParticles();

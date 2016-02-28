@@ -13,7 +13,7 @@ ParticleEngine::~ParticleEngine()
 
 void ParticleEngine::Update(const Matrix & viewMatrix, const Matrix & projectionMatrix, float dt)
 {
-	_dt += dt;
+	//_dt += dt;
 
 	// if we don't have any effects, we can reset dt. might save us from losing
 	// float precision if we take advantage of times when no effects are being rendered

@@ -33,6 +33,7 @@ private:
 
 	float current_time;
 	int draw_counter;
+	float timeLeftOver;
 
 	// methods
 	void Initialize();
