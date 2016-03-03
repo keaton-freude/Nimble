@@ -6,17 +6,17 @@
 using DirectX::Colors::Black;
 
 ParticleSystem::ParticleSystem(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext, const ParticleSettings& settings)
-	: first_active_particle(0), first_free_particle(0), first_new_particle(0), first_retired_particle(0), current_time(0.0f),
-	startIndex(0), length(0), timeLeftOver(0.0f), settings(settings)
+	: settings(settings), current_time(0.0f), timeLeftOver(0.0f), first_active_particle(0), first_new_particle(0),
+	first_free_particle(0), first_retired_particle(0), startIndex(0), length(0), timeBetweenParticles(1.0f / settings.particles_per_second)
 {
 	// each particle system needs it own particle shader because we rely on
 	// constant shader values, and we can't stomp over another particle system's
 	// cbuffer space (alternative is to re-write these values per frame, instead of per
 	// lifetime of the system).
-
 	particle_shader.reset(new ParticleShader(device, settings));
 
-	texture = std::make_shared<Texture>(device, deviceContext, settings.texture_name);
+	texture = std::make_unique<Texture>(device, deviceContext, settings.texture_name);
+
 	Initialize();
 	LoadContent(device);
 }
@@ -24,8 +24,6 @@ ParticleSystem::ParticleSystem(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceC
 void ParticleSystem::Update(const Matrix& viewMatrix, const Matrix& projectionMatrix, float dt)
 {
 	current_time += dt;
-
-	float timeBetweenParticles = 1.0f / settings.particles_per_second;
 
 	if (dt > 0)
 	{
@@ -111,11 +109,11 @@ void ParticleSystem::Draw(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContex
 
 void ParticleSystem::Initialize()
 {
-	particles = shared_ptr<ParticleVertex>(new ParticleVertex[settings.max_particles * 4]);
+	particles = std::make_unique<ParticleVertex[]>(settings.max_particles * 4);
 	auto p_particles = particles.get();
 
 	// make quads
-	for (int i = 0; i < settings.max_particles; ++i)
+	for (auto i = 0; i < settings.max_particles; ++i)
 	{
 		p_particles[i * 4 + 0].Corner = Vector2(-1.0f, -1.0f); // bottom left
 		p_particles[i * 4 + 1].Corner = Vector2(1.0f, -1.0f);  // bottom right

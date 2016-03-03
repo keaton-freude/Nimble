@@ -17,23 +17,25 @@ public:
 
 	void Update(const Matrix& viewMatrix, const Matrix& projectionMatrix, float dt);
 	void Draw(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext);
+
+private:
+	// fields
+	unique_ptr<Texture> texture;
+	unique_ptr<ParticleVertex[]> particles;
+	shared_ptr<VertexBuffer> vertex_buffer; // contains both VertexBuffer and IndexBuffer
+	unique_ptr<ParticleShader> particle_shader;
+
+	ParticleSettings settings;
+	float current_time;
+	int draw_counter;
+	float timeLeftOver;
 	int first_active_particle;
 	int first_new_particle;
 	int first_free_particle;
 	int first_retired_particle;
 	int startIndex;
 	int length;
-	ParticleSettings settings;
-private:
-
-	shared_ptr<Texture> texture;
-	shared_ptr<ParticleVertex> particles;
-	shared_ptr<VertexBuffer> vertex_buffer; // contains both VertexBuffer and IndexBuffer
-	unique_ptr<ParticleShader> particle_shader;
-
-	float current_time;
-	int draw_counter;
-	float timeLeftOver;
+	float timeBetweenParticles;
 
 	// methods
 	void Initialize();
