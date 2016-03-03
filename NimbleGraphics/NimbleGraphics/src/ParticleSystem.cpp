@@ -6,7 +6,7 @@
 using DirectX::Colors::Black;
 
 ParticleSystem::ParticleSystem(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext, const ParticleSettings& settings)
-	: settings(settings), current_time(0.0f), timeLeftOver(0.0f), first_active_particle(0), first_new_particle(0),
+	: settings(settings), system_time(0.0f), timeLeftOver(0.0f), first_active_particle(0), first_new_particle(0),
 	first_free_particle(0), first_retired_particle(0), startIndex(0), length(0), timeBetweenParticles(1.0f / settings.particles_per_second)
 {
 	// each particle system needs it own particle shader because we rely on
@@ -23,7 +23,7 @@ ParticleSystem::ParticleSystem(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceC
 
 void ParticleSystem::Update(const Matrix& viewMatrix, const Matrix& projectionMatrix, float dt)
 {
-	current_time += dt;
+	system_time += dt;
 
 	if (dt > 0)
 	{
@@ -36,10 +36,11 @@ void ParticleSystem::Update(const Matrix& viewMatrix, const Matrix& projectionMa
 			currentTime += timeBetweenParticles;
 			timeToSpend -= timeBetweenParticles;
 
-			Vector3 pos = Vector3(
+			auto pos = Vector3(
 				RandomFloat(settings.min_position.x, settings.max_position.x),
 				RandomFloat(settings.min_position.y, settings.max_position.y),
 				RandomFloat(settings.min_position.z, settings.max_position.z));
+
 			AddParticle(pos);
 		}
 
@@ -50,7 +51,7 @@ void ParticleSystem::Update(const Matrix& viewMatrix, const Matrix& projectionMa
 	FreeRetiredParticles();
 
 	if (first_active_particle == first_free_particle)
-		current_time = 0.0f;
+		system_time = 0.0f;
 
 	if (first_retired_particle == first_active_particle)
 		draw_counter = 0.0f;
@@ -89,17 +90,17 @@ void ParticleSystem::Draw(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContex
 		if (first_active_particle < first_free_particle)
 		{
 			particle_shader.get()->Draw(deviceContext, (first_free_particle - first_active_particle) * 6,
-				first_active_particle * 6, 0, texture.get(), Vector2::Zero, current_time);
+				first_active_particle * 6, 0, texture.get(), Vector2::Zero, system_time);
 		}
 		else
 		{
 			particle_shader.get()->Draw(deviceContext, (settings.max_particles - first_active_particle) * 6,
-				first_active_particle * 6, 0, texture.get(), Vector2::Zero, current_time);
+				first_active_particle * 6, 0, texture.get(), Vector2::Zero, system_time);
 
 			if (first_free_particle > 0)
 			{
 				particle_shader.get()->Draw(deviceContext, first_free_particle * 6, 0, 0, texture.get(),
-					Vector2::Zero, current_time, false);
+					Vector2::Zero, system_time, false);
 			}
 		}
 	}
@@ -124,8 +125,6 @@ void ParticleSystem::Initialize()
 
 void ParticleSystem::LoadContent(ComPtr<ID3D11Device> device)
 {
-	LoadParticleEffect();
-
 	vector<unsigned long> indices;
 
 	for (int i = 0; i < settings.max_particles; ++i)
@@ -144,17 +143,13 @@ void ParticleSystem::LoadContent(ComPtr<ID3D11Device> device)
 		settings.max_particles * 4, indices, indices.size());
 }
 
-void ParticleSystem::LoadParticleEffect()
-{
-}
-
 void ParticleSystem::RetireActiveParticles()
 {
 	float particle_duration = settings.duration;
 
 	while (first_active_particle != first_new_particle)
 	{
-		float particle_age = current_time - particles.get()[first_active_particle * 4].Time;
+		float particle_age = system_time - particles.get()[first_active_particle * 4].Time;
 
 		if (particle_age < particle_duration)
 			break;
@@ -236,7 +231,7 @@ void ParticleSystem::AddParticle(Vector3 position)
 		particles.get()[first_free_particle * 4 + i].Position = position;
 		particles.get()[first_free_particle * 4 + i].Velocity = velocity;
 		particles.get()[first_free_particle * 4 + i].Random = random;
-		particles.get()[first_free_particle * 4 + i].Time = current_time;
+		particles.get()[first_free_particle * 4 + i].Time = system_time;
 	}
 
 	first_free_particle = next_free_particle;

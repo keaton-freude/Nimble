@@ -13,7 +13,7 @@ inline void SetD3DDebugName(ID3D11DeviceChild* child, const std::string& name)
 {
 	if (child != nullptr)
 	{
-		child->SetPrivateData(WKPDID_D3DDebugObjectName, name.size(), name.c_str());
+		child->SetPrivateData(WKPDID_D3DDebugObjectName, static_cast<UINT>(name.size()), name.c_str());
 	}
 }
 

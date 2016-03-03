@@ -26,6 +26,8 @@
 
 #ifndef TK_SPLINE_H
 #define TK_SPLINE_H
+#pragma warning(push)
+#pragma warning(disable:4267)
 #undef min
 #include <cstdio>
 #include <cassert>
@@ -55,11 +57,11 @@ namespace
 			int dim() const;                             // matrix dimension
 			int num_upper() const
 			{
-				return m_upper.size() - 1;
+				return static_cast<int>(m_upper.size()) - 1;
 			}
 			int num_lower() const
 			{
-				return m_lower.size() - 1;
+				return static_cast<int>(m_lower.size()) - 1;
 			}
 			// access operator
 			double & operator () (int i, int j);            // write
@@ -408,5 +410,5 @@ namespace
 
 
 } // namespace
-
+#pragma warning(pop)
 #endif /* TK_SPLINE_H */

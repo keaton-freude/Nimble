@@ -47,13 +47,13 @@ Heightmap::Heightmap(unsigned int width, unsigned int height)
 		{
 			_image.get_pixel(j, i, r, g, b);
 
-			vertex_height = r + g + b;
+			vertex_height = static_cast<float>(r + g + b);
 
 			index = (_image.height() * j) + i;
 
-			_heightMap.get()[index].x = (float)i;
+			_heightMap.get()[index].x = static_cast<float>(i);
 			_heightMap.get()[index].y = vertex_height;
-			_heightMap.get()[index].z = (float)j;
+			_heightMap.get()[index].z = static_cast<float>(j);
 		}
 	}
 
@@ -86,9 +86,9 @@ void Heightmap::Add(Vector3 location, float radius, float min, float max)
 	unsigned char g;
 	unsigned char b;
 
-	for (int i = 0; i < width; ++i)
+	for (unsigned int i = 0; i < width; ++i)
 	{
-		for (int j = 0; j < height; ++j)
+		for (unsigned int j = 0; j < height; ++j)
 		{
 			index = i * width + j;
 			distance = Vector3::Distance(location, Vector3(_heightMap.get()[index].x, _heightMap.get()[index].y, _heightMap.get()[index].z));
@@ -108,7 +108,7 @@ void Heightmap::Add(Vector3 location, float radius, float min, float max)
 				float height_increase = 0.0f;
 
 				if (lerp_amount < .3f)
-					height_increase = _spline(lerp_value) * 300.0f;
+					height_increase = static_cast<float>(_spline(lerp_value)) * 300.0f;
 				else
 					height_increase = 300.0f;
 
@@ -124,7 +124,7 @@ void Heightmap::Add(Vector3 location, float radius, float min, float max)
 					if (r + split_increase > 255)
 						r = 255;
 					else
-						r = split_increase;
+						r = static_cast<unsigned char>(split_increase);
 				}
 
 				if (split_increase >= g)
@@ -132,7 +132,7 @@ void Heightmap::Add(Vector3 location, float radius, float min, float max)
 					if (g + split_increase > 255)
 						g = 255;
 					else
-						g = split_increase;
+						g = static_cast<unsigned char>(split_increase);
 				}
 
 				if (split_increase >= b)
@@ -140,7 +140,7 @@ void Heightmap::Add(Vector3 location, float radius, float min, float max)
 					if (b + split_increase > 255)
 						b = 255;
 					else
-						b = split_increase;
+						b = static_cast<unsigned char>(split_increase);
 				}
 
 				_image.set_pixel(i, j, r, g, b);
@@ -181,13 +181,13 @@ void Heightmap::LoadFromFile(ComPtr<ID3D11Device> device, string heightMapPath)
 		{
 			_image.get_pixel(i, j, r, g, b);
 
-			vertex_height = r + g + b;
+			vertex_height = static_cast<float>(r + g + b);
 
 			index = (_image.height() * j) + i;
 
-			_heightMap.get()[index].x = (float)i;
-			_heightMap.get()[index].y = (float)vertex_height;
-			_heightMap.get()[index].z = (float)j;
+			_heightMap.get()[index].x = static_cast<float>(i);
+			_heightMap.get()[index].y = vertex_height;
+			_heightMap.get()[index].z = static_cast<float>(j);
 		}
 	}
 

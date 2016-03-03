@@ -26,7 +26,7 @@ private:
 	unique_ptr<ParticleShader> particle_shader;
 
 	ParticleSettings settings;
-	float current_time;
+	float system_time;
 	int draw_counter;
 	float timeLeftOver;
 	int first_active_particle;
@@ -40,7 +40,6 @@ private:
 	// methods
 	void Initialize();
 	void LoadContent(ComPtr<ID3D11Device> device);
-	void LoadParticleEffect();
 	void RetireActiveParticles();
 	void FreeRetiredParticles();
 	void AddNewParticlesToVertexBuffer(ComPtr<ID3D11DeviceContext> deviceContext);
