@@ -9,6 +9,7 @@ using DirectX::SimpleMath::Ray;
 using DirectX::CommonStates;
 using std::unique_ptr;
 using DirectX::SimpleMath::Vector3;
+using DirectX::SimpleMath::Color;
 
 
 inline void SetD3DDebugName(ID3D11DeviceChild* child, const std::string& name)
@@ -45,6 +46,14 @@ inline float RandomFloat(float a, float b)
 inline Vector3 RandomVector3(const Vector3& a, const Vector3& b)
 {
 	return Vector3(RandomFloat(a.x, b.x), RandomFloat(a.y, b.y), RandomFloat(a.z, b.z));
+}
+
+// Return a Color whos components are randomly chosen
+// based on the components of a and b
+inline Color RandomColor(const Color& a, const Color& b)
+{
+	return Color(RandomFloat(a.x, b.x), RandomFloat(a.y, b.y), 
+		RandomFloat(a.z, b.z), RandomFloat(a.w, b.w));
 }
 
 class StatesHelper
