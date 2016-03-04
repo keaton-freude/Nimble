@@ -41,8 +41,8 @@ public:
 		UINT width, UINT height, float resolution);
 	static shared_ptr<VertexBuffer> CreateTerrainNode(ComPtr<ID3D11Device> device,
 		shared_ptr<TerrainVertex> vertices, int vertexCount, shared_ptr<unsigned long> indices);
-	static shared_ptr<VertexBuffer> CreateDynamic(ComPtr<ID3D11Device> device, int vertexSize, int vertexCount,
-		vector<unsigned long> indices, int index_count);
+	static shared_ptr<VertexBuffer> CreateDynamic(ComPtr<ID3D11Device> device, size_t vertexSize, size_t vertexCount,
+	                                              vector<unsigned long> indices, size_t index_count);
 
 
 	// Load methods, populate the class with the correct values
@@ -52,8 +52,8 @@ public:
 	void LoadLine(ComPtr<ID3D11Device> device, Vector3 p1, Vector3 p2);
 	void LoadTerrainNode(ComPtr<ID3D11Device> device, shared_ptr<TerrainVertex> vertices, int vertexCount,
 		shared_ptr<unsigned long> indicies);
-	void LoadDynamic(ComPtr<ID3D11Device> device, int vertexSize, int vertexCount,
-		vector<unsigned long> indices, int index_count);
+	void LoadDynamic(ComPtr<ID3D11Device> device, size_t vertexSize, size_t vertexCount,
+	                 vector<unsigned long> indices, size_t index_count);
 
 	// XNA-style vertexbuffer updates
 	// provide the baseOffset (for @vertices), pointer to CPU buffer
@@ -80,7 +80,7 @@ inline void VertexBuffer::SetData(ComPtr<ID3D11DeviceContext> deviceContext, T *
 
 	deviceContext->Map(this->vertexBuffer.Get(), 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mappedResource);
 
-	dataPtr = (T*)mappedResource.pData;
+	dataPtr = static_cast<T*>(mappedResource.pData);
 	
 	memcpy(&dataPtr[indexOffset], &data[indexOffset], numberElements * stride);
 

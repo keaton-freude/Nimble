@@ -435,7 +435,7 @@ void VertexBuffer::LoadTerrainNode(ComPtr<ID3D11Device> device, shared_ptr<Terra
 	device->CreateBuffer(&indexBufferDesc, &indexData, indexBuffer.GetAddressOf());
 }
 
-void VertexBuffer::LoadDynamic(ComPtr<ID3D11Device> device, int vertexSize, int vertexCount, vector<unsigned long> indices, int index_count)
+void VertexBuffer::LoadDynamic(ComPtr<ID3D11Device> device, size_t vertexSize, size_t vertexCount, vector<unsigned long> indices, size_t index_count)
 {
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	D3D11_SUBRESOURCE_DATA indexData;
@@ -448,7 +448,7 @@ void VertexBuffer::LoadDynamic(ComPtr<ID3D11Device> device, int vertexSize, int 
 	vertexBufferDesc.MiscFlags = 0;
 	vertexBufferDesc.StructureByteStride = 0;
 
-	device->CreateBuffer(&vertexBufferDesc, NULL, vertexBuffer.GetAddressOf());
+	device->CreateBuffer(&vertexBufferDesc, nullptr, vertexBuffer.GetAddressOf());
 
 	// Set up the description of the index buffer.
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -501,7 +501,7 @@ shared_ptr<VertexBuffer> VertexBuffer::CreateTerrainNode(ComPtr<ID3D11Device> de
 	return shared_ptr<VertexBuffer>(vb);
 }
 
-shared_ptr<VertexBuffer> VertexBuffer::CreateDynamic(ComPtr<ID3D11Device> device, int vertexSize, int vertexCount, vector<unsigned long> indices, int index_count)
+shared_ptr<VertexBuffer> VertexBuffer::CreateDynamic(ComPtr<ID3D11Device> device, size_t vertexSize, size_t vertexCount, vector<unsigned long> indices, size_t index_count)
 {
 	VertexBuffer* vb = new VertexBuffer();
 	vb->LoadDynamic(device, vertexCount, vertexSize, indices, index_count);
