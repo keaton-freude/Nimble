@@ -36,10 +36,7 @@ void ParticleSystem::Update(const Matrix& viewMatrix, const Matrix& projectionMa
 			currentTime += timeBetweenParticles;
 			timeToSpend -= timeBetweenParticles;
 
-			auto pos = Vector3(
-				RandomFloat(settings.min_position.x, settings.max_position.x),
-				RandomFloat(settings.min_position.y, settings.max_position.y),
-				RandomFloat(settings.min_position.z, settings.max_position.z));
+			auto pos = RandomVector3(settings.min_position, settings.max_position);
 
 			AddParticle(pos);
 		}
