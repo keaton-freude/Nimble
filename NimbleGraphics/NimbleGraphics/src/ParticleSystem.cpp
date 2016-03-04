@@ -51,7 +51,7 @@ void ParticleSystem::Update(const Matrix& viewMatrix, const Matrix& projectionMa
 		system_time = 0.0f;
 
 	if (first_retired_particle == first_active_particle)
-		draw_counter = 0.0f;
+		draw_counter = 0;
 
 	particle_shader->Update(Matrix::Identity, viewMatrix, projectionMatrix);
 }
@@ -137,7 +137,7 @@ void ParticleSystem::LoadContent(ComPtr<ID3D11Device> device)
 
 	// create a dynamic vertex buffer
 	vertex_buffer = VertexBuffer::CreateDynamic(device, sizeof(ParticleVertex),
-		settings.max_particles * 4, indices, indices.size());
+	                                            settings.max_particles * 4, indices, indices.size());
 }
 
 void ParticleSystem::RetireActiveParticles()
@@ -164,7 +164,7 @@ void ParticleSystem::FreeRetiredParticles()
 {
 	while (first_retired_particle != first_active_particle)
 	{
-		int age = draw_counter - (int)particles.get()[first_retired_particle * 4].Time;
+		int age = draw_counter - static_cast<int>(particles.get()[first_retired_particle * 4].Time);
 
 		if (age < 3)
 			break;
@@ -178,8 +178,6 @@ void ParticleSystem::FreeRetiredParticles()
 
 void ParticleSystem::AddNewParticlesToVertexBuffer(ComPtr<ID3D11DeviceContext> deviceContext)
 {
-	int stride = ParticleVertex::GetSize();
-
 	if (first_new_particle < first_free_particle)
 	{
 		// all new particles are in one consecutive range
@@ -213,12 +211,7 @@ void ParticleSystem::AddParticle(Vector3 position)
 	if (next_free_particle == first_retired_particle)
 		return;
 
-	Vector3 velocity = Vector3
-	(
-		RandomFloat(settings.min_velocity.x, settings.max_velocity.x),
-		RandomFloat(settings.min_velocity.y, settings.max_velocity.y),
-		RandomFloat(settings.min_velocity.z, settings.max_velocity.z)
-	);
+	auto velocity = RandomVector3(settings.min_velocity, settings.max_velocity);
 
 	Color random = Color(RandomFloat(0.0f, 1.0f), RandomFloat(0.0f, 1.0f), 
 		RandomFloat(0.0f, 1.0f), RandomFloat(0.0f, 1.0f));

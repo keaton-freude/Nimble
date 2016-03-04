@@ -148,8 +148,6 @@ void ParticleShader::UpdatePerFrameBuffer(ComPtr<ID3D11DeviceContext> deviceCont
 bool ParticleShader::SetShaderParameters(ComPtr<ID3D11DeviceContext> deviceContext, ComPtr<ID3D11ShaderResourceView> texture,
 	Vector2 viewport, float current_time, bool update)
 {
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
-
 	deviceContext->PSSetShaderResources(0, 1, texture.GetAddressOf());
 
 	UpdatePerFrameBuffer(deviceContext, viewport, current_time);

@@ -2,7 +2,6 @@
 #include "Logger.h"
 #include "Helper.h"
 #include <stdio.h>
-#include <iostream>
 
 using namespace std;
 
@@ -24,18 +23,15 @@ Heightmap::~Heightmap()
 
 
 Heightmap::Heightmap(unsigned int width, unsigned int height)
-	: _image(width, height),_splineX({ 0, 0.05, 0.0742857, 0.0985714, 0.12, 0.142857, 0.171429, 0.18, 0.198571, 0.218571, 0.24, 0.295714, 0.377143, 0.498571, 0.617143, 0.75, 0.875714, 0.977143, 1.0 }),
+	: _splineX({ 0, 0.05, 0.0742857, 0.0985714, 0.12, 0.142857, 0.171429, 0.18, 0.198571, 0.218571, 0.24, 0.295714, 0.377143, 0.498571, 0.617143, 0.75, 0.875714, 0.977143, 1.0 }),
 	_splineY({ 0, 0.0330237, 0.0784314, 0.150671, 0.21775, 0.335397, 0.44066, 0.540764, 0.664603, 0.778122, 0.858617, 0.909185, 0.951496, 0.973168, 0.986584, 1.0, 1.0, 1.0, 1.0 }),
-	_spline()
+	_image(width, height), _spline()
 {
 	_spline.set_points(_splineX, _splineY);
 
 	unsigned char r = 0;
 	unsigned char g = 0;
 	unsigned char b = 0;
-	unsigned int index = 0;
-
-	float vertex_height = 0.0f;
 
 	_image.set_all_channels(0, 0, 0);
 
@@ -47,9 +43,9 @@ Heightmap::Heightmap(unsigned int width, unsigned int height)
 		{
 			_image.get_pixel(j, i, r, g, b);
 
-			vertex_height = static_cast<float>(r + g + b);
+			float vertex_height = static_cast<float>(r + g + b);
 
-			index = (_image.height() * j) + i;
+			unsigned int index = (_image.height() * j) + i;
 
 			_heightMap.get()[index].x = static_cast<float>(i);
 			_heightMap.get()[index].y = vertex_height;
@@ -80,8 +76,6 @@ void Heightmap::Add(Vector3 location, float radius, float min, float max)
 {
 	unsigned int height = _image.height();
 	unsigned int width = _image.width();
-	unsigned int index = 0;
-	float distance = 0.0f;
 	unsigned char r;
 	unsigned char g;
 	unsigned char b;
@@ -90,8 +84,8 @@ void Heightmap::Add(Vector3 location, float radius, float min, float max)
 	{
 		for (unsigned int j = 0; j < height; ++j)
 		{
-			index = i * width + j;
-			distance = Vector3::Distance(location, Vector3(_heightMap.get()[index].x, _heightMap.get()[index].y, _heightMap.get()[index].z));
+			unsigned int index = i * width + j;
+			float distance = Vector3::Distance(location, Vector3(_heightMap.get()[index].x, _heightMap.get()[index].y, _heightMap.get()[index].z));
 
 			// Check distance of this vertex with passed in location
 			if (distance <= radius)
@@ -105,7 +99,7 @@ void Heightmap::Add(Vector3 location, float radius, float min, float max)
 				// need to increase the values here. will lerp between 0 and 10 for now
 				float lerp_value = lerp(1.0f, 0.0f, lerp_amount);
 
-				float height_increase = 0.0f;
+				float height_increase;
 
 				if (lerp_amount < .3f)
 					height_increase = static_cast<float>(_spline(lerp_value)) * 300.0f;
@@ -164,14 +158,10 @@ void Heightmap::LoadFromFile(ComPtr<ID3D11Device> device, string heightMapPath)
 	unsigned char r = 0;
 	unsigned char g = 0;
 	unsigned char b = 0;
-	unsigned int index = 0;
-	unsigned int width = 0;
-	unsigned int height = 0;
-	float vertex_height = 0.0f;
 
 	_image = bitmap_image(heightMapPath);
-	height = _image.height();
-	width = _image.width();
+	unsigned int height = _image.height();
+	unsigned int width = _image.width();
 
 	_heightMap = shared_ptr<HeightMapData>(new HeightMapData[_image.width() * _image.height()]);
 
@@ -181,9 +171,9 @@ void Heightmap::LoadFromFile(ComPtr<ID3D11Device> device, string heightMapPath)
 		{
 			_image.get_pixel(i, j, r, g, b);
 
-			vertex_height = static_cast<float>(r + g + b);
+			float vertex_height = static_cast<float>(r + g + b);
 
-			index = (_image.height() * j) + i;
+			unsigned int index = (_image.height() * j) + i;
 
 			_heightMap.get()[index].x = static_cast<float>(i);
 			_heightMap.get()[index].y = vertex_height;
