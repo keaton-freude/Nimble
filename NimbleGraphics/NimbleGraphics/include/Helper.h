@@ -8,6 +8,8 @@
 using DirectX::SimpleMath::Ray;
 using DirectX::CommonStates;
 using std::unique_ptr;
+using DirectX::SimpleMath::Vector3;
+
 
 inline void SetD3DDebugName(ID3D11DeviceChild* child, const std::string& name)
 {
@@ -30,10 +32,19 @@ inline float frand()
 
 inline float RandomFloat(float a, float b) 
 {
-	float random = ((float)rand()) / (float)RAND_MAX;
+	float random = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+
 	float diff = b - a;
 	float r = random * diff;
 	return a + r;
+}
+
+// Return a Vector3 whose components are randomly chosen
+// based on the components of a and b
+// NewVector(Random(a.x, b.x), Random(a.y, b.y), Random(a.z, b.z))
+inline Vector3 RandomVector3(const Vector3& a, const Vector3& b)
+{
+	return Vector3(RandomFloat(a.x, b.x), RandomFloat(a.y, b.y), RandomFloat(a.z, b.z));
 }
 
 class StatesHelper
