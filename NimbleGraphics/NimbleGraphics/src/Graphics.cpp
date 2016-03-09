@@ -70,8 +70,6 @@ bool Graphics::Init(int screenWidth, int screenHeight, HWND hwnd, bool fullScree
 
 	LOG_INFO("D3D Initialized successfully.");
 
-	StatesHelper::GetInstance().Load(_D3D->GetDevice());
-
 	// Create the camera object at <5, 10, 5> with rotation: x:.78f, y:.78f, z:0.0f
 	_camera = make_shared<Camera>(Vector3(0.0f, 5.0f, -5.0f), Vector3(0.78f, 0.0f, 0.0f));
 

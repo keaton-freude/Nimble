@@ -335,6 +335,8 @@ bool NimbleD3D::Init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, b
 
 	*m_worldMatrix = Matrix::Identity;
 
+	StatesHelper::GetInstance().Load(m_device);
+
 	return true;
 }
 
