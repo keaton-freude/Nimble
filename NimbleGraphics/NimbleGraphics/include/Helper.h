@@ -4,6 +4,7 @@
 #include <SimpleMath.h>
 #include <chrono>
 #include "Logger.h"
+#include "Singleton.h"
 
 using DirectX::SimpleMath::Ray;
 using DirectX::CommonStates;
@@ -56,16 +57,10 @@ inline Color RandomColor(const Color& a, const Color& b)
 		RandomFloat(a.z, b.z), RandomFloat(a.w, b.w));
 }
 
-class StatesHelper
+class StatesHelper: public Singleton<StatesHelper>
 {
 public:
-	static StatesHelper& GetInstance()
-	{
-		static StatesHelper instance;
-		return instance;
-	}
-
-	inline CommonStates* GetStates()
+	inline CommonStates* GetStates() const
 	{
 		return states.get();
 	}
