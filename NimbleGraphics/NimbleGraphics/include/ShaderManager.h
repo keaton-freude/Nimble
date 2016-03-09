@@ -62,6 +62,9 @@ inline T* ShaderManager::GetShader(SHADER shader)
 	T* resource = dynamic_cast<T*>(element->second.get());
 
 	if (resource)
+	{
 		return resource;
+	}
+
 	return nullptr;
 }
