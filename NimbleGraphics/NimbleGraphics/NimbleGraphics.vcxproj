@@ -42,6 +42,7 @@
     <ClInclude Include="include\ParticleSystem.h" />
     <ClInclude Include="include\ParticleVertex.h" />
     <ClInclude Include="include\QuadTreeNode.h" />
+    <ClInclude Include="include\Singleton.h" />
     <ClInclude Include="include\spline.h" />
     <ClInclude Include="include\TerrainChunk.h" />
     <ClInclude Include="include\TerrainQuadTree.h" />
