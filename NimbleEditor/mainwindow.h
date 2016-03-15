@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <vector>
 #include "spline.h"
+#include <ParticleSettings.h>
 
 using std::vector;
 namespace Ui
@@ -49,6 +50,10 @@ private slots:
 
     void on_btnChooseTexture_clicked();
 
+	void on_btnSaveSystem_clicked();
+
+	void on_btnOpenSystem_clicked();
+
 private:
     vector<double> spline_points_x;
     vector<double> spline_points_y;
@@ -56,6 +61,7 @@ private:
     QVector<double> graph_y;
     tk::spline test_spline;
     void UpdateWorldLightDirection();
+	ParticleSettings GetParticleSettingsFromUI();
     Ui::MainWindow *ui;
 };
 

@@ -25,14 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     //connect(ui->graph, SIGNAL(mousePress(QMouseEvent*)),
 //            this, SLOT(graphClicked(QMouseEvent*)));
 
-    //ui->graph->addGraph();
-    //ui->graph->xAxis->setLabel("x");
-    //ui->graph->yAxis->setLabel("y");
-
-    //ui->graph->xAxis->setRange(0, 1);
-    //ui->graph->yAxis->setRange(0, 1);
-
-    //ui->graph->replot();
+	//connect(ui->btnSaveSystem, SIGNAL(clicked()), this, SLOT(on_btnSaveSystem_clicked()));
 
     spline_points_x.push_back(0.0);
     spline_points_y.push_back(0.0);
@@ -138,6 +131,59 @@ void MainWindow::UpdateWorldLightDirection()
     float z = ui->wl_direction_z->text().toFloat();
 
     ui->viewport_2->SetLightDirection(x,y,z);
+}
+
+ParticleSettings MainWindow::GetParticleSettingsFromUI()
+{
+	ParticleSettings settings;
+
+	settings.system_name = ui->txtParticleSystemName->text().toStdString();
+	settings.texture_name = "..\\..\\Assets\\Textures\\" + ui->txtTextureName->text().toStdString();
+	settings.particles_per_second = std::stof(ui->txtParticlesPerSecond->text().toStdString());
+	settings.max_particles = stof(ui->txtMaxParticles->text().toStdString());
+
+	if (ui->cmbBlendMode->currentText() == "Alpha")
+	{
+		settings.blend_state = BLEND_STATE::Alpha;
+	}
+	else if (ui->cmbBlendMode->currentText() == "Additive")
+	{
+		settings.blend_state = BLEND_STATE::Additive;
+	}
+
+	settings.geometry_scale = Vector2(ui->geometry_scale_x->value(), ui->geometry_scale_y->value());
+
+	settings.min_position = Vector3(ui->min_position_offset_x->value(), ui->min_position_offset_y->value(), ui->min_position_offset_z->value());
+	settings.max_position = Vector3(ui->max_position_offset_x->value(), ui->max_position_offset_y->value(), ui->max_position_offset_z->value());
+
+	settings.min_velocity = Vector3(ui->min_velocity_x->value(), ui->min_velocity_y->value(), ui->min_velocity_z->value());
+	settings.max_velocity = Vector3(ui->max_velocity_x->value(), ui->max_velocity_y->value(), ui->max_velocity_z->value());
+
+	settings.min_acceleration = Vector3(ui->min_acceleration_x->value(), ui->min_acceleration_y->value(), ui->min_acceleration_z->value());
+	settings.max_acceleration = Vector3(ui->max_acceleration_x->value(), ui->max_acceleration_y->value(), ui->max_acceleration_z->value());
+
+	settings.min_color = Color(ui->startColorWidget->palette().background().color().redF(),
+		ui->startColorWidget->palette().background().color().greenF(),
+		ui->startColorWidget->palette().background().color().blueF(),
+		ui->alpha_start->value());
+
+	settings.max_color = Color(ui->endColorWidget->palette().background().color().redF(),
+		ui->endColorWidget->palette().background().color().greenF(),
+		ui->endColorWidget->palette().background().color().blueF(),
+		ui->alpha_end->value());
+
+	float life_min = 0.0f;
+	float life_max = 0.0f;
+	life_min = ui->life_min->value();
+	life_max = ui->life_max->value();
+
+	settings.duration = life_max;
+	settings.duration_randomness = life_max - life_min;
+
+	settings.start_size = Vector2(ui->start_size_x->value(), ui->start_size_y->value());
+	settings.end_size = Vector2(ui->end_size_x->value(), ui->end_size_y->value());
+
+	return settings;
 }
 
 void MainWindow::on_wl_direction_y_editingFinished()
@@ -426,60 +472,10 @@ bool GetVector3(string text, Vector3& vector)
 
 void MainWindow::on_btnUpdate_clicked()
 {
-    ParticleSettings settings;
-
-    settings.system_name = ui->txtParticleSystemName->text().toStdString();
-    settings.texture_name = "..\\..\\Assets\\Textures\\" + ui->txtTextureName->text().toStdString();
-    settings.particles_per_second = std::stof(ui->txtParticlesPerSecond->text().toStdString());
-    settings.max_particles = stof(ui->txtMaxParticles->text().toStdString());
-
-
-
-    if (ui->cmbBlendMode->currentText() == "Alpha")
-    {
-        settings.blend_state = BLEND_STATE::Alpha;
-    }
-    else if (ui->cmbBlendMode->currentText() == "Additive")
-    {
-        settings.blend_state = BLEND_STATE::Additive;
-    }
-
-	settings.geometry_scale = Vector2(ui->geometry_scale_x->value(), ui->geometry_scale_y->value());
-
-    settings.min_position = Vector3(ui->min_position_offset_x->value(), ui->min_position_offset_y->value(), ui->min_position_offset_z->value());
-    settings.max_position = Vector3(ui->max_position_offset_x->value(), ui->max_position_offset_y->value(), ui->max_position_offset_z->value());
-
-    settings.min_velocity = Vector3(ui->min_velocity_x->value(), ui->min_velocity_y->value(), ui->min_velocity_z->value());
-    settings.max_velocity = Vector3(ui->max_velocity_x->value(), ui->max_velocity_y->value(), ui->max_velocity_z->value());
-
-    settings.min_acceleration = Vector3(ui->min_acceleration_x->value(), ui->min_acceleration_y->value(), ui->min_acceleration_z->value());
-    settings.max_acceleration = Vector3(ui->max_acceleration_x->value(), ui->max_acceleration_y->value(), ui->max_acceleration_z->value());
-
-    settings.min_color = Color(ui->startColorWidget->palette().background().color().redF(),
-                               ui->startColorWidget->palette().background().color().greenF(),
-                               ui->startColorWidget->palette().background().color().blueF(),
-                               ui->alpha_start->value());
-
-    settings.max_color = Color(ui->endColorWidget->palette().background().color().redF(),
-                               ui->endColorWidget->palette().background().color().greenF(),
-                               ui->endColorWidget->palette().background().color().blueF(),
-                               ui->alpha_end->value());
-
-    float life_min = 0.0f;
-    float life_max = 0.0f;
-    life_min = ui->life_min->value();
-    life_max = ui->life_max->value();
-
-    settings.duration = life_max;
-    settings.duration_randomness = life_max - life_min;
-
-    settings.start_size = Vector2(ui->start_size_x->value(), ui->start_size_y->value());
-    settings.end_size = Vector2(ui->end_size_x->value(), ui->end_size_y->value());
+	auto settings = GetParticleSettingsFromUI();
 
     ui->viewport_2->GetGraphics()->GetParticleEngine()->Clear();
     ui->viewport_2->GetGraphics()->GetParticleEngine()->Add(ui->viewport_2->GetGraphics()->GetD3D()->GetDevice(), ui->viewport_2->GetGraphics()->GetD3D()->GetDeviceContext(), vector<ParticleSettings>( { settings } ));
-
-
 }
 
 
@@ -508,4 +504,23 @@ void MainWindow::on_btnChooseTexture_clicked()
     cout << tokens.back() << endl;
     string name = tokens.back();
     ui->txtTextureName->setText(QString::fromStdString(name));
+}
+
+void MainWindow::on_btnSaveSystem_clicked()
+{
+	auto settings = GetParticleSettingsFromUI();
+
+	string save_path = QFileDialog::getSaveFileName(this, tr("Save System"), "..\\..\\Assets\\ParticleSystems", tr("Particle Systems (*.ps)")).toStdString();
+	
+	settings.WriteToFile(save_path);
+}
+
+void MainWindow::on_btnOpenSystem_clicked()
+{
+	string file_path = QFileDialog::getOpenFileName(this, tr("Open System"), "..\\..\\Assets\\ParticleSystems", tr("Particle Systems (*.ps)")).toStdString();
+
+	auto settings = ParticleSettings(file_path);
+
+	ui->viewport_2->GetGraphics()->GetParticleEngine()->Clear();
+	ui->viewport_2->GetGraphics()->GetParticleEngine()->Add(ui->viewport_2->GetGraphics()->GetD3D()->GetDevice(), ui->viewport_2->GetGraphics()->GetD3D()->GetDeviceContext(), vector<ParticleSettings>({ settings }));
 }

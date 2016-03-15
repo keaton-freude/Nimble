@@ -222,7 +222,7 @@
    <property name="minimumSize">
     <size>
      <width>250</width>
-     <height>1191</height>
+     <height>1249</height>
     </size>
    </property>
    <property name="maximumSize">
@@ -2405,6 +2405,20 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="btnOpenSystem">
+       <property name="text">
+        <string>Open System from File</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnSaveSystem">
+       <property name="text">
+        <string>Save System to File</string>
+       </property>
+      </widget>
+     </item>
     </layout>
     <zorder>grpPositionOffset</zorder>
     <zorder>grpVelocity</zorder>
@@ -2422,6 +2436,8 @@
     <zorder>grpVelocity_7</zorder>
     <zorder>grpVelocity_2</zorder>
     <zorder>grpPositionOffset_3</zorder>
+    <zorder>btnSaveSystem</zorder>
+    <zorder>btnOpenSystem</zorder>
    </widget>
   </widget>
   <action name="actionExit">
