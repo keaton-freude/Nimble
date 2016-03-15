@@ -1,6 +1,11 @@
 #pragma once
 #include <string>
+#include <rapidjson/writer.h>
+#include <rapidjson/document.h>
+#include <rapidjson/stringbuffer.h>
 #include <SimpleMath.h>
+#include <fstream>
+
 
 using std::string;
 using DirectX::SimpleMath::Vector2;
@@ -69,4 +74,6 @@ public:
 	BLEND_STATE blend_state;
 
 	ParticleSettings();
+	ParticleSettings(string file_path);
+	void WriteToFile(string file_path);
 };
