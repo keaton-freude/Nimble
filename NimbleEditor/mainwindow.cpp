@@ -444,6 +444,8 @@ void MainWindow::on_btnUpdate_clicked()
         settings.blend_state = BLEND_STATE::Additive;
     }
 
+	settings.geometry_scale = Vector2(ui->geometry_scale_x->value(), ui->geometry_scale_y->value());
+
     settings.min_position = Vector3(ui->min_position_offset_x->value(), ui->min_position_offset_y->value(), ui->min_position_offset_z->value());
     settings.max_position = Vector3(ui->max_position_offset_x->value(), ui->max_position_offset_y->value(), ui->max_position_offset_z->value());
 

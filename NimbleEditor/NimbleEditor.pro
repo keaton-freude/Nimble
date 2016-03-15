@@ -41,6 +41,6 @@ INCLUDEPATH += ..\Externals\directxtk\include
 
 FORMS    += mainwindow.ui
 
-LIBS += -l..\..\bin\NimbleGraphics
+LIBS += -l..\bin\NimbleGraphics
 LIBS += -l..\..\Externals\directxtk\lib\x64\Debug\DirectXTK
 LIBS += -luser32

@@ -21,7 +21,7 @@ using DirectX::SimpleMath::Ray;
 
 void PrintMatrix(Matrix m);
 
-D3DRenderWidget::D3DRenderWidget(QWidget* parent = NULL)
+D3DRenderWidget::D3DRenderWidget(QWidget* parent = nullptr)
     : QDockWidget(parent), _prev_mouse_pos(Vector3::Zero)
 {
     // DRAW TIMER
@@ -58,8 +58,6 @@ D3DRenderWidget::D3DRenderWidget(QWidget* parent = NULL)
     setAttribute(Qt::WA_DeleteOnClose);
 
     _mouse_speed = 0.2f;
-
-
 }
 
 
