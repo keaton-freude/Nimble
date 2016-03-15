@@ -142,7 +142,7 @@ bool IShader::Init(ComPtr<ID3D11Device> device)
 		}
 		else
 		{
-			cout << "Could not find shader: " << _vsFilename.c_str() << endl;
+			std::wcout << "Could not find shader: " << _vsFilename << endl;
 		}
 		return false;
 	}

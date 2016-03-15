@@ -110,13 +110,16 @@ void ParticleSystem::Initialize()
 	particles = std::make_unique<ParticleVertex[]>(settings.max_particles * 4);
 	auto p_particles = particles.get();
 
+	auto x_mul = settings.geometry_scale.x;
+	auto y_mul = settings.geometry_scale.y;
+
 	// make quads
 	for (auto i = 0; i < settings.max_particles; ++i)
 	{
-		p_particles[i * 4 + 0].Corner = Vector2(-1.0f, -1.0f); // bottom left
-		p_particles[i * 4 + 1].Corner = Vector2(1.0f, -1.0f);  // bottom right
-		p_particles[i * 4 + 2].Corner = Vector2(1.0f, 1.0f);   // top right
-		p_particles[i * 4 + 3].Corner = Vector2(-1.0f, 1.0f);  // top left
+		p_particles[i * 4 + 0].Corner = Vector2(-x_mul, -y_mul); // bottom left
+		p_particles[i * 4 + 1].Corner = Vector2(x_mul, -y_mul);  // bottom right
+		p_particles[i * 4 + 2].Corner = Vector2(x_mul, y_mul);   // top right
+		p_particles[i * 4 + 3].Corner = Vector2(-x_mul, y_mul);  // top left
 	}
 }
 

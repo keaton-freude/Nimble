@@ -60,6 +60,12 @@ public:
 	Vector2 start_size;
 	Vector2 end_size;
 
+	// defines the scaling of the particle quad
+	// a narrow verticle bar might be: x: .1, y: 1.0
+	// each component must be between 0 and 1.0 and describes
+	// how wide/tall that dimension is. .10 = 10%, .5 = 50%, etc.
+	Vector2 geometry_scale;
+
 	BLEND_STATE blend_state;
 
 	ParticleSettings();
