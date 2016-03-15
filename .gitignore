@@ -37,6 +37,10 @@ NimbleEditor/build/*
 #except our placeholder
 !NimbleEditor/build/.placeholder.txt
 
+NimbleEditor/x64/*
+NimbleEditor/Debug/*
+NimbleEditor/GeneratedFiles/*
+
 # Ignore QT Project User Files
 *.pro.user
 
