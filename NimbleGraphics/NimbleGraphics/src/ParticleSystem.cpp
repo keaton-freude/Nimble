@@ -150,6 +150,9 @@ void ParticleSystem::RetireActiveParticles()
 	while (first_active_particle != first_new_particle)
 	{
 		float particle_age = system_time - particles.get()[first_active_particle * 4].Time;
+		particle_age *= 1 + particles.get()[first_active_particle * 4].Random.x * settings.duration_randomness;
+		// apply duration_randomness
+
 
 		if (particle_age < particle_duration)
 			break;

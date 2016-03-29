@@ -44,7 +44,7 @@ struct PixelInputType
 
 // Vertex shader helper for computing the position of a particle.
 float4 ComputeParticlePosition(float4 position, float3 velocity,
-                               float age, float normalizedAge)
+                               float age, float normalizedAge, float adjustedDuration)
 {
     float startVelocity = length(velocity);
 
@@ -61,8 +61,12 @@ float4 ComputeParticlePosition(float4 position, float3 velocity,
     float velocityIntegral = startVelocity * normalizedAge +
                              (endVelocity - startVelocity) * normalizedAge *
                                                              normalizedAge / 2;
+
+	position += (float4(velocity, 0.0f) * adjustedDuration) * normalizedAge;
      
-    position += float4(normalize(velocity), 0.0f) * velocityIntegral * duration;
+    //position += float4(normalize(velocity), 0.0f) * velocityIntegral * adjustedDuration;
+
+
     
     // Apply the gravitational force.
     position += float4(gravity, 0.0f) * age * normalizedAge;
@@ -130,13 +134,24 @@ PixelInputType ParticleVertexShader(VertexInputType input)
     
     // Apply a random factor to make different particles age at different rates.
     age *= 1 + input.Random.x * duration_randomness;
+
+	float adjusted_duration = duration - (input.Random.x * duration_randomness);
     
     // Normalize the age into the range zero to one.
     float normalizedAge = saturate(age / duration);
 
+	if (normalizedAge == 1.0f)
+	{
+		// emit invis
+		output.Position = float4(0.0f, 0.0f, 0.0f, 0.0f);
+		output.Color = float4(0.0f, 0.0f, 0.0f, 0.0f);
+		output.TextureCoordinate = float2(1.0f, 1.0f);
+		return output;
+	}
+
     // Compute the particle position, size, color, and rotation.
     output.Position = ComputeParticlePosition(float4(input.Position, 1.0f), input.Velocity,
-                                              age, normalizedAge);
+                                              age, normalizedAge, adjusted_duration);
 
     float size = ComputeParticleSize(input.Random.y, normalizedAge);
     float2x2 rotation = ComputeParticleRotation(input.Random.w, age);
