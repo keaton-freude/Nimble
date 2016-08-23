@@ -89,14 +89,14 @@ void TerrainQuadTree::UpdateBuffers(ComPtr<ID3D11DeviceContext> deviceContext)
 	}
 }
 
-void TerrainQuadTree::UpdateVerts(HeightMapData * data)
+void TerrainQuadTree::UpdateVerts(TerrainVertex * data)
 {
 	int terrain_index = 0;
 	int heightmap_index = 0;
 
 	for (int i = 0; i < _vertexCount; ++i)
 	{
-		_vertexList.get()[i].position.y = data[i].y;
+		_vertexList.get()[i].position = data[i].position;
 	}
 }
 

@@ -5,7 +5,8 @@
 #include <chrono>
 #include "Logger.h"
 #include "Singleton.h"
-
+#include <wrl\client.h>
+using Microsoft::WRL::ComPtr;
 using DirectX::SimpleMath::Ray;
 using DirectX::CommonStates;
 using std::unique_ptr;
@@ -24,6 +25,64 @@ inline void SetD3DDebugName(ID3D11DeviceChild* child, const std::string& name)
 inline float lerp(float value1, float value2, float amount)
 {
 	return value1 + ((value2 - value1) * amount);
+}
+
+inline bool rayTriangleIntersect(const Ray& ray, const Vector3 triangle[3], float& distance)
+{
+	float const EPSILON = 0.000001f;
+	Vector3 e1, e2;
+	Vector3 P, Q, T;
+	float det, inv_det, u, v;
+	float t;
+
+	e1 = triangle[1] - triangle[0];
+	e2 = triangle[2] - triangle[0];
+
+	P = ray.direction.Cross(e2);
+
+	det = e1.Dot(P);
+
+	if (det > -EPSILON && det < EPSILON)
+		return false;
+
+	inv_det = 1.0f / det;
+
+	T = ray.position - triangle[0];
+
+	u = T.Dot(P) * inv_det;
+
+	if (u < 0.0f || u > 1.0f) return false;
+
+	Q = T.Cross(e1);
+
+	v = ray.direction.Dot(Q) * inv_det;
+
+	if (v < 0.0f || u + v > 1.0f) return false;
+
+	t = e2.Dot(Q) * inv_det;
+
+	if (t > EPSILON)
+	{
+		distance = t;
+		return true;
+	}
+
+	return false;
+}
+
+inline unsigned char overflow_safe_add(unsigned char value, unsigned char to_add, unsigned char min, unsigned char max)
+{
+	if (value + to_add > max)
+	{
+		return max;
+	}
+
+	if (value + to_add < min)
+	{
+		return min;
+	}
+
+	return value + to_add;
 }
 
 inline float frand()

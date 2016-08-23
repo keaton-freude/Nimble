@@ -2,6 +2,8 @@
 
 #include <d3d11.h>
 #include <SimpleMath.h>
+#include "Logger.h"
+#include <fstream>
 
 using DirectX::SimpleMath::Color;
 using DirectX::SimpleMath::Vector2;
@@ -22,14 +24,6 @@ struct ColorVertex
 	Color color;
 };
 
-typedef struct HeightMapData
-{
-	float x, y, z;
-	// normals
-	float tu, tv;
-	float nx, ny, nz;
-} HeightMapData;
-
 typedef struct VectorType
 {
 	float x, y, z;
@@ -43,12 +37,55 @@ typedef struct LightBuffer
 	float padding;
 } LightBuffer;
 
-typedef struct TerrainVertex
+struct TerrainVertex
 {
 	Vector3 position;
 	Vector2 texture;
 	Vector3 normal;
-} TerrainVertex;
+
+	TerrainVertex()
+		: position(Vector3::Zero), texture(Vector2::Zero), normal(Vector3::Zero)
+	{
+		
+	}
+
+	TerrainVertex(TerrainVertex&& other)
+		: position(std::move(other.position)), texture(std::move(other.texture)), normal(std::move(other.normal))
+	{
+	}
+
+	TerrainVertex(Vector3 pos, Vector2 tex, Vector3 norm)
+		: position(pos), texture(tex), normal(norm)
+	{
+		
+	}
+
+	TerrainVertex& operator=(TerrainVertex& other)
+	{
+		this->position = other.position;
+		this->normal = other.normal;
+		this->texture = other.texture;
+		return *this;
+	}
+
+	TerrainVertex& operator=(TerrainVertex&& other) // move assignment
+	{
+		this->position = std::move(other.position);
+		this->normal = std::move(other.normal);
+		this->texture = std::move(other.texture);
+		return *this;
+	}
+
+	void WriteToFile(std::fstream & file)
+	{
+		//file << "wat?";
+		//file << std::string("wat").c_str();
+		file << position.x << "," << position.y << "," << position.z << "," << texture.x << "," << texture.y << "," << normal.x << "," << normal.y << "," << normal.z;
+	}
+
+};
+
+const int TEXTURE_REPEAT = 2;
 
 typedef struct TargaHeader
 {
@@ -91,4 +128,20 @@ struct PerFrameParticleParameters
 {
 	Vector2 ViewportScale;
 	float CurrentTime;
+};
+
+struct TerrainCell
+{
+	TerrainVertex bottomLeft;
+	TerrainVertex bottomRight;
+	TerrainVertex upperLeft;
+	TerrainVertex upperRight;
+
+	Vector3 GetAveragePosition()
+	{
+		// average all 4 vertices and return
+		Vector3 average = bottomLeft.position + bottomRight.position + upperLeft.position + upperRight.position;
+
+		return average * 0.25f;
+	}
 };

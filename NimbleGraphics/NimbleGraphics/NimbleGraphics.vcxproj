@@ -34,6 +34,7 @@
     <ClInclude Include="include\Light.h" />
     <ClInclude Include="include\LineDrawable.h" />
     <ClInclude Include="include\Logger.h" />
+    <ClInclude Include="include\MemoryHeightmap.h" />
     <ClInclude Include="include\NimbleD3D.h" />
     <ClInclude Include="include\ParticleEffect.h" />
     <ClInclude Include="include\ParticleEngine.h" />
@@ -44,6 +45,7 @@
     <ClInclude Include="include\QuadTreeNode.h" />
     <ClInclude Include="include\Singleton.h" />
     <ClInclude Include="include\spline.h" />
+    <ClInclude Include="include\TerrainCell.h" />
     <ClInclude Include="include\TerrainChunk.h" />
     <ClInclude Include="include\TerrainQuadTree.h" />
     <ClInclude Include="include\RayHit.h" />
@@ -59,6 +61,7 @@
     <ClInclude Include="src\Emitter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\MemoryHeightmap.cpp" />
     <ClCompile Include="src\ParticleEffect.cpp" />
     <ClCompile Include="src\ParticleEngine.cpp" />
     <ClCompile Include="src\ParticleSettings.cpp" />

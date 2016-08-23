@@ -24,7 +24,7 @@ void ColorDrawable::Draw(ComPtr<ID3D11DeviceContext> deviceContext, shared_ptr<M
 	unsigned int offset;
 
 	// Set vertex buffer stride and offset.
-	stride = sizeof(HeightMapData);
+	stride = sizeof(TerrainVertex);
 	offset = 0;
 	auto vb = this->vertexBuffer->GetVertexBuffer().Get();
 	// Set the vertex buffer to active in the input assembler so it can be rendered.

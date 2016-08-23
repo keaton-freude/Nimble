@@ -72,9 +72,9 @@ bool TerrainShader::Load(ComPtr<ID3D11Device> device)
 
 	// Create a texture sampler state description.
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 	samplerDesc.MipLODBias = 0.0f;
 	samplerDesc.MaxAnisotropy = 1;
 	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
@@ -178,7 +178,10 @@ void TerrainShader::RenderShader(ComPtr<ID3D11DeviceContext> deviceContext, int 
 	deviceContext->VSSetShader(this->_vertexShader.Get(), NULL, 0);
 	deviceContext->PSSetShader(this->_pixelShader.Get(), NULL, 0);
 
-	deviceContext->PSSetSamplers(0, 1, _sampleState.GetAddressOf());
+	auto ss = StatesHelper::GetInstance().GetStates()->LinearWrap();
+	deviceContext->PSSetSamplers(0, 1, &ss);
+
+	//deviceContext->PSSetSamplers(0, 1, _sampleState.GetAddressOf());
 
 	// Draw the triangle.
 	deviceContext->DrawIndexed(indexCount, 0, 0);

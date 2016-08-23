@@ -21,4 +21,6 @@ public:
 	void Draw(ComPtr<ID3D11DeviceContext> deviceContext, int vertexCount);
 
 	void Update(ComPtr<ID3D11DeviceContext> deviceContext, int x, int y, int width, shared_ptr<TerrainVertex> vertices);
+private:
+	TerrainShader* terrain_shader;
 };

@@ -8,7 +8,7 @@ using namespace std;
 using DirectX::XM_PIDIV2;
 
 Heightmap::Heightmap()
-	: _splineX({ 0, 0.124286, 0.325714, 0.492857, 0.721429, 0.94, 1.0 }),
+	: highest_point(0), _splineX({ 0, 0.124286, 0.325714, 0.492857, 0.721429, 0.94, 1.0 }),
 	_splineY({ 0, 0.20743, 0.403509, 0.691434, 0.915377, 0.93808, 1.0 }),
 	_spline()
 {
@@ -22,7 +22,7 @@ Heightmap::~Heightmap()
 }
 
 
-Heightmap::Heightmap(unsigned int width, unsigned int height)
+Heightmap::Heightmap(unsigned int width, unsigned int height, float resolution)
 	: _splineX({ 0, 0.05, 0.0742857, 0.0985714, 0.12, 0.142857, 0.171429, 0.18, 0.198571, 0.218571, 0.24, 0.295714, 0.377143, 0.498571, 0.617143, 0.75, 0.875714, 0.977143, 1.0 }),
 	_splineY({ 0, 0.0330237, 0.0784314, 0.150671, 0.21775, 0.335397, 0.44066, 0.540764, 0.664603, 0.778122, 0.858617, 0.909185, 0.951496, 0.973168, 0.986584, 1.0, 1.0, 1.0, 1.0 }),
 	_image(width, height), _spline()
@@ -35,21 +35,21 @@ Heightmap::Heightmap(unsigned int width, unsigned int height)
 
 	_image.set_all_channels(0, 0, 0);
 
-	_heightMap = shared_ptr<HeightMapData>(new HeightMapData[_image.width() * _image.height()]);
+	_heightMap = shared_ptr<TerrainVertex>(new TerrainVertex[_image.width() * _image.height()]);
 
 	for (unsigned int j = 0; j < _image.height(); j++)
 	{
 		for (unsigned int i = 0; i < _image.width(); i++)
 		{
-			_image.get_pixel(j, i, r, g, b);
+			_image.get_pixel(i, j, r, g, b);
 
 			float vertex_height = static_cast<float>(r + g + b);
 
 			unsigned int index = (_image.height() * j) + i;
 
-			_heightMap.get()[index].x = static_cast<float>(i);
-			_heightMap.get()[index].y = vertex_height;
-			_heightMap.get()[index].z = static_cast<float>(j);
+			_heightMap.get()[index].position.x = static_cast<float>(i) * resolution;
+			_heightMap.get()[index].position.y = vertex_height;
+			_heightMap.get()[index].position.z = static_cast<float>(j) * resolution;
 		}
 	}
 
@@ -57,11 +57,12 @@ Heightmap::Heightmap(unsigned int width, unsigned int height)
 	{
 		for (unsigned int i = 0; i < _image.width(); i++)
 		{
-			_heightMap.get()[(_image.height() * j) + i].y /= 15.0f;
+			_heightMap.get()[(_image.height() * j) + i].position.y /= 15.0f;
 		}
 	}
 
 	this->CalculateNormals();
+	this->CalculateHighestPoint();
 }
 
 Heightmap::Heightmap(ComPtr<ID3D11Device> device, string heightMapPath)
@@ -85,8 +86,7 @@ void Heightmap::Add(Vector3 location, float radius, float min, float max)
 		for (unsigned int j = 0; j < height; ++j)
 		{
 			unsigned int index = i * width + j;
-			float distance = Vector3::Distance(location, Vector3(_heightMap.get()[index].x, _heightMap.get()[index].y, _heightMap.get()[index].z));
-
+			float distance = Vector3::Distance(location, _heightMap.get()[index].position);
 			// Check distance of this vertex with passed in location
 			if (distance <= radius)
 			{
@@ -140,7 +140,67 @@ void Heightmap::Add(Vector3 location, float radius, float min, float max)
 				_image.set_pixel(i, j, r, g, b);
 
 				// set the new value in our heightmap array
-				_heightMap.get()[index].y = (r + g + b) / 35.0f;
+				_heightMap.get()[index].position.y = (r + g + b) / 35.0f;
+			}
+		}
+	}
+
+	this->CalculateNormals();
+}
+
+void Heightmap::SmoothAdd(Vector3 location, float radius, float intensity)
+{
+	const auto width = _image.width();
+	const auto height = _image.height();
+	auto currentMapPosition = Vector3::Zero;
+	const auto p_heightmap = _heightMap.get();
+	unsigned char r;
+	unsigned char g;
+	unsigned char b;
+	auto const dampening_factor = 20.0f;
+
+	for(auto i = 0; i < width; ++i)
+	{
+		for(auto j = 0; j < height; ++j)
+		{
+			auto index = i * width + j;
+			currentMapPosition = p_heightmap[index].position;
+
+			// Find the distance from the current point from the given location
+			auto distance = Vector3::Distance(location, currentMapPosition);
+
+			// If this point is within the radius, we need to transform it
+			if (distance <= radius)
+			{
+				// the point in the middle will have the highest
+				// value, while the points on the very edge will be
+				// zero
+
+				// distance_factor will be 1.0 when exactly on the location, 0.0 when exactly
+				// on the edge of radius
+				auto distance_factor = 1 - (distance / radius);
+
+				auto amount = lerp(0.0, intensity, distance_factor);
+
+				_image.get_pixel(i, j, r, g, b);
+
+				auto split_increase = amount / 3.0f;
+
+				r = overflow_safe_add(r, split_increase, 0, 255);
+				g = overflow_safe_add(r, split_increase, 0, 255);
+				b = overflow_safe_add(r, split_increase, 0, 255);
+
+				_image.set_pixel(i, j, r, g, b);
+
+				auto heightmap_value = (r + g + g) / dampening_factor;
+
+				if (heightmap_value > highest_point)
+					highest_point = heightmap_value;
+
+				// set the new value in our heightmap array
+				_heightMap.get()[index].position.y = heightmap_value;
+
+				
 			}
 		}
 	}
@@ -163,7 +223,7 @@ void Heightmap::LoadFromFile(ComPtr<ID3D11Device> device, string heightMapPath)
 	unsigned int height = _image.height();
 	unsigned int width = _image.width();
 
-	_heightMap = shared_ptr<HeightMapData>(new HeightMapData[_image.width() * _image.height()]);
+	_heightMap = shared_ptr<TerrainVertex>(new TerrainVertex[_image.width() * _image.height()]);
 
 	for (unsigned int j = 0; j < height; j++)
 	{
@@ -175,9 +235,9 @@ void Heightmap::LoadFromFile(ComPtr<ID3D11Device> device, string heightMapPath)
 
 			unsigned int index = (_image.height() * j) + i;
 
-			_heightMap.get()[index].x = static_cast<float>(i);
-			_heightMap.get()[index].y = vertex_height;
-			_heightMap.get()[index].z = static_cast<float>(j);
+			_heightMap.get()[index].position.x = static_cast<float>(i);
+			_heightMap.get()[index].position.y = vertex_height;
+			_heightMap.get()[index].position.z = static_cast<float>(j);
 		}
 	}
 
@@ -187,7 +247,7 @@ void Heightmap::LoadFromFile(ComPtr<ID3D11Device> device, string heightMapPath)
 	{
 		for (unsigned int i = 0; i < _image.width(); i++)
 		{
-			_heightMap.get()[(_image.height()* j) + i].y /= 15.0f;
+			_heightMap.get()[(_image.height()* j) + i].position.y /= 15.0f;
 		}
 	}
 
@@ -217,17 +277,17 @@ bool Heightmap::CalculateNormals()
 			index3 = ((j + 1) * height) + i;
 
 			// Get three vertices from the face.
-			vertex1[0] = _heightMap.get()[index1].x;
-			vertex1[1] = _heightMap.get()[index1].y;
-			vertex1[2] = _heightMap.get()[index1].z;
+			vertex1[0] = _heightMap.get()[index1].position.x;
+			vertex1[1] = _heightMap.get()[index1].position.y;
+			vertex1[2] = _heightMap.get()[index1].position.z;
 
-			vertex2[0] = _heightMap.get()[index2].x;
-			vertex2[1] = _heightMap.get()[index2].y;
-			vertex2[2] = _heightMap.get()[index2].z;
+			vertex2[0] = _heightMap.get()[index2].position.x;
+			vertex2[1] = _heightMap.get()[index2].position.y;
+			vertex2[2] = _heightMap.get()[index2].position.z;
 
-			vertex3[0] = _heightMap.get()[index3].x;
-			vertex3[1] = _heightMap.get()[index3].y;
-			vertex3[2] = _heightMap.get()[index3].z;
+			vertex3[0] = _heightMap.get()[index3].position.x;
+			vertex3[1] = _heightMap.get()[index3].position.y;
+			vertex3[2] = _heightMap.get()[index3].position.z;
 
 			// Calculate the two vectors for this face.
 			vector1[0] = vertex1[0] - vertex3[0];
@@ -316,16 +376,35 @@ bool Heightmap::CalculateNormals()
 			index = (j * height) + i;
 
 			// Normalize the final shared normal for this vertex and store it in the height map array.
-			_heightMap.get()[index].nx = (sum[0] / length);
-			_heightMap.get()[index].ny = (sum[1] / length);
-			_heightMap.get()[index].nz = (sum[2] / length);
+			_heightMap.get()[index].normal.x = (sum[0] / length);
+			_heightMap.get()[index].normal.y = (sum[1] / length);
+			_heightMap.get()[index].normal.z = (sum[2] / length);
 		}
 	}
 
 	return true;
 }
 
-shared_ptr<HeightMapData> Heightmap::GetHeightMapData()
+void Heightmap::CalculateHighestPoint()
+{
+	const auto width = _image.width();
+	const auto height = _image.height();
+
+	for(auto i = 0; i < width; ++i)
+	{
+		for(auto j = 0; j < height; ++j)
+		{
+			auto index = i * width + j;
+
+			auto location_height = _heightMap.get()[index].position.y;
+
+			if (location_height > this->highest_point)
+				this->highest_point = location_height;
+		}
+	}
+}
+
+shared_ptr<TerrainVertex> Heightmap::GetHeightMapData()
 {
 	return _heightMap;
 }

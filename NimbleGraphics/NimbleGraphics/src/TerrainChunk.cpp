@@ -2,14 +2,16 @@
 #include "Logger.h"
 
 TerrainChunk::TerrainChunk()
-	: _positionX(0), _positionZ(0), _width(0), _height(0)
+	: _vertexCount(0), _positionX(0), _positionZ(0), _width(0), _height(0)
 {
 }
 
-TerrainChunk::TerrainChunk(int posX, int posZ, unsigned int width, unsigned int height, ComPtr<ID3D11Device> device, shared_ptr<TerrainVertex> vertices, int vertexCount, shared_ptr<unsigned long> indices)
-	: _positionX(posX), _positionZ(posZ), _width(width), _height(height), _vertexCount(vertexCount), _drawable(device, vertices, vertexCount, indices)
+TerrainChunk::TerrainChunk(int posX, int posZ, unsigned int width, unsigned int height, ComPtr<ID3D11Device> device, 
+	shared_ptr<TerrainVertex> vertices, int vertexCount, shared_ptr<unsigned long> indices)
+	: _vertexCount(vertexCount), _positionX(posX), _positionZ(posZ), _width(width), _height(height), 
+	_drawable(device, vertices, vertexCount, indices)
 {
-	
+	BoundingBox::CreateFromPoints(_boundingBox, Vector3(0.0f, 0.0f, 0.0f), Vector3(_width, 1.0f, height));
 }
 
 TerrainChunk::~TerrainChunk()

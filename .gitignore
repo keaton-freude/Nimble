@@ -51,6 +51,8 @@ NimbleGraphics/Debug/*
 
 NimbleGraphics/.vs/*
 
+*.VC.db
+
 NimbleGraphics/NimbleGraphics/x64/*
 
 *.vcxproj.user
@@ -58,3 +60,5 @@ NimbleGraphics/NimbleGraphics/x64/*
 *.VC.opendb
 
 *.autosave
+
+NimbleEditor/Release/*

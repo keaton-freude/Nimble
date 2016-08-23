@@ -15,9 +15,9 @@ using DirectX::SimpleMath::Ray;
 using namespace std;
 
 Graphics::Graphics()
-	: _dt(0.0f), _D3D(0), _camera(0), particleEngine(std::make_shared<ParticleEngine>())
+	: _D3D(nullptr), _camera(nullptr), particleEngine(std::make_shared<ParticleEngine>()), _dt(0.0f), _currentTime(0)
 {
-	this->_light0 = shared_ptr<Light>(new Light());
+	this->_light0 = std::make_shared<Light>();
 	LOG_INFO("Graphics constructed.");
 	LOG_INFO("SizeOf: ", ParticleVertex::GetSize());
 }
@@ -35,7 +35,7 @@ Graphics::~Graphics()
 // Intensity: How much to add to each vertex
 void Graphics::HeightmapAdd(Vector3 location, float radius, float intensity)
 {
-	terrain->HeightmapAdd(location, radius, _D3D->GetDeviceContext(), _D3D->GetDevice());
+	terrain->SmoothHeightmapAdd(location, radius, intensity, _D3D->GetDeviceContext(), _D3D->GetDevice());
 }
 
 RayHit Graphics::IsRayIntersectingTerrain(Ray r)
@@ -83,7 +83,7 @@ bool Graphics::Init(int screenWidth, int screenHeight, HWND hwnd, bool fullScree
 	_line = make_shared<LineDrawable>();
 	SetDebugLine(Vector3(0, 0, 0), Vector3(0, 100, 0));
 
-	terrain = make_shared<Terrain>(_D3D->GetDevice(), _D3D->GetDeviceContext(), 4, 4, "..\\..\\Assets\\Textures\\grass5.tga", "..\\..\\Assets\\Textures\\slope.tga", "..\\..\\Assets\\Textures\\stone1.tga");
+	terrain = make_shared<Terrain>(_D3D->GetDevice(), _D3D->GetDeviceContext(), 4, 4, "..\\..\\Assets\\Textures\\grass1.tga", "..\\..\\Assets\\Textures\\slope.tga", "..\\..\\Assets\\Textures\\stone1.tga");
 
 	LOG_INFO("Graphics initialization complete.");
 
@@ -156,14 +156,14 @@ bool Graphics::RenderViewport()
 	auto viewMatrix = _camera->GetViewMatrix();
 
 	_frustum->ConstructFrustum(1000.0f, *projectionMatrix, *viewMatrix);
-	_line->Draw(_D3D->GetDeviceContext().Get(), viewMatrix, projectionMatrix);
+	//_line->Draw(_D3D->GetDeviceContext().Get(), viewMatrix, projectionMatrix);
 
-	//terrain->Draw(_D3D->GetDevice(), _D3D->GetDeviceContext(), viewMatrix, projectionMatrix, _light0, _frustum);
+	terrain->Draw(_D3D->GetDevice(), _D3D->GetDeviceContext(), viewMatrix, projectionMatrix, _light0, _frustum);
 
 	//particleSystem->Update(*viewMatrix, *projectionMatrix, _dt);
 	//particleSystem->Draw(_D3D->GetDevice(), _D3D->GetDeviceContext());
-	particleEngine->Update(*viewMatrix, *projectionMatrix, _dt);
-	particleEngine->Draw(_D3D->GetDevice(), _D3D->GetDeviceContext());
+	//particleEngine->Update(*viewMatrix, *projectionMatrix, _dt);
+	//particleEngine->Draw(_D3D->GetDevice(), _D3D->GetDeviceContext());
 
 	
 	//StartDebugTimer();

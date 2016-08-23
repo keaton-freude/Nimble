@@ -4,7 +4,7 @@
 
 TerrainDrawable::TerrainDrawable()
 {
-
+	//terrain_shader = ShaderManager::GetInstance().GetShader<TerrainShader>(SHADER::TERRAIN);
 }
 
 TerrainDrawable::TerrainDrawable(ComPtr<ID3D11Device> device, shared_ptr<TerrainVertex> vertices, int vertexCount, shared_ptr<unsigned long> indices)
@@ -38,6 +38,7 @@ void TerrainDrawable::Draw(ComPtr<ID3D11DeviceContext> deviceContext, int vertex
 
 	auto terrainShader = ShaderManager::GetInstance().GetShader<TerrainShader>(SHADER::TERRAIN);
 
+	terrainShader->SetWorldMatrix(this->_transform.GetWorldMatrix(false));
 	terrainShader->RenderShader(deviceContext, vertexCount);
 }
 
@@ -58,4 +59,6 @@ void TerrainDrawable::Update(ComPtr<ID3D11DeviceContext> deviceContext, int x, i
 	}
 	
 	deviceContext->Unmap(this->vertexBuffer->GetVertexBuffer().Get(), 0);
+
+
 }

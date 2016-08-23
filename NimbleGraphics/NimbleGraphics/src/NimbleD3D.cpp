@@ -1,4 +1,4 @@
- #include "NimbleD3D.h"
+#include "NimbleD3D.h"
 #include "Logger.h"
 #include <iostream>
 #include <DirectXMath.h>
@@ -188,7 +188,7 @@ bool NimbleD3D::Init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, b
 	featureLevel = D3D_FEATURE_LEVEL_11_0;
 
 	// Create the swap chain, Direct3D device, and Direct3D device context.
-	result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, D3D11_CREATE_DEVICE_DEBUG, &featureLevel, 1,
+	result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, NULL, &featureLevel, 1,
 		D3D11_SDK_VERSION, &m_swapChainDesc, m_swapChain.GetAddressOf(), m_device.GetAddressOf(), NULL, m_deviceContext.GetAddressOf());
 	if (FAILED(result))
 	{

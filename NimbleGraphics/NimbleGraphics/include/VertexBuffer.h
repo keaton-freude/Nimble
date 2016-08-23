@@ -36,7 +36,7 @@ public:
 	// Factory Methods - use these for object creation
 	static shared_ptr<VertexBuffer> CreateLine(ComPtr<ID3D11Device> device, Vector3 p1, Vector3 p2);
 	static shared_ptr<VertexBuffer> CreateFromHeightMap(ComPtr<ID3D11Device> device,
-		shared_ptr<HeightMapData> heightMap, unsigned int width, unsigned int height);
+		shared_ptr<TerrainVertex> heightMap, unsigned int width, unsigned int height);
 	static shared_ptr<VertexBuffer> CreateTerrain(ComPtr<ID3D11Device> device,
 		UINT width, UINT height, float resolution);
 	static shared_ptr<VertexBuffer> CreateTerrainNode(ComPtr<ID3D11Device> device,
@@ -46,7 +46,7 @@ public:
 
 
 	// Load methods, populate the class with the correct values
-	void LoadFromHeightmap(ComPtr<ID3D11Device> device, shared_ptr<HeightMapData> heightMap,
+	void LoadFromHeightmap(ComPtr<ID3D11Device> device, shared_ptr<TerrainVertex> heightMap,
 		unsigned int width, unsigned int height);
 	void LoadTerrain(ComPtr<ID3D11Device> device, UINT width, UINT height, float resolution);
 	void LoadLine(ComPtr<ID3D11Device> device, Vector3 p1, Vector3 p2);

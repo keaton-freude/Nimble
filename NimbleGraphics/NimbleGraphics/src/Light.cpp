@@ -7,7 +7,7 @@ using DirectX::XM_PI;
 Light::Light()
 {
 	this->_lightBuffer = shared_ptr<LightBuffer>(new LightBuffer());
-	this->Create(Vector4(0.45f, 0.45f, 0.45f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector3(XM_PI, 0.0, XM_PI));
+	this->Create(Vector4(0.65f, 0.65f, 0.65f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector3(XM_PI, 0.0, XM_PI));
 }
 
 Light::~Light()

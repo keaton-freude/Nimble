@@ -251,7 +251,7 @@ UINT VertexBuffer::GetNumIndices()
 }
 
 void VertexBuffer::LoadFromHeightmap(ComPtr<ID3D11Device> device,
-	shared_ptr<HeightMapData> heightMap, unsigned int width, unsigned int height)
+	shared_ptr<TerrainVertex> heightMap, unsigned int width, unsigned int height)
 {
 	unique_ptr<TerrainVertex> vertices;
 	unique_ptr<unsigned long> indices;
@@ -285,68 +285,68 @@ void VertexBuffer::LoadFromHeightmap(ComPtr<ID3D11Device> device,
 			index4 = (height * (j + 1)) + (i + 1);  // Upper right.
 
 															 // Upper left.
-			tv = heightMapPtr[index3].tv;
+			tv = heightMapPtr[index3].texture.y;
 
 			// Modify the texture coordinates to cover the top edge.
 			if (tv == 1.0f) { tv = 0.0f; }
 
-			vertices.get()[index].position = Vector3(heightMapPtr[index3].x, heightMapPtr[index3].y, heightMapPtr[index3].z);
-			vertices.get()[index].texture = Vector2(heightMapPtr[index3].tu, tv);
-			vertices.get()[index].normal = Vector3(heightMapPtr[index3].nx, heightMapPtr[index3].ny, heightMapPtr[index3].nz);
+			vertices.get()[index].position = heightMapPtr[index3].position;
+			vertices.get()[index].texture = heightMapPtr[index3].texture;
+			vertices.get()[index].normal = heightMapPtr[index3].normal;
 			indices.get()[index] = index;
 			index++;
 
 			// Upper right.
-			tu = heightMapPtr[index4].tu;
-			tv = heightMapPtr[index4].tv;
+			tu = heightMapPtr[index4].texture.x;
+			tv = heightMapPtr[index4].texture.y;
 
 			// Modify the texture coordinates to cover the top and right edge.
 			if (tu == 0.0f) { tu = 1.0f; }
 			if (tv == 1.0f) { tv = 0.0f; }
 
-			vertices.get()[index].position = Vector3(heightMapPtr[index4].x, heightMapPtr[index4].y, heightMapPtr[index4].z);
+			vertices.get()[index].position = heightMapPtr[index4].position;
 			vertices.get()[index].texture = Vector2(tu, tv);
-			vertices.get()[index].normal = Vector3(heightMapPtr[index4].nx, heightMapPtr[index4].ny, heightMapPtr[index4].nz);
+			vertices.get()[index].normal = heightMapPtr[index4].normal;
 			indices.get()[index] = index;
 			index++;
 
 			// Bottom left.
-			vertices.get()[index].position = Vector3(heightMapPtr[index1].x, heightMapPtr[index1].y, heightMapPtr[index1].z);
-			vertices.get()[index].texture = Vector2(heightMapPtr[index1].tu, heightMapPtr[index1].tv);
-			vertices.get()[index].normal = Vector3(heightMapPtr[index1].nx, heightMapPtr[index1].ny, heightMapPtr[index1].nz);
+			vertices.get()[index].position = heightMapPtr[index1].position;
+			vertices.get()[index].texture = heightMapPtr[index1].texture;
+			vertices.get()[index].normal = heightMapPtr[index1].normal;
 			indices.get()[index] = index;
 			index++;
 
 			// Bottom left.
-			vertices.get()[index].position = Vector3(heightMapPtr[index1].x, heightMapPtr[index1].y, heightMapPtr[index1].z);
-			vertices.get()[index].texture = Vector2(heightMapPtr[index1].tu, heightMapPtr[index1].tv);
-			vertices.get()[index].normal = Vector3(heightMapPtr[index1].nx, heightMapPtr[index1].ny, heightMapPtr[index1].nz);
+			vertices.get()[index].position = heightMapPtr[index1].position;
+			vertices.get()[index].texture = heightMapPtr[index1].texture;
+			vertices.get()[index].normal = heightMapPtr[index1].normal;
 			indices.get()[index] = index;
 			index++;
 
 			// Upper right.
-			tu = heightMapPtr[index4].tu;
-			tv = heightMapPtr[index4].tv;
+			tu = heightMapPtr[index4].texture.x;
+			tv = heightMapPtr[index4].texture.y;
 
 			// Modify the texture coordinates to cover the top and right edge.
 			if (tu == 0.0f) { tu = 1.0f; }
 			if (tv == 1.0f) { tv = 0.0f; }
 
-			vertices.get()[index].position = Vector3(heightMapPtr[index4].x, heightMapPtr[index4].y, heightMapPtr[index4].z);
+			vertices.get()[index].position = heightMapPtr[index4].position;
 			vertices.get()[index].texture = Vector2(tu, tv);
-			vertices.get()[index].normal = Vector3(heightMapPtr[index4].nx, heightMapPtr[index4].ny, heightMapPtr[index4].nz);
+			vertices.get()[index].normal = heightMapPtr[index4].normal;
 			indices.get()[index] = index;
 			index++;
 
 			// Bottom right.
-			tu = heightMapPtr[index2].tu;
+			tu = heightMapPtr[index2].texture.x;
 
 			// Modify the texture coordinates to cover the right edge.
 			if (tu == 0.0f) { tu = 1.0f; }
 
-			vertices.get()[index].position = Vector3(heightMapPtr[index2].x, heightMapPtr[index2].y, heightMapPtr[index2].z);
-			vertices.get()[index].texture = Vector2(tu, heightMapPtr[index2].tv);
-			vertices.get()[index].normal = Vector3(heightMapPtr[index2].nx, heightMapPtr[index2].ny, heightMapPtr[index2].nz);
+			vertices.get()[index].position = heightMapPtr[index2].position;
+			vertices.get()[index].texture = Vector2(tu, heightMapPtr[index2].texture.y);
+			vertices.get()[index].normal = heightMapPtr[index2].normal;
 			indices.get()[index] = index;
 			index++;
 		}
@@ -477,7 +477,7 @@ shared_ptr<VertexBuffer> VertexBuffer::CreateLine(ComPtr<ID3D11Device> device, V
 }
 
 shared_ptr<VertexBuffer> VertexBuffer::CreateFromHeightMap(ComPtr<ID3D11Device> device,
-	shared_ptr<HeightMapData> heightMap, unsigned int width, unsigned int height)
+	shared_ptr<TerrainVertex> heightMap, unsigned int width, unsigned int height)
 {
 	VertexBuffer* vb = new VertexBuffer();
 	vb->LoadFromHeightmap(device, heightMap, width, height);

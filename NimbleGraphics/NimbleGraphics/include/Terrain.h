@@ -11,11 +11,10 @@
 #include <vector>
 #include "Texture.h"
 #include "Structs.h"
+#include "MemoryHeightmap.h"
 
 #include <memory>
 #include <wrl\client.h>
-
-const int TEXTURE_REPEAT = 32;
 
 using DirectX::SimpleMath::Matrix;
 using DirectX::SimpleMath::Vector2;
@@ -40,6 +39,8 @@ public:
 
 	// external functions (editor, etc)
 	void HeightmapAdd(Vector3 location, float radius, ComPtr<ID3D11DeviceContext> deviceContext, ComPtr<ID3D11Device> device);
+	void SmoothHeightmapAdd(Vector3 location, float radius, float intensity, ComPtr<ID3D11DeviceContext> deviceContext,
+		ComPtr<ID3D11Device> device);
 	RayHit IsRayIntersectingTerrain(Ray r);
 	int GetVertexCount();
 
@@ -48,17 +49,19 @@ private:
 	bool InitializeBuffers();
 	bool LoadTextures(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext, string grass, string slope, string rock);
 	void LoadChunks(ComPtr<ID3D11Device> device);
+	void LoadChunks2(ComPtr<ID3D11Device> device);
 
 private:
 	shared_ptr<Heightmap> _heightMap;
+	shared_ptr<MemoryHeightmap> _mem_heightmap;
 	void Load(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext);
 
 	unsigned int _width;
 	unsigned int _height;
 	unsigned int _numChunksX;
 	unsigned int _numChunksZ;
-	const unsigned int _chunkWidth = 64;
-	const unsigned int _chunkHeight = 64;
+	const unsigned int _chunkWidth = 16;
+	const unsigned int _chunkHeight = 16;
 
 	shared_ptr<Texture> _grassTexture;
 	shared_ptr<Texture> _slopeTexture;
@@ -66,7 +69,7 @@ private:
 	string texture_name;
 
 	int _vertexCount;
-	shared_ptr<unsigned long> _indices;
-	shared_ptr<TerrainVertex> _vertices;
+	//shared_ptr<unsigned long> _indices;
+	//shared_ptr<TerrainVertex> _vertices;
 	vector<TerrainChunk> _chunks;
 };

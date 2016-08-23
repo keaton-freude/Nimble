@@ -25,7 +25,7 @@ public:
 	void PrintLeaves();
 	int GetVisibleVertCount();
 	void UpdateBuffers(ComPtr<ID3D11DeviceContext> deviceContext);
-	void UpdateVerts(HeightMapData* data);
+	void UpdateVerts(TerrainVertex* data);
 
 private:
 	void CalculateMeshDimensions(int vertexCount, float& centerX, float& centerZ, float& meshWidth);

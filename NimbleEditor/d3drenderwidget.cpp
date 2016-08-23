@@ -111,6 +111,11 @@ void D3DRenderWidget::resizeEvent(QResizeEvent * evt)
     if (this->objectName() == "minimap")
         return;
 
+	if (graphics->GetD3D()->GetSwapChain() == nullptr)
+	{
+		return;
+	}
+
     graphics->GetD3D()->ReleaseRenderTarget();
     graphics->GetSwapChain()->ResizeBuffers(1, width(), height(),
                                             graphics->GetSwapChainDesc().BufferDesc.Format, 0);
@@ -129,7 +134,17 @@ void D3DRenderWidget::mouseMoveEvent(QMouseEvent *evt)
 
     if (evt->buttons() == Qt::MouseButton::LeftButton)
     {
+		Matrix projectionMatrix = *graphics->GetD3D()->GetProjectionMatrix();
 
+		Ray ray = graphics->getCamera()->GetMouseRay(Vector2(pointX, pointY), projectionMatrix);
+
+		auto hit = graphics->IsRayIntersectingTerrain(ray);
+
+		if (hit.hit)
+		{
+			graphics->SetDebugLine(ray.position, hit.hit_location);
+			graphics->HeightmapAdd(hit.hit_location, 3.0f, 4.0f);
+		}
     }
     else if (evt->buttons() == Qt::MouseButton::RightButton)
     {
@@ -225,7 +240,7 @@ void D3DRenderWidget::mousePressEvent(QMouseEvent *evt)
         if (hit.hit)
         {
             graphics->SetDebugLine(ray.position, hit.hit_location);
-            graphics->HeightmapAdd(hit.hit_location, 10.0f, 10.0f);
+            graphics->HeightmapAdd(hit.hit_location, 3.0f, 4.0f);
         }
 
         //emit statusEvent(message);
