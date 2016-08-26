@@ -24,6 +24,7 @@ struct ColorVertex
 	Color color;
 };
 
+
 typedef struct VectorType
 {
 	float x, y, z;

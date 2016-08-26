@@ -4,8 +4,14 @@
 class Emitter
 {
 public:
-	Emitter();
-	~Emitter();
+	Emitter(): fire_rate(0)
+	{
+	}
+
+	~Emitter()
+	{
+		
+	}
 
 private:
 	DirectX::SimpleMath::Vector3 position;

@@ -12,6 +12,7 @@
 #include <SimpleMath.h>
 #include "Logger.h"
 #include "ShaderManager.h"
+#include "RayHit.h"
 
 using std::cout;
 using std::endl;

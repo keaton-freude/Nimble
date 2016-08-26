@@ -42,6 +42,7 @@ public:
 		_position.y += dy;
 		_position.z += dz;
 		ComputeWorldMatrix();
+
 	}
 
 	void Translate(Vector3 v)

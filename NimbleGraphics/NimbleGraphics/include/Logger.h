@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include "Singleton.h"
 
 using std::ostream;
 using std::streambuf;
@@ -20,13 +21,11 @@ enum SeverityType
 	INFO
 };
 
-class Logger
+class Logger: public Singleton<Logger>
 {
 public:
-	static Logger& GetInstance();
-
 	template<SeverityType severity, typename...Args>
-	inline void Print(Args...args)
+	void Print(Args...args)
 	{
 		//mutex lock needed?
 		switch (severity)
@@ -49,18 +48,30 @@ public:
 		Print_Impl(args...);
 	}
 
-	inline ~Logger() { _out_stream.release(); }
+	~Logger() { _out_stream.release(); }
+
+	Logger()
+		: _out_stream()
+	{
+		_out_stream.reset(&cout);
+	}
 private:
-	static unique_ptr<Logger> _instance;
 	unique_ptr<ostream> _out_stream;
 	stringstream _log_stream;
-		
-	Logger();
-	void Write(const string& msg);
-	void Print_Impl();
+
+	void Write(const string& msg) const
+	{
+		(*_out_stream) << msg << endl;
+	}
+
+	void Print_Impl()
+	{
+		Write(_log_stream.str());
+		_log_stream.str("");
+	}
 
 	template<typename First, typename...Rest>
-	inline void Print_Impl(First param1, Rest...params)
+	void Print_Impl(First param1, Rest...params)
 	{
 		_log_stream << param1;
 		Print_Impl(params...);

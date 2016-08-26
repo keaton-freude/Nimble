@@ -1,5 +1,4 @@
 #pragma once
-#include <iostream>
 #include <CommonStates.h>
 #include <SimpleMath.h>
 #include <chrono>

@@ -26,7 +26,6 @@
     <ClInclude Include="include\Emitter.h" />
     <ClInclude Include="include\Frustum.h" />
     <ClInclude Include="include\Graphics.h" />
-    <ClInclude Include="include\Heightmap.h" />
     <ClInclude Include="include\Helper.h" />
     <ClInclude Include="include\IDrawable.h" />
     <ClInclude Include="include\IResource.h" />
@@ -42,12 +41,9 @@
     <ClInclude Include="include\ParticleShader.h" />
     <ClInclude Include="include\ParticleSystem.h" />
     <ClInclude Include="include\ParticleVertex.h" />
-    <ClInclude Include="include\QuadTreeNode.h" />
     <ClInclude Include="include\Singleton.h" />
     <ClInclude Include="include\spline.h" />
-    <ClInclude Include="include\TerrainCell.h" />
     <ClInclude Include="include\TerrainChunk.h" />
-    <ClInclude Include="include\TerrainQuadTree.h" />
     <ClInclude Include="include\RayHit.h" />
     <ClInclude Include="include\ShaderManager.h" />
     <ClInclude Include="include\Structs.h" />
@@ -58,38 +54,6 @@
     <ClInclude Include="include\Transform.h" />
     <ClInclude Include="include\VertexBuffer.h" />
     <ClInclude Include="IndexedBuffer\Header.h" />
-    <ClInclude Include="src\Emitter.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\MemoryHeightmap.cpp" />
-    <ClCompile Include="src\ParticleEffect.cpp" />
-    <ClCompile Include="src\ParticleEngine.cpp" />
-    <ClCompile Include="src\ParticleSettings.cpp" />
-    <ClCompile Include="src\ParticleShader.cpp" />
-    <ClCompile Include="src\ParticleSystem.cpp" />
-    <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\ColorDrawable.cpp" />
-    <ClCompile Include="src\ColorShader.cpp" />
-    <ClCompile Include="src\Frustum.cpp" />
-    <ClCompile Include="src\Graphics.cpp" />
-    <ClCompile Include="src\Heightmap.cpp" />
-    <ClCompile Include="src\IDrawable.cpp" />
-    <ClCompile Include="src\IResource.cpp" />
-    <ClCompile Include="src\IShader.cpp" />
-    <ClCompile Include="src\Light.cpp" />
-    <ClCompile Include="src\LineDrawable.cpp" />
-    <ClCompile Include="src\Logger.cpp" />
-    <ClCompile Include="src\NimbleD3D.cpp" />
-    <ClCompile Include="src\QuadTreeNode.cpp" />
-    <ClCompile Include="src\TerrainChunk.cpp" />
-    <ClCompile Include="src\TerrainQuadTree.cpp" />
-    <ClCompile Include="src\RayHit.cpp" />
-    <ClCompile Include="src\ShaderManager.cpp" />
-    <ClCompile Include="src\Terrain.cpp" />
-    <ClCompile Include="src\TerrainDrawable.cpp" />
-    <ClCompile Include="src\TerrainShader.cpp" />
-    <ClCompile Include="src\Texture.cpp" />
-    <ClCompile Include="src\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Shaders\Color.ps" />

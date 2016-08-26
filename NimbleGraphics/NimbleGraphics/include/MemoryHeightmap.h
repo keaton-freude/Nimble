@@ -1,10 +1,10 @@
 #pragma once
-#include "TerrainCell.h"
 #include "Helper.h"
 #include <vector>
 #include <fstream>
 #include <sstream>
 #include <string>
+#include "Structs.h"
 
 namespace DirectX{
 	namespace SimpleMath{
@@ -27,7 +27,7 @@ public:
 	}
 
 	MemoryHeightmap(unsigned int width, unsigned int height, float resolution = 1.0f)
-		: highest_point(0.0f), _heightmap(width * height), _width(width), _height(height)
+		: highest_point(0.0f), _width(width), _height(height), _heightmap(width * height)
 	{
 		for(unsigned int j = 0; j < _height; ++j)
 		{
@@ -104,7 +104,59 @@ public:
 		}
 	}
 
-	void SmoothAdd(DirectX::SimpleMath::Vector3 location, float radius, float intensity);
+	void SmoothAdd(DirectX::SimpleMath::Vector3 location, float radius, float intensity)
+	{
+		auto const dampening_factor = 1.0f;
+
+		for (auto j = 0; j < _height; ++j)
+		{
+			for (auto i = 0; i < _height; ++i)
+			{
+				auto index = j * _height + i;
+
+				TerrainCell& currentMapPosition = _heightmap[index];
+
+				// BOTTOM LEFT
+				auto distance = Vector3::Distance(location, currentMapPosition.bottomLeft.position);
+				if (distance <= radius)
+				{
+					auto distance_factor = 1 - (distance / radius);
+
+					auto amount = lerp(0.0, intensity, distance_factor);
+
+					currentMapPosition.bottomLeft.position.y += (amount / dampening_factor);
+				}
+				distance = Vector3::Distance(location, currentMapPosition.bottomRight.position);
+				if (distance <= radius)
+				{
+					auto distance_factor = 1 - (distance / radius);
+
+					auto amount = lerp(0.0, intensity, distance_factor);
+
+					currentMapPosition.bottomRight.position.y += (amount / dampening_factor);
+				}
+				distance = Vector3::Distance(location, currentMapPosition.upperLeft.position);
+				if (distance <= radius)
+				{
+					auto distance_factor = 1 - (distance / radius);
+
+					auto amount = lerp(0.0, intensity, distance_factor);
+
+					currentMapPosition.upperLeft.position.y += (amount / dampening_factor);
+				}
+				distance = Vector3::Distance(location, currentMapPosition.upperRight.position);
+				if (distance <= radius)
+				{
+					auto distance_factor = 1 - (distance / radius);
+
+					auto amount = lerp(0.0, intensity, distance_factor);
+
+					currentMapPosition.upperRight.position.y += (amount / dampening_factor);
+				}
+			}
+		}
+	}
+
 	float GetHighestPoint() const
 	{
 		return highest_point;
@@ -115,8 +167,8 @@ public:
 		return _heightmap;
 	}
 
-	unsigned int GetWidth() { return _width; }
-	unsigned int GetHeight() { return _height; }
+	unsigned int GetWidth() const { return _width; }
+	unsigned int GetHeight() const { return _height; }
 
 	void Save()
 	{
@@ -125,7 +177,7 @@ public:
 
 		file.open("terrain-data.txt", std::fstream::out);
 
-		for(int i = 0; i < (_width * _height) - 1; ++i)
+		for(auto i = 0; i < (_width * _height) - 1; ++i)
 		{
 			auto& current_cell = _heightmap[i];
 			// write these cells data

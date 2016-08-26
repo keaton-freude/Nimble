@@ -120,9 +120,6 @@
     <ClInclude Include="include\Light.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Heightmap.h">
-      <Filter>Header Files\Terrain</Filter>
-    </ClInclude>
     <ClInclude Include="include\Transform.h">
       <Filter>Header Files\Misc</Filter>
     </ClInclude>
@@ -134,12 +131,6 @@
     </ClInclude>
     <ClInclude Include="include\Frustum.h">
       <Filter>Header Files\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="include\TerrainQuadTree.h">
-      <Filter>Header Files\Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="include\QuadTreeNode.h">
-      <Filter>Header Files\Terrain</Filter>
     </ClInclude>
     <ClInclude Include="include\TerrainDrawable.h">
       <Filter>Header Files\Drawables</Filter>
@@ -155,9 +146,6 @@
     </ClInclude>
     <ClInclude Include="include\Emitter.h">
       <Filter>Header Files\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Emitter.cpp">
-      <Filter>Source Files\Particles</Filter>
     </ClInclude>
     <ClInclude Include="IndexedBuffer\Header.h">
       <Filter>Header Files</Filter>
@@ -183,101 +171,9 @@
     <ClInclude Include="include\Singleton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\TerrainCell.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\MemoryHeightmap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\IDrawable.cpp">
-      <Filter>Source Files\Interfaces</Filter>
-    </ClCompile>
-    <ClCompile Include="src\IResource.cpp">
-      <Filter>Source Files\Interfaces</Filter>
-    </ClCompile>
-    <ClCompile Include="src\IShader.cpp">
-      <Filter>Source Files\Interfaces</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ColorDrawable.cpp">
-      <Filter>Source Files\Drawables</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LineDrawable.cpp">
-      <Filter>Source Files\Drawables</Filter>
-    </ClCompile>
-    <ClCompile Include="src\VertexBuffer.cpp">
-      <Filter>Source Files\D3D</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Texture.cpp">
-      <Filter>Source Files\D3D</Filter>
-    </ClCompile>
-    <ClCompile Include="src\NimbleD3D.cpp">
-      <Filter>Source Files\D3D</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Camera.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Light.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ColorShader.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ShaderManager.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Terrain.cpp">
-      <Filter>Source Files\Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Heightmap.cpp">
-      <Filter>Source Files\Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Logger.cpp">
-      <Filter>Source Files\Misc</Filter>
-    </ClCompile>
-    <ClCompile Include="src\RayHit.cpp">
-      <Filter>Source Files\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Frustum.cpp">
-      <Filter>Source Files\Misc</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TerrainQuadTree.cpp">
-      <Filter>Source Files\Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="src\QuadTreeNode.cpp">
-      <Filter>Source Files\Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TerrainDrawable.cpp">
-      <Filter>Source Files\Drawables</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TerrainChunk.cpp">
-      <Filter>Source Files\Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TerrainShader.cpp">
-      <Filter>Source Files\Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ParticleSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ParticleShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ParticleSettings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ParticleEffect.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ParticleEngine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MemoryHeightmap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Shaders\Color.ps">

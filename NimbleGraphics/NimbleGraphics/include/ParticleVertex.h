@@ -24,7 +24,6 @@ struct ParticleVertex
 	static shared_ptr<D3D11_INPUT_ELEMENT_DESC> GetLayout(unsigned int & numElements)
 	{
 		numElements = 5;
-
 		auto desc = shared_ptr<D3D11_INPUT_ELEMENT_DESC>(new D3D11_INPUT_ELEMENT_DESC[numElements]);
 
 		// Corner
@@ -62,6 +61,7 @@ struct ParticleVertex
 		desc.get()[3].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 		desc.get()[3].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		desc.get()[3].InstanceDataStepRate = 0;
+
 
 		// Time
 		desc.get()[4].SemanticName = "TEXCOORD";

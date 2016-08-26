@@ -3,20 +3,33 @@
 
 using DirectX::SimpleMath::Vector3;
 
-class RayHit;
 
 class RayHit
 {
 public:
-	RayHit();
-	RayHit(Vector3 origin, Vector3 hitLocation, float distance, bool hit);
-	~RayHit();
+	RayHit(): hit(false), distance(0)
+	{
+	}
 
-	static const RayHit NoHit;
+	RayHit(Vector3 origin, Vector3 hitLocation, float distance, bool hit): hit(hit), distance(distance)
+	{
+	}
+
+	~RayHit()
+	{
+		
+	}
+
+	static RayHit NoHit()
+	{
+		static auto noHit = RayHit(Vector3::Zero, Vector3::Zero, 0.0f, false);
+		return noHit;
+	}
 
 	// true if the ray intersection test was successful, else false
 	// if false, then state of this object is not valid
 	bool hit;
+
 	// distance from origin of ray to intersection
 	float distance;
 

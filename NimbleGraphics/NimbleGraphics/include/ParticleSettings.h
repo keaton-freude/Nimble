@@ -5,6 +5,7 @@
 #include <rapidjson/stringbuffer.h>
 #include <SimpleMath.h>
 #include <fstream>
+#include "Logger.h"
 
 
 using std::string;
@@ -58,6 +59,7 @@ public:
 	Color min_color;
 	Color max_color;
 
+
 	float min_rotate_speed;
 	float max_rotate_speed;
 
@@ -73,7 +75,76 @@ public:
 
 	BLEND_STATE blend_state;
 
-	ParticleSettings();
-	ParticleSettings(string file_path);
-	void WriteToFile(string file_path);
+	ParticleSettings() : texture_name("..\\..\\Assets\\Textures\\smoke_particle.tga"), max_particles(2000000),
+		particles_per_second(0.0f), duration(12.0f), duration_randomness(3.0f), min_velocity(Vector3(-5.0f, -5.0f, -5.0f)),
+		max_velocity(Vector3(5.0f, 5.0f, 5.0f)), gravity(Vector3(0.0f, 0.0f, 0.0f)), end_velocity(1.0f), min_color(Color(1.0f, 1.0f, 1.0f, 1.0f)),
+		max_color(Color(1.0f, 1.0f, 1.0f, 1.0f)), min_rotate_speed(0.0f), max_rotate_speed(0.0f), start_size(0.0f, 0.0f),
+		end_size(0.0f, 0.0f), geometry_scale(1.0f, 1.0f), blend_state(BLEND_STATE::Alpha)
+	{
+	}
+
+	explicit ParticleSettings(string file_path): texture_name("..\\..\\Assets\\Textures\\smoke_particle.tga"), max_particles(2000000),
+		particles_per_second(0.0f), duration(12.0f), duration_randomness(3.0f), min_velocity(Vector3(-5.0f, -5.0f, -5.0f)),
+		max_velocity(Vector3(5.0f, 5.0f, 5.0f)), gravity(Vector3(0.0f, 0.0f, 0.0f)), end_velocity(1.0f), min_color(Color(1.0f, 1.0f, 1.0f, 1.0f)),
+		max_color(Color(1.0f, 1.0f, 1.0f, 1.0f)), min_rotate_speed(0.0f), max_rotate_speed(0.0f), start_size(0.0f, 0.0f),
+		end_size(0.0f, 0.0f), geometry_scale(1.0f, 1.0f), blend_state(BLEND_STATE::Alpha)
+	{
+		std::ifstream ifs(file_path);
+
+		// read the whole file into a string
+		string content((std::istreambuf_iterator<char>(ifs)),
+			(std::istreambuf_iterator<char>()));
+
+		// set our settings based on the data
+		rapidjson::Document document;
+
+		if (document.Parse(content.c_str()).HasParseError())
+		{
+			LOG_ERROR("Unable to load JSON ParticleSystem data in ", file_path);
+			return;
+		}
+
+		if (document.HasMember("system_name"))
+		{
+			system_name = document["system_name"].GetString();
+		}
+
+		if (document.HasMember("max_particles"))
+		{
+			max_particles = document["max_particles"].GetUint();
+		}
+
+		if (document.HasMember("texture_name"))
+		{
+			texture_name = document["texture_name"].GetString();
+		}
+
+		if (document.HasMember("particles_per_second"))
+		{
+			particles_per_second = static_cast<float>(document["particles_per_second"].GetDouble());
+		}
+	}
+
+	void WriteToFile(string file_path)
+	{
+		rapidjson::StringBuffer sb;
+		rapidjson::Writer<rapidjson::StringBuffer> writer(sb);
+
+		writer.StartObject();
+		writer.Key("system_name");
+		writer.String(system_name.c_str());
+		writer.Key("max_particles");
+		writer.Uint(max_particles);
+		writer.Key("texture_name");
+		writer.String(texture_name.c_str());
+		writer.Key("particles_per_second");
+		writer.Double(particles_per_second);
+		writer.EndObject();
+
+		std::ofstream out_file(file_path, std::ios::out | std::ios::trunc);
+
+		out_file << sb.GetString();
+
+		out_file.close();
+	}
 };

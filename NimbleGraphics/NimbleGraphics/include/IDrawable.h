@@ -1,5 +1,4 @@
 #pragma once
-#include <d3d11.h>
 #include <memory>
 #include <wrl/client.h>
 #include "SimpleMath.h"
@@ -14,12 +13,12 @@ using Microsoft::WRL::ComPtr;
 class IDrawable
 {
 public:
-	inline void SetVertexBuffer(shared_ptr<VertexBuffer> newBuffer)
+	void SetVertexBuffer(shared_ptr<VertexBuffer> newBuffer)
 	{
 		this->vertexBuffer = newBuffer;
 	}
-	
-	inline shared_ptr<VertexBuffer> GetVertexBuffer()
+
+	shared_ptr<VertexBuffer> GetVertexBuffer()
 	{
 		return vertexBuffer;
 	}

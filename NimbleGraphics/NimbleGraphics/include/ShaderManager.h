@@ -21,50 +21,64 @@ enum SHADER
 	PARTICLE = 2
 };
 
-class ShaderManager
+class ShaderManager: public Singleton<ShaderManager>
 {
 public:
-	static ShaderManager& GetInstance()
+	ShaderManager()
 	{
-		static ShaderManager instance;
-		return instance;
+
 	}
 
-	void Load(ComPtr<ID3D11Device> device);
+	void Load(ComPtr<ID3D11Device> device)
+	{
+		std::pair<SHADER, shared_ptr<IShader>> pair = std::pair<SHADER, shared_ptr<IShader>>(SHADER::COLOR,
+			make_shared<ColorShader>(device));
 
-	ShaderManager(ShaderManager&& other);
-	ShaderManager& operator=(ShaderManager&& other);
+		_shaders.insert(pair);
 
-	~ShaderManager();
+		pair = std::pair<SHADER, shared_ptr<IShader>>(SHADER::TERRAIN,
+			make_shared<TerrainShader>(device));
 
-	void Shutdown();
+		_shaders.insert(pair);
+
+		//pair = std::pair<SHADER, shared_ptr<IShader>>(SHADER::PARTICLE, make_shared<ParticleShader>(device));
+
+		//_shaders.insert(pair);
+	}
+
+	~ShaderManager()
+	{
+		this->Shutdown();
+		
+	}
+
+	void Shutdown()
+	{
+		LOG_INFO("Shader manager being shut down.");
+		_shaders.clear();
+	}
 
 	template<typename T>
-    T* GetShader(SHADER shader);
-private:
-	ShaderManager();
+    T* GetShader(SHADER shader)
+	{
+		auto element = _shaders.find(shader);
+		if (element == _shaders.end())
+		{
+			return nullptr;
+		}
 
+		T* resource = dynamic_cast<T*>(element->second.get());
+
+		if (resource)
+		{
+			return resource;
+		}
+
+		return nullptr;
+	}
+protected:
 	ShaderManager(ShaderManager const& other) = delete;
 	void operator=(ShaderManager const&) = delete;
 
 	unordered_map<SHADER, shared_ptr<IShader>> _shaders;
 };
-
-template<typename T>
-inline T* ShaderManager::GetShader(SHADER shader)
-{
-	auto element = _shaders.find(shader);
-	if (element == _shaders.end())
-	{
-		return nullptr;
-	}
-
-	T* resource = dynamic_cast<T*>(element->second.get());
-
-	if (resource)
-	{
-		return resource;
-	}
-
-	return nullptr;
-}
