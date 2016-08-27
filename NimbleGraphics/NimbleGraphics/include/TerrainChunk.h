@@ -19,7 +19,7 @@ public:
 	TerrainChunk(int posX, int posZ, unsigned int width, unsigned int height, ComPtr<ID3D11Device> device,
 		shared_ptr<TerrainVertex> vertices, int vertexCount, shared_ptr<unsigned long> indices)
 		: _vertexCount(vertexCount), _positionX(posX), _positionZ(posZ), _width(width), _height(height),
-		_drawable(device, vertices, vertexCount, indices)
+		_drawable(device, vertices, vertexCount, indices), _terrainCellData()
 	{
 		BoundingBox::CreateFromPoints(_boundingBox, Vector3(0.0f, 0.0f, 0.0f), Vector3(_width, 1.0f, height));
 	}
@@ -34,7 +34,7 @@ public:
 		_drawable.Draw(deviceContext, _vertexCount);
 	}
 
-	void WriteToBuffer(ComPtr<ID3D11DeviceContext> deviceContext, shared_ptr<TerrainVertex> vertices, shared_ptr<VertexBuffer> vertexBuffer)
+	void WriteToBuffer(ComPtr<ID3D11DeviceContext> deviceContext, shared_ptr<TerrainVertex> vertices, shared_ptr<VertexBuffer> vertexBuffer) const
 	{
 		D3D11_MAPPED_SUBRESOURCE resource;
 		deviceContext->Map(vertexBuffer->GetVertexBuffer().Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
@@ -54,6 +54,18 @@ public:
 		deviceContext->Unmap(vertexBuffer->GetVertexBuffer().Get(), 0);
 	}
 
+	void Update(ComPtr<ID3D11DeviceContext> deviceContext)
+	{
+		if (_terrainCellData.size() == 0)
+			return;
+		_drawable.GetVertexBuffer()->SetData<TerrainCell>(deviceContext, &_terrainCellData[0], 0, _terrainCellData.size());
+	}
+
+	vector<TerrainCell>& GetTerrainCellData()
+	{
+		return _terrainCellData;
+	}
+
 	BoundingBox GetBoundingBox() const { return _boundingBox; }
 	Transform& transform() { return _drawable._transform; }
 private:
@@ -64,4 +76,5 @@ private:
 	unsigned int _height;
 	BoundingBox _boundingBox;
 	TerrainDrawable _drawable;
+	vector<TerrainCell> _terrainCellData;
 };

@@ -14,12 +14,11 @@ using Microsoft::WRL::ComPtr;
 class TerrainDrawable : public IDrawable
 {
 public:
-	TerrainDrawable()
+	TerrainDrawable(): terrain_shader(nullptr)
 	{
-		
 	}
 
-	TerrainDrawable(ComPtr<ID3D11Device> device, shared_ptr<TerrainVertex> vertices, int vertexCount, shared_ptr<unsigned long> indices)
+	TerrainDrawable(ComPtr<ID3D11Device> device, shared_ptr<TerrainVertex> vertices, int vertexCount, shared_ptr<unsigned long> indices): terrain_shader(nullptr)
 	{
 		vertexBuffer = VertexBuffer::CreateTerrainNode(device, vertices, vertexCount, indices);
 	}

@@ -63,6 +63,9 @@
     <None Include="..\..\Assets\Shaders\Terrain.ps" />
     <None Include="..\..\Assets\Shaders\Terrain.vs" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\placeholder.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BE4AE97B-E112-4F31-84E9-CE99619194E7}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

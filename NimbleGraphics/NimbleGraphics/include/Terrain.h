@@ -2,7 +2,6 @@
 #include "ColorDrawable.h"
 #include "TerrainChunk.h"
 #include "TerrainShader.h"
-#include "Heightmap.h"
 #include "RayHit.h"
 #include <SimpleMath.h>
 #include "Light.h"
@@ -91,17 +90,16 @@ public:
 	{
 		StartDebugTimer();
 		_mem_heightmap->SmoothAdd(location, radius, intensity);
+		for(auto& chunk : _chunks)
+		{
+			//chunk.GetTerrainCellData()
+		}
 		_mem_heightmap->CalculateTextureCoordinates();
 		EndDebugTimer("SmoothAdd: ");
 
 		StartDebugTimer();
-		_mem_heightmap->Save();
-		EndDebugTimer("Heightmap save: ");
-
-		StartDebugTimer();
-		_chunks.clear();
-		LoadChunks(device);
-		EndDebugTimer("Chunks Recreated: ");
+		UpdateChunks(device, deviceContext);
+		EndDebugTimer("Chunks Updated: ");
 	}
 
 	RayHit IsRayIntersectingTerrain(Ray r)
@@ -267,13 +265,20 @@ private:
 
 				auto chunk = TerrainChunk(x * chunk_width, z * chunk_height, chunk_width, chunk_height, device,
 					vertices, _width * _height * 6, indices);
+				chunk.GetTerrainCellData();
 				_chunks.push_back(chunk);
 				chunk_vertex_index = 0;
 			}
 		}
 	}
 
-
+	void UpdateChunks(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext)
+	{
+		for(auto & chunk : _chunks)
+		{
+			chunk.Update(deviceContext);
+		}
+	}
 
 private:
 	shared_ptr<MemoryHeightmap> _mem_heightmap;
