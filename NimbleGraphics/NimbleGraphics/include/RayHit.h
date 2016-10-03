@@ -11,7 +11,7 @@ public:
 	{
 	}
 
-	RayHit(Vector3 origin, Vector3 hitLocation, float distance, bool hit): hit(hit), distance(distance)
+	RayHit(Vector3 origin, Vector3 hitLocation, float distance, bool hit): hit(hit), distance(distance), origin(origin), hit_location(hitLocation)
 	{
 	}
 

@@ -15,21 +15,26 @@ using std::shared_ptr;
 
 class Camera
 {
+private:
+	Transform _transform;
+	Matrix _viewMatrix;
+
 public:
-	Camera(): _transform(Vector3(0.001f, 0.001f, 0.001f), Vector3(0.0f, 0.0f, 0.0f), 
-		Vector3(1.0f, 1.0f, 1.0f)), _viewMatrix(new Matrix())
+	Camera()
+		: _transform(Vector3(0.001f, 0.001f, 0.001f), Vector3(0.0f, 0.0f, 0.0f), 
+			Vector3(1.0f, 1.0f, 1.0f)), _viewMatrix()
 	{	
 	}
 
-	explicit Camera(Vector3 initial_position) : _transform(initial_position, Vector3(0.0f, 0.0f, 0.0f),
-		Vector3(0.0f, 0.0f, 0.0f)), _viewMatrix(new Matrix())
+	explicit Camera(Vector3 initial_position) 
+		: _transform(initial_position, Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f)), _viewMatrix()
 	{
 		// in case we are in an unsafe location
 		this->SetSafePosition();
 	}
 
-	Camera(Vector3 initial_position, Vector3 initial_rotation): _transform(initial_position, initial_rotation,
-		Vector3(0.0f, 0.0f, 0.0f)), _viewMatrix(new Matrix())
+	Camera(Vector3 initial_position, Vector3 initial_rotation)
+		: _transform(initial_position, initial_rotation, Vector3(0.0f, 0.0f, 0.0f)), _viewMatrix()
 	{
 		this->SetSafePosition();
 	}
@@ -39,9 +44,11 @@ public:
 		LOG_INFO("Camera destruct!");
 	}
 
-	Vector3 GetPosition() const { return _transform._position; }
-	Vector3 GetRotation() const { return _transform._rotation; }
-	shared_ptr<Matrix> GetViewMatrix() const { return _viewMatrix; }
+	const Vector3& GetPosition() const { return _transform._position; }
+
+	const Vector3& GetRotation() const { return _transform._rotation; }
+
+	const Matrix& GetViewMatrix() const { return _viewMatrix; }
 
 	void SetPosition(float x, float y, float z)
 	{
@@ -71,12 +78,7 @@ public:
 		_transform._rotation += delta_rotation;
 	}
 
-	void TranslateRotated(Vector3 offset)
-	{
-		
-	}
-
-	void Update() const
+	void Update()
 	{
 		auto rotationMatrixX = Matrix::CreateRotationX(_transform._rotation.x);
 		auto rotationMatrixY = Matrix::CreateRotationY(_transform._rotation.y);
@@ -86,7 +88,7 @@ public:
 
 		auto cameraLookAt = _transform._position + transformedReference;
 
-		*_viewMatrix = XMMatrixLookAtLH(_transform._position, cameraLookAt, Vector3::UnitY);
+		_viewMatrix = XMMatrixLookAtLH(_transform._position, cameraLookAt, Vector3::UnitY);
 	}
 
 	Ray GetMouseRay(Vector2 mousePosition, Matrix projectionMatrix) const
@@ -97,7 +99,7 @@ public:
 		pointX = pointX / projectionMatrix._11;
 		pointY = pointY / projectionMatrix._22;
 
-		auto matView = *_viewMatrix;
+		auto matView = _viewMatrix;
 		auto m = matView.Invert();
 
 		Vector3 direction;
@@ -123,8 +125,4 @@ private:
 			_transform._position += Vector3(0.001f, 0.0f, 0.001f);
 		}
 	}
-
-private:
-	Transform _transform;
-	shared_ptr<Matrix> _viewMatrix;
 };

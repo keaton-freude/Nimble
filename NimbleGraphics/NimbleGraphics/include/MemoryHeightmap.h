@@ -2,9 +2,9 @@
 #include "Helper.h"
 #include <vector>
 #include <fstream>
-#include <sstream>
-#include <string>
 #include "Structs.h"
+#include "DebugLineManager.h"
+#include "TerrainVertexField.h"
 
 namespace DirectX{
 	namespace SimpleMath{
@@ -16,7 +16,7 @@ class MemoryHeightmap
 {
 public:
 	MemoryHeightmap()
-		: highest_point(0.0f), _heightmap(), _width(0), _height(0)
+		: highest_point(0.0f), _heightmap(), _width(0), _height(0), _vertex_field()
 	{
 		
 	}
@@ -27,20 +27,26 @@ public:
 	}
 
 	MemoryHeightmap(unsigned int width, unsigned int height, float resolution = 1.0f)
-		: highest_point(0.0f), _width(width), _height(height), _heightmap(width * height)
+		: highest_point(0.0f), _width(width), _height(height), _heightmap(width * height), _vertex_field(width + 1, height + 1, resolution)
 	{
+		auto& p_verts = _vertex_field.GetVertices();
 		for(unsigned int j = 0; j < _height; ++j)
 		{
 			for(unsigned int i = 0; i < _width; ++i)
 			{
+				auto vf_height = _vertex_field.GetHeight();
 				auto index = j * _height + i;
-				TerrainCell cell = TerrainCell();
-				cell.upperLeft = TerrainVertex(Vector3(i, 0.0f, j + 1), Vector2::Zero, Vector3::UnitY);
-				cell.upperRight = TerrainVertex(Vector3(i + 1, 0.0f, j + 1), Vector2::Zero, Vector3::UnitY);
-				cell.bottomLeft = TerrainVertex(Vector3(i, 0.0f, j), Vector2::Zero, Vector3::UnitY);
-				cell.bottomRight = TerrainVertex(Vector3(i + 1, 0.0f, j), Vector2::Zero, Vector3::UnitY);
-				
-				_heightmap[index] = cell;
+
+				auto blIndex = j * vf_height + i;
+				auto brIndex = j * vf_height + (i + 1);
+				auto ulIndex = (j + 1) * vf_height + i;
+				auto urIndex = (j + 1) * vf_height + (i + 1);
+
+				// Create _symbolic_ links to the underlying verts				
+				_heightmap[index].data.upperLeft = &p_verts[ulIndex];
+				_heightmap[index].data.upperRight = &p_verts[urIndex];
+				_heightmap[index].data.bottomLeft = &p_verts[blIndex];
+				_heightmap[index].data.bottomRight = &p_verts[brIndex];
 			}
 		}
 
@@ -52,106 +58,61 @@ public:
 		int incrementCount, tuCount, tvCount;
 		float incrementValue, tuCoordinate, tvCoordinate;
 
-		incrementValue = (float)TEXTURE_REPEAT / (float)_width;
+		incrementValue = (float)TEXTURE_REPEAT / _width;
 
 		float tu, tv;
 
 		tv = 1.0f;
 		tu = 0.0f;
 
-		tuCount = 0;
-		tvCount = 0;
+		auto vf_height = _vertex_field.GetHeight();
+		auto vf_width = _vertex_field.GetWidth();
 
 		incrementCount = _width / TEXTURE_REPEAT;
+		auto& p_vertex_field = GetVertexField()->GetVertices();
 
-		for (unsigned int j = 0; j < _height; ++j)
+		for (unsigned int j = 0; j < vf_height; ++j)
 		{
-			for (unsigned int i = 0; i < _width; ++i)
+			for (unsigned int i = 0; i < vf_width; ++i)
 			{
-				auto index = j * _height + i;
+				auto index = j * vf_height + i;
 
-				auto & current_cell = _heightmap[index];
-				
-				Vector2 upperLeft = Vector2(tu, tv - incrementValue);
-				Vector2 upperRight = Vector2(tu + incrementValue, tv - incrementValue);
-				Vector2 bottomLeft = Vector2(tu, tv);
-				Vector2 bottomRight = Vector2(tu + incrementValue, tv);
-
-				current_cell.upperLeft.texture = upperLeft;
-				current_cell.upperRight.texture = upperRight;
-				current_cell.bottomLeft.texture = bottomLeft;
-				current_cell.bottomRight.texture = bottomRight;
-
-				// keep tu moving
+				// We are moving left to right, bottom to top
+				// each time we move right, we need to
+				// 1) write our current value, then increment
+				p_vertex_field[index].texture = Vector2(tu, tv);
 				tu += incrementValue;
-				tuCount++;
-
-				if (tuCount == incrementCount)
-				{
-					tu = 0.0f;
-					tuCount = 0;
-				}
 			}
-
+			tu = 0.0f;
 			tv -= incrementValue;
-			tvCount++;
-
-			if (tvCount == incrementCount)
-			{
-				tv = 1.0f;
-				tvCount = 0;
-			}
 		}
 	}
 
 	void SmoothAdd(DirectX::SimpleMath::Vector3 location, float radius, float intensity)
 	{
 		auto const dampening_factor = 1.0f;
+		auto& p_verts = _vertex_field.GetVertices();
 
-		for (auto j = 0; j < _height; ++j)
+		auto height = _vertex_field.GetHeight();
+		auto width = _vertex_field.GetWidth();
+
+		for (auto j = 0; j < height; ++j)
 		{
-			for (auto i = 0; i < _height; ++i)
+			for (auto i = 0; i < width; ++i)
 			{
-				auto index = j * _height + i;
+				auto index = j * height + i;
 
-				TerrainCell& currentMapPosition = _heightmap[index];
+				TerrainVertex& vert = p_verts[index];
 
-				// BOTTOM LEFT
-				auto distance = Vector3::Distance(location, currentMapPosition.bottomLeft.position);
+				auto distance = Vector3::Distance(location, vert.position);
+
 				if (distance <= radius)
 				{
 					auto distance_factor = 1 - (distance / radius);
 
 					auto amount = lerp(0.0, intensity, distance_factor);
 
-					currentMapPosition.bottomLeft.position.y += (amount / dampening_factor);
-				}
-				distance = Vector3::Distance(location, currentMapPosition.bottomRight.position);
-				if (distance <= radius)
-				{
-					auto distance_factor = 1 - (distance / radius);
-
-					auto amount = lerp(0.0, intensity, distance_factor);
-
-					currentMapPosition.bottomRight.position.y += (amount / dampening_factor);
-				}
-				distance = Vector3::Distance(location, currentMapPosition.upperLeft.position);
-				if (distance <= radius)
-				{
-					auto distance_factor = 1 - (distance / radius);
-
-					auto amount = lerp(0.0, intensity, distance_factor);
-
-					currentMapPosition.upperLeft.position.y += (amount / dampening_factor);
-				}
-				distance = Vector3::Distance(location, currentMapPosition.upperRight.position);
-				if (distance <= radius)
-				{
-					auto distance_factor = 1 - (distance / radius);
-
-					auto amount = lerp(0.0, intensity, distance_factor);
-
-					currentMapPosition.upperRight.position.y += (amount / dampening_factor);
+					vert.position.y += (amount / dampening_factor);
 				}
 			}
 		}
@@ -172,44 +133,197 @@ public:
 
 	void Save()
 	{
-		// save current state of _heightmap to terrain_data.txt
-		std::fstream file;
+	}
 
-		file.open("terrain-data.txt", std::fstream::out);
-
-		for(auto i = 0; i < (_width * _height) - 1; ++i)
+	void AddImpl(int index, Vector3& normal, int faces)
+	{
+		auto& cell = _heightmap[index];
+		if (faces == 1)
+			normal += cell.GetFaceNormal1();
+		else if (faces == 2)
+			normal += cell.GetFaceNormal2();
+		else if (faces == 0)
 		{
-			auto& current_cell = _heightmap[i];
-			// write these cells data
-			current_cell.bottomLeft.WriteToFile(file);
-			file << "\n";
-			current_cell.bottomRight.WriteToFile(file);
-			file << "\n";
-			current_cell.upperLeft.WriteToFile(file);
-			file << "\n";
-			current_cell.upperRight.WriteToFile(file);
-			file << "\n";
+			normal += cell.GetFaceNormal1();
+			normal += cell.GetFaceNormal2();
+		}
+	}
+
+	void AddDown(int i, int j, Vector3& normal, int faces)
+	{
+		if (j != 0)
+		{
+			// can add
+			auto index = (j - 1) * _height + i;
+			AddImpl(index, normal, faces);
+		}
+	}
+
+	void AddLeft(int i, int j, Vector3& normal, int faces)
+	{
+		if (i != 0)
+		{
+			// can add
+			auto index = j * _height + (i - 1);
+			AddImpl(index, normal, faces);
+		}
+	}
+
+	void AddRight(int i, int j, Vector3& normal, int faces)
+	{
+		if (i < (_width - 1))
+		{
+			auto index = j * _height + (i + 1);
+			AddImpl(index, normal, faces);
+		}
+	}
+
+	void AddUp(int i, int j, Vector3& normal, int faces)
+	{
+		if (j < (_height - 1))
+		{
+			auto index = (j + 1) * _height + (i);
+			AddImpl(index, normal, faces);
+		}
+	}
+
+	void AddBottomLeft(int i, int j, Vector3& normal, int faces)
+	{
+		if (i != 0 && j != 0)
+		{
+			// good to go
+			auto index = (j - 1) * _height + (i - 1);
+			AddImpl(index, normal, faces);
+		}
+	}
+
+	void AddBottomRight(int i, int j, Vector3& normal, int faces)
+	{
+		if (j != 0 && i < (_width - 1))
+		{
+			// good to go
+			auto index = (j - 1) * _height + (i + 1);
+			AddImpl(index, normal, faces);
+		}
+	}
+
+	void AddUpperLeft(int i, int j, Vector3& normal, int faces)
+	{
+		if (i != 0 && j < (_height - 1))
+		{
+			// good to go
+			auto index = (j + 1) * _height + (i - 1);
+			AddImpl(index, normal, faces);
+		}
+	}
+
+	void AddUpperRight(int i, int j, Vector3& normal, int faces)
+	{
+		if (j < (_height - 1) && i < (_width - 1))
+		{
+			// good to go
+			auto index = (j + 1) * _height + (i + 1);
+			AddImpl(index, normal, faces);
+		}
+	}
+
+	bool CalculateNormalsDifferently()
+	{
+		for(auto j = 0; j < _height; ++j)
+		{
+			for(auto i = 0; i < _width; ++i)
+			{
+				auto index = j * _height + i;
+
+				// each cell has 2 faces, shared between 6 vertices
+				auto& cell = _heightmap[index];
+				// clear out the normals
+				cell.ClearNormals();
+				cell.SetNormal();
+			}
 		}
 
-		auto& current_cell = _heightmap.back();
-		// write these cells data
-		current_cell.bottomLeft.WriteToFile(file);
-		file << "\n";
-		current_cell.bottomRight.WriteToFile(file);
-		file << "\n";
-		current_cell.upperLeft.WriteToFile(file);
-		file << "\n";
-		current_cell.upperRight.WriteToFile(file);
+		for (auto j = 0; j < _height; ++j)
+		{
+			for (auto i = 0; i < _width; ++i)
+			{
+				auto index = j * _height + i;
 
-		file.close();
+				auto& cell = _heightmap[index];
+
+				// bottomLeft vertex
+				// Need: Face2 on Left, Face1/2 on Bottom-Left, Face1 on Bottom
+				cell.data.bottomLeft->normal += cell.GetFaceNormal1();
+				cell.data.bottomLeft->normal += cell.GetFaceNormal2();
+				AddLeft(i, j, cell.data.bottomLeft->normal, 2);
+				AddBottomLeft(i, j, cell.data.bottomLeft->normal, 3);
+				AddDown(i, j, cell.data.bottomLeft->normal, 1);
+				cell.data.bottomLeft->normal.Normalize();
+
+				// bottomRight vertex
+				// Need: Face1 on Bottom, 
+				cell.data.bottomRight->normal += cell.GetFaceNormal2();
+				AddDown(i, j, cell.data.bottomRight->normal, 3);
+				AddBottomRight(i, j, cell.data.bottomRight->normal, 1);
+				AddRight(i, j, cell.data.bottomRight->normal, 3);
+				cell.data.bottomRight->normal.Normalize();
+
+				// upperLeft vertex
+				// Need: Face1/2 Above, Face2 Upper-left, Face1/2 Left, Face1 on self
+				cell.data.upperLeft->normal += cell.GetFaceNormal1(); //1
+				AddUp(i, j, cell.data.upperLeft->normal, 3); //2
+				AddUpperLeft(i, j, cell.data.upperLeft->normal, 2);// 1
+				AddLeft(i, j, cell.data.upperLeft->normal, 3); // 2
+				cell.data.upperLeft->normal.Normalize();
+
+				// upperRight vertex
+				// face1/2 on self, face2 above, face1/2 upper-right, face1 right
+				cell.data.upperRight->normal += cell.GetFaceNormal1();
+				cell.data.upperRight->normal += cell.GetFaceNormal2();
+				AddUp(i, j, cell.data.upperRight->normal, 2);
+				AddUpperRight(i, j, cell.data.upperRight->normal, 3);
+				AddRight(i, j, cell.data.upperRight->normal, 1);
+				cell.data.upperRight->normal.Normalize();
+
+				//cell.NormalizeNormals(); // ?? maybe?
+			}
+		}
+
+		DebugLineManager::GetInstance().Clear();
+
+		// Add debug lines
+		for (auto j = 0; j < _height; ++j)
+		{
+			for (auto i = 0; i < _width; ++i)
+			{
+				auto& cell = _heightmap[j * _height + i];
+
+				// draw 4 normals lines for debug
+				//DebugLineManager::GetInstance().AddNormal(cell.data.upperLeft->position, cell.data.upperLeft->normal);
+				//DebugLineManager::GetInstance().AddNormal(cell.data.upperRight->position, cell.data.upperRight->normal);
+				//DebugLineManager::GetInstance().AddNormal(cell.data.bottomLeft->position, cell.data.bottomLeft->normal);
+				//DebugLineManager::GetInstance().AddNormal(cell.data.bottomRight->position, cell.data.bottomRight->normal);
+			}
+		}
+
+		return true;
+	}
+
+	TerrainVertexField* GetVertexField()
+	{
+		return &_vertex_field;
 	}
 
 private:
-	bool CalculateNormals();
+	TerrainCell* GetHeightmapDataPointer()
+	{
+		return &_heightmap[0];
+	}
+
 	void CalculateHighestPoint();
 	float highest_point;
 	unsigned int _width;
 	unsigned int _height;
 	std::vector<TerrainCell> _heightmap;
-
+	TerrainVertexField _vertex_field;
 };

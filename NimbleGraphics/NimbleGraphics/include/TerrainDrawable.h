@@ -18,9 +18,20 @@ public:
 	{
 	}
 
-	TerrainDrawable(ComPtr<ID3D11Device> device, shared_ptr<TerrainVertex> vertices, int vertexCount, shared_ptr<unsigned long> indices): terrain_shader(nullptr)
+	TerrainDrawable(ComPtr<ID3D11Device> device, vector<TerrainVertex>& vertices, vector<unsigned long>& indices): terrain_shader(nullptr)
 	{
-		vertexBuffer = VertexBuffer::CreateTerrainNode(device, vertices, vertexCount, indices);
+
+		//vertices[0].texture = Vector2(0.0f, 1.0f);
+		//vertices[1].texture = Vector2(1.0f, 1.0f);
+		//vertices[2].texture = Vector2(2.0f, 1.0f);
+		//vertices[3].texture = Vector2(0.0f, 0.0f);
+		//vertices[4].texture = Vector2(1.0f, 0.0f);
+		//vertices[5].texture = Vector2(2.0f, 0.0f);
+		//vertices[6].texture = Vector2(0.0f, -1.0f);
+		//vertices[7].texture = Vector2(1.0f, -1.0f);
+		//vertices[8].texture = Vector2(2.0f, -1.0f);
+
+		vertexBuffer = VertexBuffer::CreateTerrainNode(device, vertices, indices);
 	}
 
 	~TerrainDrawable()
@@ -28,11 +39,11 @@ public:
 		LOG_INFO("TerrainDrawable destruct!");
 	}
 	
-	void Draw(ComPtr<ID3D11DeviceContext> deviceContext, int vertexCount)
+	void Draw(ComPtr<ID3D11DeviceContext> deviceContext, int indexCount)
 	{
 		// bind our vertex buffer
 		unsigned int stride;
-		unsigned int offset;
+ 		unsigned int offset;
 
 		// Set vertex buffer stride and offset.
 		stride = sizeof(TerrainVertex);
@@ -50,7 +61,7 @@ public:
 		auto terrainShader = ShaderManager::GetInstance().GetShader<TerrainShader>(SHADER::TERRAIN);
 
 		terrainShader->SetWorldMatrix(this->_transform.GetWorldMatrix(false));
-		terrainShader->RenderShader(deviceContext, vertexCount);
+		terrainShader->RenderShader(deviceContext, indexCount);
 	}
 
 	void Update(ComPtr<ID3D11DeviceContext> deviceContext, int x, int y, int width, shared_ptr<TerrainVertex> vertices)

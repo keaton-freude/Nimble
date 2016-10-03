@@ -26,7 +26,7 @@ public:
 
 	~VertexBuffer()
 	{
-		LOG_INFO("Vertex Buffer destruct!");
+		//LOG_INFO("Vertex Buffer destruct!");
 		this->VertexBuffer::Unload();
 	}
 
@@ -72,10 +72,10 @@ public:
 	}
 
 	static shared_ptr<VertexBuffer> CreateTerrainNode(ComPtr<ID3D11Device> device,
-		shared_ptr<TerrainVertex> vertices, int vertexCount, shared_ptr<unsigned long> indices)
+		vector<TerrainVertex>& vertices, vector<unsigned long>& indices)
 	{
 		VertexBuffer* vb = new VertexBuffer();
-		vb->LoadTerrainNode(device, vertices, vertexCount, indices);
+		vb->LoadTerrainNode(device, vertices, indices);
 		return shared_ptr<VertexBuffer>(vb);
 	}
 
@@ -140,8 +140,7 @@ public:
 		device->CreateBuffer(&indexBufferDesc, &indexData, indexBuffer.GetAddressOf());
 	}
 
-	void LoadTerrainNode(ComPtr<ID3D11Device> device, shared_ptr<TerrainVertex> vertices, int vertexCount,
-		shared_ptr<unsigned long> indicies)
+	void LoadTerrainNode(ComPtr<ID3D11Device> device, vector<TerrainVertex>& vertices, vector<unsigned long>& indicies)
 	{
 		D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 		D3D11_SUBRESOURCE_DATA vertexData, indexData;
@@ -149,14 +148,14 @@ public:
 
 		// Set up the description of the vertex buffer.
 		vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC; // <-- This allows us to make write changes during runtime
-		vertexBufferDesc.ByteWidth = sizeof(TerrainVertex) * vertexCount;
+		vertexBufferDesc.ByteWidth = sizeof(TerrainVertex) * vertices.size();
 		vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		vertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		vertexBufferDesc.MiscFlags = 0;
 		vertexBufferDesc.StructureByteStride = 0;
 
 		// Give the subresource structure a pointer to the vertex data.
-		vertexData.pSysMem = vertices.get();
+		vertexData.pSysMem = &vertices[0];
 		vertexData.SysMemPitch = 0;
 		vertexData.SysMemSlicePitch = 0;
 
@@ -165,14 +164,14 @@ public:
 
 		// Set up the description of the index buffer.
 		indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-		indexBufferDesc.ByteWidth = sizeof(unsigned long) * vertexCount;
+		indexBufferDesc.ByteWidth = sizeof(unsigned long) * indicies.size();
 		indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 		indexBufferDesc.CPUAccessFlags = 0;
 		indexBufferDesc.MiscFlags = 0;
 		indexBufferDesc.StructureByteStride = 0;
 
 		// Give the subresource structure a pointer to the index data.
-		indexData.pSysMem = indicies.get();
+		indexData.pSysMem = &indicies[0];
 		indexData.SysMemPitch = 0;
 		indexData.SysMemSlicePitch = 0;
 

@@ -15,7 +15,7 @@ public:
 
 	~LineDrawable()
 	{
-		LOG_INFO("LineDrawable destruct!");
+		//LOG_INFO("LineDrawable destruct!");
 	}
 
 	void SetLine(ComPtr<ID3D11Device> device, Vector3 p1, Vector3 p2)

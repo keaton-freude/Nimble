@@ -28,6 +28,7 @@ public:
     void SetDiffuseColor(QColor color);
     void SetLightDirection(float x, float y, float z);
     shared_ptr<Graphics> GetGraphics();
+	Ui::MainWindow *ui;
 
 protected:
     virtual void resizeEvent(QResizeEvent* evt);

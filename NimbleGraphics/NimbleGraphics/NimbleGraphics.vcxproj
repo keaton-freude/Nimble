@@ -23,6 +23,7 @@
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\ColorDrawable.h" />
     <ClInclude Include="include\ColorShader.h" />
+    <ClInclude Include="include\DebugLineManager.h" />
     <ClInclude Include="include\Emitter.h" />
     <ClInclude Include="include\Frustum.h" />
     <ClInclude Include="include\Graphics.h" />
@@ -50,6 +51,7 @@
     <ClInclude Include="include\Terrain.h" />
     <ClInclude Include="include\TerrainDrawable.h" />
     <ClInclude Include="include\TerrainShader.h" />
+    <ClInclude Include="include\TerrainVertexField.h" />
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\Transform.h" />
     <ClInclude Include="include\VertexBuffer.h" />

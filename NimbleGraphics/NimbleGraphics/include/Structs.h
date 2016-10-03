@@ -45,9 +45,14 @@ struct TerrainVertex
 	Vector3 normal;
 
 	TerrainVertex()
-		: position(Vector3::Zero), texture(Vector2::Zero), normal(Vector3::Zero)
+		: position(Vector3::Zero), texture(Vector2::Zero), normal(Vector3::UnitY)
 	{
 		
+	}
+
+	~TerrainVertex()
+	{
+		//LOG_INFO("TERRAIN VERTEX DESTRUCT!");
 	}
 
 	TerrainVertex(TerrainVertex&& other)
@@ -86,7 +91,7 @@ struct TerrainVertex
 
 };
 
-const int TEXTURE_REPEAT = 2;
+const int TEXTURE_REPEAT = 1;
 
 typedef struct TargaHeader
 {
@@ -131,18 +136,84 @@ struct PerFrameParticleParameters
 	float CurrentTime;
 };
 
-struct TerrainCell
+struct TerrainData
 {
-	TerrainVertex bottomLeft;
-	TerrainVertex bottomRight;
-	TerrainVertex upperLeft;
-	TerrainVertex upperRight;
+	TerrainVertex* upperLeft;
+	TerrainVertex* upperRight;
+	TerrainVertex* bottomLeft;
+	TerrainVertex* bottomRight;
+};
 
-	Vector3 GetAveragePosition()
+class TerrainCell
+{
+public:
+	TerrainData data;
+	Vector3 FaceNormal1;
+	Vector3 FaceNormal2;
+	
+	/* This face is upperLeft, upperRight1, bottomLeft1 */
+	void UpdateFaceNormal1()
 	{
-		// average all 4 vertices and return
-		Vector3 average = bottomLeft.position + bottomRight.position + upperLeft.position + upperRight.position;
+		Vector3 P1 = data.upperLeft->position;
+		Vector3 P2 = data.upperRight->position;
+		Vector3 P3 = data.bottomLeft->position;
 
-		return average * 0.25f;
+		Vector3 U = P2 - P1;
+		Vector3 V = P3 - P1;
+
+		FaceNormal1 = U.Cross(V);
+	}
+
+	/* This face is bottomLeft, upperRight2, bottomRight2*/
+	void UpdateFaceNormal2()
+	{
+		Vector3 P1 = data.bottomLeft->position;
+		Vector3 P2 = data.upperRight->position;
+		Vector3 P3 = data.bottomRight->position;
+
+		Vector3 U = P2 - P1;
+		Vector3 V = P3 - P1;
+
+		FaceNormal2 = U.Cross(V);
+	}
+
+	void ClearNormals()
+	{
+		data.upperLeft->normal = Vector3::Zero;
+		data.upperRight->normal = Vector3::Zero;
+		data.bottomRight->normal = Vector3::Zero;
+		data.bottomLeft->normal = Vector3::Zero;
+	}
+
+	void SetNormal()
+	{
+		// Need to set the normals for all 4 of our Vertices
+		UpdateFaceNormal1();
+		UpdateFaceNormal2();
+
+		data.upperLeft->normal = FaceNormal1;
+		data.upperRight->normal = (FaceNormal1 + FaceNormal2);
+		data.upperRight->normal.Normalize();
+		data.bottomLeft->normal = (FaceNormal1 + FaceNormal2);
+		data.bottomLeft->normal.Normalize();
+		data.bottomRight->normal = FaceNormal2;
+	}
+
+	void NormalizeNormals()
+	{
+		data.upperLeft->normal.Normalize();
+		data.upperRight->normal.Normalize();
+		data.bottomLeft->normal.Normalize();
+		data.bottomRight->normal.Normalize();
+	}
+
+	const Vector3& GetFaceNormal1() const
+	{
+		return FaceNormal1;
+	}
+
+	const Vector3& GetFaceNormal2() const
+	{
+		return FaceNormal2;
 	}
 };

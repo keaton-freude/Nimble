@@ -20,6 +20,7 @@
 #include <CommonStates.h>
 #include "ShaderManager.h"
 #include <DirectXColors.h>
+#include "DebugLineManager.h"
 
 using DirectX::CommonStates;
 using DirectX::SimpleMath::Vector3;
@@ -81,6 +82,7 @@ public:
 		LOG_INFO("Camera created successfully.");
 
 		ShaderManager::GetInstance().Load(_D3D->GetDevice().Get());
+		DebugLineManager::GetInstance().Load(_D3D->GetDevice());
 
 		LOG_INFO("Shaders compiled.");
 
@@ -88,7 +90,7 @@ public:
 		_line = make_shared<LineDrawable>();
 		SetDebugLine(Vector3(0, 0, 0), Vector3(0, 100, 0));
 
-		terrain = make_shared<Terrain>(_D3D->GetDevice(), _D3D->GetDeviceContext(), 4, 4, "..\\..\\Assets\\Textures\\grass1.tga", "..\\..\\Assets\\Textures\\slope.tga", "..\\..\\Assets\\Textures\\stone1.tga");
+		terrain = make_shared<Terrain>(_D3D->GetDevice(), _D3D->GetDeviceContext(), 2, 2, "..\\..\\Assets\\Textures\\grass8.tga", "..\\..\\Assets\\Textures\\slope.tga", "..\\..\\Assets\\Textures\\stone1.tga");
 
 		LOG_INFO("Graphics initialization complete.");
 
@@ -275,6 +277,14 @@ private:
 		//_line->Draw(_D3D->GetDeviceContext().Get(), viewMatrix, projectionMatrix);
 
 		terrain->Draw(_D3D->GetDevice(), _D3D->GetDeviceContext(), viewMatrix, projectionMatrix, _light0, _frustum);
+
+		// draw every line
+		auto& lines = DebugLineManager::GetInstance().GetLines();
+
+		for (auto& line : lines)
+		{
+			line.Draw(_D3D->GetDeviceContext().Get(), viewMatrix, projectionMatrix);
+		}
 
 		//particleSystem->Update(*viewMatrix, *projectionMatrix, _dt);
 		//particleSystem->Draw(_D3D->GetDevice(), _D3D->GetDeviceContext());

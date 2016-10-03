@@ -13,6 +13,7 @@
 #include "Logger.h"
 #include "ShaderManager.h"
 #include "RayHit.h"
+#include "ui_mainwindow.h"
 
 using std::cout;
 using std::endl;
@@ -22,9 +23,14 @@ using DirectX::SimpleMath::Ray;
 
 void PrintMatrix(Matrix m);
 
-D3DRenderWidget::D3DRenderWidget(QWidget* parent = nullptr)
+D3DRenderWidget::D3DRenderWidget(QWidget* parent)
     : QDockWidget(parent), _prev_mouse_pos(Vector3::Zero)
 {
+
+	// Get pointer to mainwindow
+	auto main_window_ptr = qobject_cast<MainWindow*>(QApplication::topLevelWidgets()[0]);
+	this->ui = main_window_ptr->ui;
+
     // DRAW TIMER
     timer = QSharedPointer<QTimer>::create(this);
     connect(timer.data(), SIGNAL(timeout()), this, SLOT(update()));
@@ -144,7 +150,9 @@ void D3DRenderWidget::mouseMoveEvent(QMouseEvent *evt)
 		if (hit.hit)
 		{
 			graphics->SetDebugLine(ray.position, hit.hit_location);
-			graphics->HeightmapAdd(hit.hit_location, 3.0f, 4.0f);
+			float intensity = std::stof(ui->hm_intensity->text().toStdString());
+			float radius = std::stof(ui->hm_radius->text().toStdString());
+			graphics->HeightmapAdd(hit.hit_location, radius, intensity);
 		}
     }
     else if (evt->buttons() == Qt::MouseButton::RightButton)
@@ -241,7 +249,9 @@ void D3DRenderWidget::mousePressEvent(QMouseEvent *evt)
         if (hit.hit)
         {
             graphics->SetDebugLine(ray.position, hit.hit_location);
-            graphics->HeightmapAdd(hit.hit_location, 3.0f, 4.0f);
+			float intensity = std::stof(ui->hm_intensity->text().toStdString());
+			float radius = std::stof(ui->hm_radius->text().toStdString());
+			graphics->HeightmapAdd(hit.hit_location, radius, intensity);
         }
 
         //emit statusEvent(message);

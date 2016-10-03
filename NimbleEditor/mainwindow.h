@@ -20,7 +20,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
+	Ui::MainWindow *ui;
 public slots:
     void setStatusBarText(const QString&);
     void graphClicked(QMouseEvent*);
@@ -62,7 +62,7 @@ private:
     tk::spline test_spline;
     void UpdateWorldLightDirection();
 	ParticleSettings GetParticleSettingsFromUI();
-    Ui::MainWindow *ui;
+
 };
 
 #endif

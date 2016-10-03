@@ -68,20 +68,24 @@ float4 TerrainPixelShader(PixelInputType input) : SV_TARGET
 		textureColor = rockColor;
 	}
 
-    	// Invert the light direction for calculations.
-    	lightDir = -lightDirection;
+	//textureColor = grassTexture.Sample(SampleType, input.tex);
 
-	    // Calculate the amount of light on this pixel.
-    	lightIntensity = saturate(dot(input.normal, lightDir));
+
+
+    // Invert the light direction for calculations.
+    lightDir = -lightDirection;
+
+	// Calculate the amount of light on this pixel.
+    lightIntensity = saturate(dot(input.normal, lightDir));
 	
-    	// Determine the final diffuse color based on the diffuse color and the amount of light intensity.
-    	color += (diffuseColor * lightIntensity);
+    // Determine the final diffuse color based on the diffuse color and the amount of light intensity.
+    color += (diffuseColor * lightIntensity);
 
-	    // Saturate the final light color.
-    	color = saturate(color);
+	// Saturate the final light color.
+    color = saturate(color);
 
-	    // Multiply the texture color and the final light color to get the result.
-    	color = color * textureColor;
+	// Multiply the texture color and the final light color to get the result.
+    color = color * textureColor;
 
  	return color;
 }

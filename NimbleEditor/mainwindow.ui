@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1940</width>
-    <height>1257</height>
+    <height>1300</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,7 +73,7 @@
   </widget>
   <widget class="QDockWidget" name="toolBox">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="sizePolicy">
     <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
@@ -104,7 +104,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>20</y>
+       <y>10</y>
        <width>200</width>
        <height>116</height>
       </rect>
@@ -177,38 +177,84 @@
       </item>
      </layout>
     </widget>
-    <widget class="QPushButton" name="pushButton_3">
+    <widget class="QGroupBox" name="groupBox_2">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>440</y>
-       <width>75</width>
-       <height>23</height>
+       <x>20</x>
+       <y>160</y>
+       <width>151</width>
+       <height>131</height>
       </rect>
      </property>
-     <property name="text">
-      <string>PushButton</string>
+     <property name="title">
+      <string>Heightmap Brush Settings</string>
      </property>
-    </widget>
-    <widget class="QLineEdit" name="startX">
-     <property name="geometry">
-      <rect>
-       <x>190</x>
-       <y>340</y>
-       <width>31</width>
-       <height>20</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="startY">
-     <property name="geometry">
-      <rect>
-       <x>230</x>
-       <y>340</y>
-       <width>31</width>
-       <height>20</height>
-      </rect>
-     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="hm_intensity">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>40</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>0.1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="text">
+         <string>Intensity</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lbl_radius">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="text">
+         <string>Brush Radius</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="hm_radius">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>40</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>2.0</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
   </widget>
@@ -2517,10 +2563,7 @@
   <tabstop>cmbBlendMode</tabstop>
   <tabstop>btnUpdate</tabstop>
   <tabstop>pushButton</tabstop>
-  <tabstop>startX</tabstop>
   <tabstop>wl_direction_z</tabstop>
-  <tabstop>startY</tabstop>
-  <tabstop>pushButton_3</tabstop>
   <tabstop>wl_direction_y</tabstop>
   <tabstop>pushButton_2</tabstop>
   <tabstop>wl_direction_x</tabstop>
