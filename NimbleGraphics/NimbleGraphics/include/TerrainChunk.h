@@ -5,6 +5,7 @@
 #include "VertexBuffer.h"
 #include "TerrainDrawable.h"
 #include "TerrainVertexField.h"
+#include "MemoryHeightmap.h"
 
 class TerrainVertexField;
 using std::shared_ptr;
@@ -90,13 +91,13 @@ public:
 		deviceContext->Unmap(_drawable.GetVertexBuffer()->GetVertexBuffer().Get(), 0);
 	}
 
-	void NewUpdate(ComPtr<ID3D11DeviceContext> deviceContext, TerrainVertexField* vertex_field)
+	void NewUpdate(ComPtr<ID3D11DeviceContext> deviceContext, MemoryHeightmap& mem_heightmap, unsigned int chunk_x, unsigned int chunk_z)
 	{
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
 		TerrainVertex* dataPtr = nullptr;
 		auto stride = sizeof(TerrainVertex);
 
-		auto p_field = vertex_field->GetVertices();
+		auto p_map_vertices = mem_heightmap.GetVertexField()->GetVertices();
 
 		deviceContext->Map(_drawable.GetVertexBuffer()->GetVertexBuffer().Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
@@ -108,10 +109,13 @@ public:
 		{
 			for (auto i = 0; i < (_width + 1); ++i)
 			{
-				auto index = j * (_height + 1) + i;
-				//index += (_width * chunk_x) + (chunk_z * vertex_field->GetHeight() * _height);
-				dataPtr[vert_index++] = p_field[index];
-
+				//auto index = 
+				////index += (_width * chunk_x) + (chunk_z * vertex_field->GetHeight() * _height);
+				//dataPtr[vert_index++] = p_field[index];
+				auto vert_index = j * (_height + 1) + i;
+				auto map_index = mem_heightmap.GetIndex(chunk_z, chunk_x, _width, _height, j, i);
+				
+				dataPtr[vert_index] = p_map_vertices[map_index];
 			}
 		}
 

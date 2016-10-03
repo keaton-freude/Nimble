@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "IShader.h"
+#include "Typedefs.h"
 
 using namespace std;
 using Microsoft::WRL::ComPtr;
@@ -53,15 +54,15 @@ public:
 		return IShader::Load(device);
 	}
 
-	bool Draw(ComPtr<ID3D11DeviceContext> deviceContext, int indexCount, Matrix world, shared_ptr<Matrix> view,
-		shared_ptr<Matrix> projection)
+	bool Draw(ComPtr<ID3D11DeviceContext> deviceContext, int indexCount, MatrixRef world, MatrixRef view,
+		MatrixRef projection)
 	{
 		bool result;
 
 		// set the matrices here
 		this->_worldMatrix = world;
-		this->_viewMatrix = *view;
-		this->_projectionMatrix = *projection;
+		this->_viewMatrix = view;
+		this->_projectionMatrix = projection;
 
 		// Set the shader parameters that it will use for rendering.
 		result = this->SetShaderParameters(deviceContext);

@@ -180,6 +180,9 @@
     <ClInclude Include="include\TerrainVertexField.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Typedefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Shaders\Color.ps">

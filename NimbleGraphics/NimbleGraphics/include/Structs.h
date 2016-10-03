@@ -142,6 +142,13 @@ struct TerrainData
 	TerrainVertex* upperRight;
 	TerrainVertex* bottomLeft;
 	TerrainVertex* bottomRight;
+
+	Vector3 GetAveragePosition() const
+	{
+		auto vectorSum = upperLeft->position + upperRight->position + bottomLeft->position + bottomRight->position;
+
+		return vectorSum / 4.0f;
+	}
 };
 
 class TerrainCell
@@ -215,5 +222,10 @@ public:
 	const Vector3& GetFaceNormal2() const
 	{
 		return FaceNormal2;
+	}
+
+	Vector3 GetAveragePosition() const
+	{
+		return data.GetAveragePosition();
 	}
 };

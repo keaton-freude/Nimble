@@ -104,16 +104,16 @@ public:
 	}
 
 	// IShader Draw
-	bool Draw(ComPtr<ID3D11DeviceContext> deviceContext, int indexCount, Matrix worldMatrix,
-		shared_ptr<Matrix> viewMatrix, shared_ptr<Matrix> projectionMatrix, shared_ptr<Light> light, ComPtr<ID3D11ShaderResourceView> grass,
+	bool Draw(ComPtr<ID3D11DeviceContext> deviceContext, int indexCount, const Matrix& worldMatrix,
+		const Matrix& viewMatrix, const Matrix& projectionMatrix, const Light& light, ComPtr<ID3D11ShaderResourceView> grass,
 		ComPtr<ID3D11ShaderResourceView> slope, ComPtr<ID3D11ShaderResourceView> rock)
 	{
 		bool result;
 
 		// set the matrices here
 		this->_worldMatrix = worldMatrix;
-		this->_viewMatrix = *viewMatrix;
-		this->_projectionMatrix = *projectionMatrix;
+		this->_viewMatrix = viewMatrix;
+		this->_projectionMatrix = projectionMatrix;
 
 		// Set the shader parameters that it will use for rendering.
 		result = this->SetShaderParameters(deviceContext, light, grass, slope, rock);
@@ -178,7 +178,7 @@ public:
 		deviceContext->DrawIndexed(indexCount, 0, 0);
 	}
 
-	bool SetShaderParameters(ComPtr<ID3D11DeviceContext> deviceContext, shared_ptr<Light> light, ComPtr<ID3D11ShaderResourceView> grass, ComPtr<ID3D11ShaderResourceView> slope,
+	bool SetShaderParameters(ComPtr<ID3D11DeviceContext> deviceContext, const Light& light, ComPtr<ID3D11ShaderResourceView> grass, ComPtr<ID3D11ShaderResourceView> slope,
 		ComPtr<ID3D11ShaderResourceView> rock)
 	{
 		HRESULT result;
@@ -192,13 +192,13 @@ public:
 			return false;
 		}
 
-		dataPtr = (LightBuffer*)mappedResource.pData;
+		dataPtr = static_cast<LightBuffer*>(mappedResource.pData);
 
-		auto lightBuffer = light->GetLightBuffer();
+		auto lightBuffer = light.GetLightBuffer();
 
-		dataPtr->ambientLight = lightBuffer->ambientLight;
-		dataPtr->diffuseColor = lightBuffer->diffuseColor;
-		dataPtr->lightDirection = lightBuffer->lightDirection;
+		dataPtr->ambientLight = lightBuffer.ambientLight;
+		dataPtr->diffuseColor = lightBuffer.diffuseColor;
+		dataPtr->lightDirection = lightBuffer.lightDirection;
 		dataPtr->padding = 0.0f;
 
 		deviceContext->Unmap(_lightBuffer.Get(), 0);

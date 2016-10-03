@@ -66,12 +66,12 @@ public:
 	}
 
 	void Draw(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext,
-		shared_ptr<Matrix> viewMatrix, shared_ptr<Matrix> projectionMatrix, shared_ptr<Light> light, shared_ptr<Frustum> frustum)
+		const Matrix& viewMatrix, const Matrix& projectionMatrix, const Light& light, const Frustum& frustum)
 	{
 		auto terrain_shader = ShaderManager::GetInstance().GetShader<TerrainShader>(SHADER::TERRAIN);
 
-		terrain_shader->SetViewMatrix(*viewMatrix);
-		terrain_shader->SetProjectionMatrix(*projectionMatrix);
+		terrain_shader->SetViewMatrix(viewMatrix);
+		terrain_shader->SetProjectionMatrix(projectionMatrix);
 		terrain_shader->SetShaderParameters(deviceContext, light, _grassTexture->GetTexture(), _slopeTexture->GetTexture(), _rockTexture->GetTexture());
 
 		deviceContext->OMSetBlendState(StatesHelper::GetInstance().GetStates()->Opaque(), Black, 0xffffffff);
@@ -89,18 +89,18 @@ public:
 	void SmoothHeightmapAdd(Vector3 location, float radius, float intensity, ComPtr<ID3D11DeviceContext> deviceContext,
 		ComPtr<ID3D11Device> device)
 	{
-		StartDebugTimer();
+		//StartDebugTimer();
 		_mem_heightmap->SmoothAdd(location, radius, intensity);
 		//_mem_heightmap->CalculateTextureCoordinates();
-		EndDebugTimer("SmoothAdd: ");
+		//EndDebugTimer("SmoothAdd: ");
 
-		StartDebugTimer();
-		_mem_heightmap->CalculateNormalsDifferently();
-		EndDebugTimer("Calculate normals: ");
+		//StartDebugTimer();
+		_mem_heightmap->CalculateNormalsDifferently(location, radius);
+		//EndDebugTimer("Calculate normals: ");
 
-		StartDebugTimer();
+		//StartDebugTimer();
 		UpdateChunks(device, deviceContext);
-		EndDebugTimer("Chunks Updated: ");
+		//EndDebugTimer("Chunks Updated: ");
 	}
 
 	RayHit IsRayIntersectingTerrain(Ray r)
@@ -127,7 +127,7 @@ public:
 
 			if (rayTriangleIntersect(r, triangle1, distance))
 			{
-				LOG_INFO("Ray Triangle Intersect. Distance: ", distance);
+				//LOG_INFO("Ray Triangle Intersect. Distance: ", distance);
 
 				Vector3 hit_location = (r.position + (r.direction * distance));
 				return RayHit(r.position, hit_location, distance, true);
@@ -135,7 +135,7 @@ public:
 
 			if (rayTriangleIntersect(r, triangle2, distance))
 			{
-				LOG_INFO("Ray Triangle Intersect. Distance: ", distance);
+				//OG_INFO("Ray Triangle Intersect. Distance: ", distance);
 
 				Vector3 hit_location = (r.position + (r.direction * distance));
 				return RayHit(r.position, hit_location, distance, true);
@@ -203,11 +203,16 @@ private:
 		return true;
 	}
 
+	unsigned int GetTerrainChunkSubIndex(int i, int j, int chunk_height)
+	{
+		return j * (chunk_height + 1) + i;
+	}
+
 	void LoadChunks(ComPtr<ID3D11Device> device)
 	{
 		auto& p_heightmap = _mem_heightmap.get()->GetHeightmapData();
-		auto vertices = vector<TerrainVertex>((_chunkWidth + 1)* (_chunkHeight + 1));
-		auto indices = vector<unsigned long>(_chunkWidth * 6 * _chunkHeight);
+		auto vertices = vector<TerrainVertex>((_chunkWidth + 1) * (_chunkHeight + 1));
+		auto indices = vector<unsigned long>(_chunkHeight * 6 * _chunkWidth);
 		auto p_indices = &indices[0];
 		auto p_vertices = &vertices[0];
 		unsigned long chunk_vertex_index = 0;
@@ -219,24 +224,24 @@ private:
 		unsigned int index = 0;
 
 		// build indices
-		for(auto j = 0; j < _height; ++j)
+		for(auto j = 0; j < chunk_height; ++j)
 		{
-			for (auto i = 0; i < _width; ++i)
+			for (auto i = 0; i < chunk_width; ++i)
 			{
 				// go in groups of 3
 				// upper-left
-				p_indices[index++] = _mem_heightmap->GetVertexField()->GetVertIndex(i, j + 1);
+				p_indices[index++] = GetTerrainChunkSubIndex(i, j + 1, chunk_height);
 				// upper-right
-				p_indices[index++] = _mem_heightmap->GetVertexField()->GetVertIndex(i + 1, j + 1);
+				p_indices[index++] = GetTerrainChunkSubIndex(i + 1, j + 1, chunk_height);
 				// bottom-left
-				p_indices[index++] = _mem_heightmap->GetVertexField()->GetVertIndex(i, j);
+				p_indices[index++] = GetTerrainChunkSubIndex(i, j, chunk_height);
 
 				// bottom-left
-				p_indices[index++] = _mem_heightmap->GetVertexField()->GetVertIndex(i, j);
+				p_indices[index++] = GetTerrainChunkSubIndex(i, j, chunk_height);
 				// upper-right
-				p_indices[index++] = _mem_heightmap->GetVertexField()->GetVertIndex(i + 1, j + 1);
+				p_indices[index++] = GetTerrainChunkSubIndex(i + 1, j + 1, chunk_height);
 				// bottom-right
-				p_indices[index++] = _mem_heightmap->GetVertexField()->GetVertIndex(i + 1, j);
+				p_indices[index++] = GetTerrainChunkSubIndex(i + 1, j, chunk_height);
 				
 			}
 		}
@@ -251,12 +256,11 @@ private:
 					for (auto i = 0; i < (chunk_width + 1); ++i)
 					{
 						auto vert_index = j * (chunk_height + 1) + i;
-						auto map_index = (x * chunk_width) + (z * (chunk_height + 1) * _height);
-						map_index += j * (chunk_height + 1) + i;
+						auto map_index = _mem_heightmap->GetIndex(z, x, chunk_width, chunk_height, j, i);
 
 						vertices[vert_index] = p_map_vertices[map_index];
 					}
-				}
+				} 
 
 				_chunks.emplace_back(x, z, chunk_width, chunk_height, device, vertices, indices);
 				chunk_vertex_index = 0;
@@ -271,7 +275,7 @@ private:
 			for(auto x = 0; x < _numChunksX; ++x)
 			{
 				auto& chunk = _chunks[z * _numChunksZ + x];
-				chunk.NewUpdate(deviceContext, _mem_heightmap->GetVertexField());
+				chunk.NewUpdate(deviceContext, *_mem_heightmap, x, z);
 			}
 		}
 	}
@@ -283,8 +287,8 @@ private:
 	unsigned int _height;
 	unsigned int _numChunksX;
 	unsigned int _numChunksZ;
-	const unsigned int _chunkWidth = 2;
-	const unsigned int _chunkHeight = 2;
+	const unsigned int _chunkWidth = 32;
+	const unsigned int _chunkHeight = 32;
 
 	shared_ptr<Texture> _grassTexture;
 	shared_ptr<Texture> _slopeTexture;

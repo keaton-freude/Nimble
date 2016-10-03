@@ -41,7 +41,6 @@ class Graphics
 public:
 	Graphics(): _dt(0), _currentTime(0)
 	{
-		this->_light0 = std::make_shared<Light>();
 		LOG_INFO("Graphics constructed.");
 		LOG_INFO("SizeOf: ", ParticleVertex::GetSize());
 	}
@@ -63,7 +62,7 @@ public:
 	{
 		bool result;
 
-		srand(time(0));
+		srand(time(nullptr));
 
 		_D3D = make_shared<NimbleD3D>();
 		result = _D3D->Init(screenWidth, screenHeight, vSyncEnabled, hwnd, fullscreen, screenDepth, screenNear);
@@ -77,7 +76,7 @@ public:
 		LOG_INFO("D3D Initialized successfully.");
 
 		// Create the camera object at <5, 10, 5> with rotation: x:.78f, y:.78f, z:0.0f
-		_camera = make_shared<Camera>(Vector3(0.0f, 5.0f, -5.0f), Vector3(0.78f, 0.0f, 0.0f));
+		_camera = Camera(Vector3(0.0f, 5.0f, 0.0f), Vector3(0.78f, 0.0f, 0.0f));
 
 		LOG_INFO("Camera created successfully.");
 
@@ -87,14 +86,11 @@ public:
 		LOG_INFO("Shaders compiled.");
 
 		// Set Initial Line
-		_line = make_shared<LineDrawable>();
 		SetDebugLine(Vector3(0, 0, 0), Vector3(0, 100, 0));
 
-		terrain = make_shared<Terrain>(_D3D->GetDevice(), _D3D->GetDeviceContext(), 2, 2, "..\\..\\Assets\\Textures\\grass8.tga", "..\\..\\Assets\\Textures\\slope.tga", "..\\..\\Assets\\Textures\\stone1.tga");
+		terrain = make_shared<Terrain>(_D3D->GetDevice(), _D3D->GetDeviceContext(), 1, 1, "..\\..\\Assets\\Textures\\grass8.tga", "..\\..\\Assets\\Textures\\slope.tga", "..\\..\\Assets\\Textures\\stone1.tga");
 
 		LOG_INFO("Graphics initialization complete.");
-
-		_frustum = make_shared<Frustum>();
 
 		return true;
 	}
@@ -125,7 +121,7 @@ public:
 		return _D3D->GetSwapChain();
 	}
 
-	shared_ptr<Camera> getCamera() const
+	Camera& getCamera()
 	{
 		return this->_camera;
 	}
@@ -155,14 +151,14 @@ public:
 		return this->terrain;
 	}
 
-	shared_ptr<Light> GetLight()
+	const Light& GetLight() const
 	{
 		return _light0;
 	}
 
-	void SetDebugLine(Vector3 p1, Vector3 p2) const
+	void SetDebugLine(Vector3 p1, Vector3 p2)
 	{
-		_line->SetLine(_D3D->GetDevice().Get(), p1, p2);
+		_line.SetLine(_D3D->GetDevice().Get(), p1, p2);
 	}
 
 	RayHit IsRayIntersectingTerrain(Ray r) const
@@ -214,19 +210,19 @@ public:
 		return stats;
 	}
 
-	void SetLightDirection(float x, float y, float z) const
+	void SetLightDirection(float x, float y, float z)
 	{
-		_light0->SetLightDirection(Vector3(x, y, z));
+		_light0.SetLightDirection(Vector3(x, y, z));
 	}
 
-	void SetAmbientLight(float r, float g, float b) const
+	void SetAmbientLight(float r, float g, float b)
 	{
-		_light0->SetAmbientLight(Vector4(r, g, b, 1.0f));
+		_light0.SetAmbientLight(Vector4(r, g, b, 1.0f));
 	}
 
-	void SetDiffuseColor(float r, float g, float b) const
+	void SetDiffuseColor(float r, float g, float b)
 	{
-		_light0->SetDiffuseColor(Vector4(r, g, b, 1.0f));
+		_light0.SetDiffuseColor(Vector4(r, g, b, 1.0f));
 	}
 
 	bool Draw(RENDER_MODE mode, float dt)
@@ -249,7 +245,7 @@ public:
 		}
 	}
 
-	shared_ptr<ParticleEngine> GetParticleEngine() const
+	ParticleEngine& GetParticleEngine()
 	{
 		return particleEngine;
 	}
@@ -263,17 +259,17 @@ private:
 		return true;
 	}
 
-	bool RenderViewport() const
+	bool RenderViewport()
 	{
 		// Clear the buffers to begin the scene.
 		_D3D->BeginScene(DirectX::Colors::Black);
 
-		_camera->Update();
+		_camera.Update();
 
 		auto projectionMatrix = _D3D->GetProjectionMatrix();
-		auto viewMatrix = _camera->GetViewMatrix();
+		auto viewMatrix = _camera.GetViewMatrix();
 
-		_frustum->ConstructFrustum(1000.0f, *projectionMatrix, *viewMatrix);
+		_frustum.ConstructFrustum(1000.0f, projectionMatrix, viewMatrix);
 		//_line->Draw(_D3D->GetDeviceContext().Get(), viewMatrix, projectionMatrix);
 
 		terrain->Draw(_D3D->GetDevice(), _D3D->GetDeviceContext(), viewMatrix, projectionMatrix, _light0, _frustum);
@@ -311,12 +307,12 @@ private:
 
 private:
 	shared_ptr<NimbleD3D> _D3D;
-	shared_ptr<Camera> _camera;
+	Camera _camera;
 	shared_ptr<Terrain> terrain;
-	shared_ptr<Light> _light0;
-	shared_ptr<Frustum> _frustum;
-	shared_ptr<LineDrawable> _line;
-	shared_ptr<ParticleEngine> particleEngine;
+	Light _light0;
+	Frustum _frustum;
+	LineDrawable _line;
+	ParticleEngine particleEngine;
 
 	// How much time has passed since the last frame, used for smooth interpolation
 	float _dt;

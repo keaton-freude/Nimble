@@ -17,8 +17,8 @@ public:
 		LOG_INFO("Color Drawable destruct!");
 	}
 	
-	void Draw(ComPtr<ID3D11DeviceContext> deviceContext, shared_ptr<Matrix> viewMatrix, 
-		shared_ptr<Matrix> projectionMatrix)
+	void Draw(ComPtr<ID3D11DeviceContext> deviceContext, MatrixRef viewMatrix,
+		MatrixRef projectionMatrix)
 	{
 		// bind our vertex buffer
 		unsigned int stride;
@@ -27,9 +27,9 @@ public:
 		// Set vertex buffer stride and offset.
 		stride = sizeof(TerrainVertex);
 		offset = 0;
-		auto vb = this->vertexBuffer->GetVertexBuffer().Get();
+
 		// Set the vertex buffer to active in the input assembler so it can be rendered.
-		deviceContext->IASetVertexBuffers(0, 1, &vb, &stride, &offset);
+		deviceContext->IASetVertexBuffers(0, 1, vertexBuffer->GetVertexBuffer().GetAddressOf(), &stride, &offset);
 
 		deviceContext->IASetIndexBuffer(this->vertexBuffer->GetIndexBuffer().Get(), DXGI_FORMAT_R32_UINT, 0);
 

@@ -38,17 +38,17 @@ public:
 		Shutdown();
 	}
 
-	void SetWorldMatrix(Matrix worldMatrix)
+	void SetWorldMatrix(const Matrix& worldMatrix)
 	{
 		this->_worldMatrix = worldMatrix;
 	}
 
-	void SetViewMatrix(Matrix viewMatrix)
+	void SetViewMatrix(const Matrix& viewMatrix)
 	{
 		this->_viewMatrix = viewMatrix;
 	}
 
-	void SetProjectionMatrix(Matrix projectionMatrix)
+	void SetProjectionMatrix(const Matrix& projectionMatrix)
 	{
 		this->_projectionMatrix = projectionMatrix;
 	}

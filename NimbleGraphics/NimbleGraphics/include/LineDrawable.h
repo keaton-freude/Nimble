@@ -24,8 +24,8 @@ public:
 		this->SetVertexBuffer(vb);
 	}
 
-	void Draw(ComPtr<ID3D11DeviceContext> deviceContext, shared_ptr<Matrix> viewMatrix, 
-		shared_ptr<Matrix> projectionMatrix)
+	void Draw(ComPtr<ID3D11DeviceContext> deviceContext, const Matrix& viewMatrix, 
+		const Matrix& projectionMatrix)
 	{
 		unsigned int stride;
 		unsigned int offset;

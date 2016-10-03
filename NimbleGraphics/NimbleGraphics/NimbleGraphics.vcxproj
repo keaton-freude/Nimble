@@ -54,6 +54,7 @@
     <ClInclude Include="include\TerrainVertexField.h" />
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\Transform.h" />
+    <ClInclude Include="include\Typedefs.h" />
     <ClInclude Include="include\VertexBuffer.h" />
     <ClInclude Include="IndexedBuffer\Header.h" />
   </ItemGroup>
