@@ -15,6 +15,8 @@ typedef struct MeshData
 {
 	UINT numVertices;
 	UINT numIndicies;
+
+	MeshData() : numVertices(0), numIndicies(0) {}
 } MeshData;
 
 /* necessary information for ColorShader. Contains Vec3 position and a Color vector*/
@@ -45,7 +47,7 @@ struct TerrainVertex
 	Vector3 normal;
 
 	TerrainVertex()
-		: position(Vector3::Zero), texture(Vector2::Zero), normal(Vector3::UnitY)
+		: position(Vector3::Zero), texture(Vector2::Zero), normal(Vector3(0.01f, 1.0f, 0.01f))
 	{
 		
 	}
@@ -55,10 +57,10 @@ struct TerrainVertex
 		//LOG_INFO("TERRAIN VERTEX DESTRUCT!");
 	}
 
-	TerrainVertex(TerrainVertex&& other)
-		: position(std::move(other.position)), texture(std::move(other.texture)), normal(std::move(other.normal))
-	{
-	}
+	//TerrainVertex(TerrainVertex&& other)
+	//	: position(std::move(other.position)), texture(std::move(other.texture)), normal(std::move(other.normal))
+	//{
+	//}
 
 	TerrainVertex(Vector3 pos, Vector2 tex, Vector3 norm)
 		: position(pos), texture(tex), normal(norm)
@@ -66,21 +68,21 @@ struct TerrainVertex
 		
 	}
 
-	TerrainVertex& operator=(TerrainVertex& other)
-	{
-		this->position = other.position;
-		this->normal = other.normal;
-		this->texture = other.texture;
-		return *this;
-	}
+	//TerrainVertex& operator=(TerrainVertex& other)
+	//{
+	//	this->position = other.position;
+	//	this->normal = other.normal;
+	//	this->texture = other.texture;
+	//	return *this;
+	//}
 
-	TerrainVertex& operator=(TerrainVertex&& other) // move assignment
-	{
-		this->position = std::move(other.position);
-		this->normal = std::move(other.normal);
-		this->texture = std::move(other.texture);
-		return *this;
-	}
+	//TerrainVertex& operator=(TerrainVertex&& other) // move assignment
+	//{
+	//	this->position = std::move(other.position);
+	//	this->normal = std::move(other.normal);
+	//	this->texture = std::move(other.texture);
+	//	return *this;
+	//}
 
 	void WriteToFile(std::fstream & file)
 	{
@@ -92,15 +94,6 @@ struct TerrainVertex
 };
 
 const int TEXTURE_REPEAT = 1;
-
-typedef struct TargaHeader
-{
-	unsigned char data1[12];
-	unsigned short width;
-	unsigned short height;
-	unsigned char bpp;
-	unsigned char data2;
-} TargaHeader;
 
 _declspec(align(16))
 struct TimeBuffer

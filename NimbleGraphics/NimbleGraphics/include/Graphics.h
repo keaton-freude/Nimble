@@ -14,7 +14,7 @@
 #include "ParticleSystem.h"
 #include "Terrain.h"
 #include "Light.h"
-#include "LineDrawable.h"
+#include "LineMesh.h"
 #include "Logger.h"
 #include "ParticleEngine.h"
 #include <CommonStates.h>
@@ -64,14 +64,7 @@ public:
 
 		srand(time(nullptr));
 
-		_D3D = make_shared<NimbleD3D>();
-		result = _D3D->Init(screenWidth, screenHeight, vSyncEnabled, hwnd, fullscreen, screenDepth, screenNear);
-
-		if (!result)
-		{
-			LOG_ERROR("Failed to init D3D in Graphics::Init.");
-			return false;
-		}
+		_D3D = make_shared<NimbleD3D>(screenWidth, screenHeight, vSyncEnabled, hwnd, fullscreen, screenDepth, screenNear);
 
 		LOG_INFO("D3D Initialized successfully.");
 
@@ -88,7 +81,7 @@ public:
 		// Set Initial Line
 		SetDebugLine(Vector3(0, 0, 0), Vector3(0, 100, 0));
 
-		terrain = make_shared<Terrain>(_D3D->GetDevice(), _D3D->GetDeviceContext(), 1, 1, "..\\..\\Assets\\Textures\\grass8.tga", "..\\..\\Assets\\Textures\\slope.tga", "..\\..\\Assets\\Textures\\stone1.tga");
+		terrain = make_shared<Terrain>(_D3D->GetDevice(), _D3D->GetDeviceContext(), 1, 1, "..\\..\\Assets\\Textures\\grass8.tga", "..\\..\\Assets\\Textures\\weird_texture.tga", "..\\..\\Assets\\Textures\\grass4.tga", "..\\..\\Assets\\Textures\\splat1.tga");
 
 		LOG_INFO("Graphics initialization complete.");
 
@@ -158,7 +151,7 @@ public:
 
 	void SetDebugLine(Vector3 p1, Vector3 p2)
 	{
-		_line.SetLine(_D3D->GetDevice().Get(), p1, p2);
+
 	}
 
 	RayHit IsRayIntersectingTerrain(Ray r) const
@@ -275,12 +268,12 @@ private:
 		terrain->Draw(_D3D->GetDevice(), _D3D->GetDeviceContext(), viewMatrix, projectionMatrix, _light0, _frustum);
 
 		// draw every line
-		auto& lines = DebugLineManager::GetInstance().GetLines();
+		//auto& lines = DebugLineManager::GetInstance().GetLines();
 
-		for (auto& line : lines)
-		{
-			line.Draw(_D3D->GetDeviceContext().Get(), viewMatrix, projectionMatrix);
-		}
+		//for (auto& line : lines)
+		//{
+		//	line.Draw(_D3D->GetDeviceContext().Get(), viewMatrix, projectionMatrix);
+		//}
 
 		//particleSystem->Update(*viewMatrix, *projectionMatrix, _dt);
 		//particleSystem->Draw(_D3D->GetDevice(), _D3D->GetDeviceContext());
@@ -311,7 +304,6 @@ private:
 	shared_ptr<Terrain> terrain;
 	Light _light0;
 	Frustum _frustum;
-	LineDrawable _line;
 	ParticleEngine particleEngine;
 
 	// How much time has passed since the last frame, used for smooth interpolation

@@ -1,6 +1,6 @@
 #pragma once
 #include "Singleton.h"
-#include "LineDrawable.h"
+#include "LineMesh.h"
 
 class DebugLineManager: public Singleton<DebugLineManager>
 {
@@ -14,12 +14,10 @@ public:
 	// direction is normalized, so we just draw from origin to direction
 	void AddNormal(Vector3 origin, Vector3 direction)
 	{
-		auto line = LineDrawable();
-		line.SetLine(_device, origin, origin + direction);
-		_lines.push_back(line);
+		_lines.emplace_back(_device, origin, origin + direction);
 	}
 
-	vector<LineDrawable>& GetLines()
+	vector<LineMesh>& GetLines()
 	{
 		return _lines;
 	}
@@ -30,6 +28,6 @@ public:
 	}
 
 private:
-	vector<LineDrawable> _lines;
+	vector<LineMesh> _lines;
 	ComPtr<ID3D11Device> _device;
 };

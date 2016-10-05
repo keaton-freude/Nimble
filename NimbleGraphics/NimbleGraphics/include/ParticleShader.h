@@ -5,7 +5,7 @@
 #include <memory>
 #include "Logger.h"
 #include "Texture.h"
-#include "VertexBuffer.h"
+#include "Mesh.h"
 #include "ParticleSettings.h"
 #include "ParticleVertex.h"
 #include "Helper.h"

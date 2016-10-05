@@ -106,7 +106,7 @@ public:
 	// IShader Draw
 	bool Draw(ComPtr<ID3D11DeviceContext> deviceContext, int indexCount, const Matrix& worldMatrix,
 		const Matrix& viewMatrix, const Matrix& projectionMatrix, const Light& light, ComPtr<ID3D11ShaderResourceView> grass,
-		ComPtr<ID3D11ShaderResourceView> slope, ComPtr<ID3D11ShaderResourceView> rock)
+		ComPtr<ID3D11ShaderResourceView> slope, ComPtr<ID3D11ShaderResourceView> rock, ComPtr<ID3D11ShaderResourceView> splat)
 	{
 		bool result;
 
@@ -116,7 +116,7 @@ public:
 		this->_projectionMatrix = projectionMatrix;
 
 		// Set the shader parameters that it will use for rendering.
-		result = this->SetShaderParameters(deviceContext, light, grass, slope, rock);
+		result = this->SetShaderParameters(deviceContext, light, grass, slope, rock, splat);
 
 		if (!result)
 		{
@@ -179,7 +179,7 @@ public:
 	}
 
 	bool SetShaderParameters(ComPtr<ID3D11DeviceContext> deviceContext, const Light& light, ComPtr<ID3D11ShaderResourceView> grass, ComPtr<ID3D11ShaderResourceView> slope,
-		ComPtr<ID3D11ShaderResourceView> rock)
+		ComPtr<ID3D11ShaderResourceView> rock, ComPtr<ID3D11ShaderResourceView> splat)
 	{
 		HRESULT result;
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -208,6 +208,7 @@ public:
 		deviceContext->PSSetShaderResources(0, 1, grass.GetAddressOf());
 		deviceContext->PSSetShaderResources(1, 1, slope.GetAddressOf());
 		deviceContext->PSSetShaderResources(2, 1, rock.GetAddressOf());
+		deviceContext->PSSetShaderResources(3, 1, splat.GetAddressOf());
 		// Must let IShader do its Matrix Buffer copies!
 		return IShader::SetShaderParameters(deviceContext);
 	}

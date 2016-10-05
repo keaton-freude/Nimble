@@ -9,6 +9,7 @@
 #include <QGuiApplication>
 #include <fpscalc.h>
 #include <QStatusBar>
+#include <d3d11.h>
 #include <SimpleMath.h>
 #include "Logger.h"
 #include "ShaderManager.h"

@@ -32,7 +32,7 @@ public:
 				auto new_j = j * resolution;
 
 				_vertices[index].position = Vector3(new_i, 0.0f, new_j);
-				_vertices[index].normal = Vector3::UnitY;
+				_vertices[index].normal = Vector3(0.01f, 1.0f, 0.01f);
 				_vertices[index].texture = Vector2::Zero;
 			}
 		}

@@ -13,23 +13,8 @@
 
 #pragma once
 
-// VS 2010/2012 do not support =default =delete
-#ifndef DIRECTX_CTOR_DEFAULT
-#if defined(_MSC_VER) && (_MSC_VER < 1800)
-#define DIRECTX_CTOR_DEFAULT {}
-#define DIRECTX_CTOR_DELETE ;
-#else
-#define DIRECTX_CTOR_DEFAULT =default;
-#define DIRECTX_CTOR_DELETE =delete;
-#endif
-#endif
-
-#pragma warning(push)
-#pragma warning(disable : 4005)
-#include <stdint.h>
-#pragma warning(pop)
-
 #include <memory>
+#include <stdint.h>
 
 #if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_APP)
 namespace ABI { namespace Windows { namespace UI { namespace Core { struct ICoreWindow; } } } }
@@ -44,6 +29,10 @@ namespace DirectX
         Keyboard();
         Keyboard(Keyboard&& moveFrom);
         Keyboard& operator= (Keyboard&& moveFrom);
+
+        Keyboard(Keyboard const&) = delete;
+        Keyboard& operator=(Keyboard const&) = delete;
+
         virtual ~Keyboard();
 
         enum Keys
@@ -385,7 +374,7 @@ namespace DirectX
             bool Reserved15 : 7;
             bool Reserved16 : 8;
             bool Reserved17 : 8;
-            bool Reserved18 : 1;
+            bool Reserved18 : 3;
             bool OemOpenBrackets : 1;   // VK_OEM_4, 0xDB
             bool OemPipe : 1;           // VK_OEM_5, 0xDC
             bool OemCloseBrackets : 1;  // VK_OEM_6, 0xDD
@@ -395,21 +384,23 @@ namespace DirectX
             bool OemBackslash : 1;      // VK_OEM_102, 0xE2
             bool Reserved20 : 2;
             bool ProcessKey : 1;        // VK_PROCESSKEY, 0xE5
-            bool Reserved21 : 4;
+            bool Reserved21 : 2;
             bool Reserved22 : 8;
+            bool Reserved23 : 2;
             bool OemCopy : 1;           // 0XF2
             bool OemAuto : 1;           // 0xF3
             bool OemEnlW : 1;           // 0xF4
-            bool Reserved23 : 1;
+            bool Reserved24 : 1;
             bool Attn : 1;              // VK_ATTN, 0xF6
             bool Crsel : 1;             // VK_CRSEL, 0xF7
             bool Exsel : 1;             // VK_EXSEL, 0xF8
             bool EraseEof : 1;          // VK_EREOF, 0xF9
             bool Play : 1;              // VK_PLAY, 0xFA
             bool Zoom : 1;              // VK_ZOOM, 0xFB
-            bool Reserved24 : 1;
+            bool Reserved25 : 1;
             bool Pa1 : 1;               // VK_PA1, 0xFD
             bool OemClear : 1;          // VK_OEM_CLEAR, 0xFE
+            bool Reserved26: 1;
 
             bool __cdecl IsKeyDown(Keys key) const
             {
@@ -449,6 +440,8 @@ namespace DirectX
             bool __cdecl IsKeyPressed(Keys key) const { return pressed.IsKeyDown(key); }
             bool __cdecl IsKeyReleased(Keys key) const { return released.IsKeyDown(key); }
 
+            State __cdecl GetLastState() const { return lastState; }
+
         public:
             State lastState;
         };
@@ -482,9 +475,5 @@ namespace DirectX
         class Impl;
 
         std::unique_ptr<Impl> pImpl;
-
-        // Prevent copying.
-        Keyboard(Keyboard const&) DIRECTX_CTOR_DELETE
-        Keyboard& operator=(Keyboard const&) DIRECTX_CTOR_DELETE
     };
 }

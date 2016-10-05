@@ -1,8 +1,8 @@
 #pragma once
-#include "ColorDrawable.h"
 #include "TerrainChunk.h"
 #include "TerrainShader.h"
 #include "RayHit.h"
+#include <d3d11.h>
 #include <SimpleMath.h>
 #include "Light.h"
 #include <vector>
@@ -35,20 +35,21 @@ public:
 	}
 
 	Terrain(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext, unsigned int numChunksX,
-		unsigned int numChunksZ, string grassTexture, string slopeTexture, string rockTexture)
+		unsigned int numChunksZ, string grassTexture, string slopeTexture, string rockTexture, string splatTexture)
 		: _numChunksX(numChunksX), _numChunksZ(numChunksZ), _grassTexture(nullptr),
 		  _slopeTexture(nullptr), _rockTexture(nullptr), _chunks()
 	{
+		_chunks.reserve(numChunksX * numChunksZ);
 		_width = _numChunksX * _chunkWidth;
 		_height = _numChunksZ * _chunkHeight;
 
-		this->_mem_heightmap = make_shared<MemoryHeightmap>(_width, _height);
+		this->_mem_heightmap = make_shared<MemoryHeightmap>(_width, _height, .5f);
 		//this->_heightMap = make_shared<Heightmap>(_width + numChunksX, _height + numChunksZ, 1.0f);
 
 		// Calculate the number of vertices in the terrain mesh.
 		_vertexCount = _width * _height * 4;
 
-		this->LoadTextures(device, deviceContext, grassTexture, slopeTexture, rockTexture);
+		this->LoadTextures(device, deviceContext, grassTexture, slopeTexture, rockTexture, splatTexture);
 
 		this->Load(device, deviceContext);
 	}
@@ -72,7 +73,7 @@ public:
 
 		terrain_shader->SetViewMatrix(viewMatrix);
 		terrain_shader->SetProjectionMatrix(projectionMatrix);
-		terrain_shader->SetShaderParameters(deviceContext, light, _grassTexture->GetTexture(), _slopeTexture->GetTexture(), _rockTexture->GetTexture());
+		terrain_shader->SetShaderParameters(deviceContext, light, _grassTexture->GetTexture(), _slopeTexture->GetTexture(), _rockTexture->GetTexture(), _splatTexture->GetTexture());
 
 		deviceContext->OMSetBlendState(StatesHelper::GetInstance().GetStates()->Opaque(), Black, 0xffffffff);
 
@@ -95,7 +96,7 @@ public:
 		//EndDebugTimer("SmoothAdd: ");
 
 		//StartDebugTimer();
-		_mem_heightmap->CalculateNormalsDifferently(location, radius);
+		_mem_heightmap->CalculateNormalsDifferently(location, radius + 2.0f);
 		//EndDebugTimer("Calculate normals: ");
 
 		//StartDebugTimer();
@@ -187,7 +188,7 @@ public:
 	}
 
 private:
-	bool LoadTextures(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext, string grass, string slope, string rock)
+	bool LoadTextures(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext, string grass, string slope, string rock, string splat)
 	{
 		bool result;
 
@@ -199,6 +200,8 @@ private:
 
 		// Create the rock texture object.
 		_rockTexture = make_shared<Texture>(device, deviceContext, rock);
+
+		_splatTexture = make_shared<Texture>(device, deviceContext, splat);
 
 		return true;
 	}
@@ -275,7 +278,7 @@ private:
 			for(auto x = 0; x < _numChunksX; ++x)
 			{
 				auto& chunk = _chunks[z * _numChunksZ + x];
-				chunk.NewUpdate(deviceContext, *_mem_heightmap, x, z);
+				chunk.Update(deviceContext, *_mem_heightmap, x, z);
 			}
 		}
 	}
@@ -287,12 +290,13 @@ private:
 	unsigned int _height;
 	unsigned int _numChunksX;
 	unsigned int _numChunksZ;
-	const unsigned int _chunkWidth = 32;
-	const unsigned int _chunkHeight = 32;
+	const unsigned int _chunkWidth = 16;
+	const unsigned int _chunkHeight = 16;
 
 	shared_ptr<Texture> _grassTexture;
 	shared_ptr<Texture> _slopeTexture;
 	shared_ptr<Texture> _rockTexture;
+	shared_ptr<Texture> _splatTexture;
 	string texture_name;
 
 	int _vertexCount;

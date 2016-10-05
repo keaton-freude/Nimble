@@ -22,69 +22,14 @@ MainWindow::MainWindow(QWidget *parent)
     ui->cmbBlendMode->addItem("Additive");
     ui->cmbBlendMode->setCurrentIndex(0);
 
-    //connect(ui->graph, SIGNAL(mousePress(QMouseEvent*)),
-//            this, SLOT(graphClicked(QMouseEvent*)));
-
-	//connect(ui->btnSaveSystem, SIGNAL(clicked()), this, SLOT(on_btnSaveSystem_clicked()));
-
     spline_points_x.push_back(0.0);
     spline_points_y.push_back(0.0);
 
     this->tabifyDockWidget(ui->toolBox, ui->ParticleEditorDock);
-    //ui->statusBar->showMessage
-    //int first_active = ui->viewport_2->GetGraphics()->GetParticleSystem()->first_active_particle;
-    //int first_free = ui->viewport_2->GetGraphics()->GetParticleSystem()->first_free_particle;
-    //int first_new = ui->viewport_2->GetGraphics()->GetParticleSystem()->first_new_particle;
-    //int first_retired = ui->viewport_2->GetGraphics()->GetParticleSystem()->first_retired_particle;
-
-    //QString message = "Active: " + QString::number(first_active) + " Free: " + QString::number(first_free) + " New: " + QString::number(first_new) + " Retired: " + QString::number(first_retired);
-    //ui->statusBar->showMessage(message);
 }
 
 void MainWindow::graphClicked(QMouseEvent* evt)
-{/*
-    static int num_added = 1;
-    //int x = evt->x();
-    //int y = evt->y();
-    int width = 700;
-    int height = 969;
-    //int graphx = x - 56;
-    //int graphy = y - 32;
-    //graphy = 1021 - graphy -32 - 38;
-
-    //if (graphx < 0.0)
-     //   graphx = 0.0;
-    //if (graphy < 0.0)
-    //    graphy = 0.0;
-
-
-    //double normal_x = (double)graphx / (double)width;
-    double normal_y = (double)graphy / (double)height;
-
-    cout << "(" << normal_x << ", " << normal_y << ")" << endl;
-
-    spline_points_x.push_back(normal_x);
-    spline_points_y.push_back(normal_y);
-
-    num_added++;
-
-    if (num_added > 2)
-    {
-        test_spline.set_points(spline_points_x, spline_points_y);
-
-        graph_x.clear();
-        graph_y.clear();
-
-        for(double i = 0.0; i < 1.0; i += .01)
-        {
-            graph_x.push_back(i);
-            graph_y.push_back(test_spline(i));
-        }
-
-  //      this->ui->graph->graph(0)->setData(graph_x, graph_y);
-   //     this->ui->graph->replot();
-    }
-    */
+{
 }
 
 MainWindow::~MainWindow()

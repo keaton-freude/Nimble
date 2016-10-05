@@ -1,4 +1,5 @@
 #pragma once
+#include <d3d11.h>
 #include <SimpleMath.h>
 #include <memory>
 #include "Structs.h"
@@ -16,7 +17,7 @@ public:
 		: _lightBuffer()
 	{
 		this->Create(Vector4(0.65f, 0.65f, 0.65f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 
-			Vector3(DirectX::XM_PI, 0.0, DirectX::XM_PI));
+			Vector3(DirectX::XM_PI, 0.0, 0.0));
 	}
 
 	~Light()

@@ -1,6 +1,7 @@
 Texture2D grassTexture : register(t0);
 Texture2D slopeTexture : register(t1);
 Texture2D rockTexture  : register(t2);
+Texture2D splatTexture : register(t3);
 
 SamplerState SampleType;
 
@@ -36,22 +37,23 @@ float4 TerrainPixelShader(PixelInputType input) : SV_TARGET
 	float4 grassColor;
 	float4 slopeColor;
 	float4 rockColor;
-	float slope;
+	//float slope;
 	float blendAmount;
 	float4 textureColor = float4(0.0f, 0.0f, 0.0f, 0.0f);
 	float3 lightDir;
 	float lightIntensity;
 	float4 color = ambientColor;
 
-	grassColor = grassTexture.Sample(SampleType, input.tex);
 
-	slopeColor = slopeTexture.Sample(SampleType, input.tex);
+	//grassColor = grassTexture.Sample(SampleType, input.tex);
 
-	rockColor = rockTexture.Sample(SampleType, input.tex);
+	//slopeColor = slopeTexture.Sample(SampleType, input.tex);
 
-	slope = 1.0f - input.normal.y;
+	//rockColor = rockTexture.Sample(SampleType, input.tex);
 
-	if (slope < 0.2)
+	//slope = 1.0f - input.normal.y;
+
+	/*if (slope < 0.2)
 	{
 		blendAmount = slope / 0.2f;
 		textureColor = lerp(grassColor, slopeColor, blendAmount);
@@ -66,10 +68,14 @@ float4 TerrainPixelShader(PixelInputType input) : SV_TARGET
 	if (slope >= 0.7)
 	{
 		textureColor = rockColor;
-	}
+	}*/
 
-	//textureColor = grassTexture.Sample(SampleType, input.tex);
+	float4 splat = splatTexture.Sample(SampleType, input.tex);
+	float4 grass = grassTexture.Sample(SampleType, input.tex);
+	float4 rock = rockTexture.Sample(SampleType, input.tex);
+	float4 slope = slopeTexture.Sample(SampleType, input.tex);
 
+	textureColor = grass * splat.g + rock * splat.r + slope * splat.b;
 
 
     // Invert the light direction for calculations.

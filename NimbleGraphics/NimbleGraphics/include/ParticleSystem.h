@@ -2,7 +2,7 @@
 #include <d3d11.h>
 #include "ParticleSettings.h"
 #include "ParticleVertex.h"
-#include "VertexBuffer.h"
+#include "Mesh.h"
 #include "ParticleShader.h"
 #include <memory>
 #include "Helper.h"
@@ -118,7 +118,7 @@ private:
 	// fields
 	unique_ptr<Texture> texture;
 	unique_ptr<ParticleVertex[]> particles;
-	shared_ptr<VertexBuffer> vertex_buffer; // contains both VertexBuffer and IndexBuffer
+	shared_ptr<Mesh> vertex_buffer; // contains both Mesh and IndexBuffer
 	unique_ptr<ParticleShader> particle_shader;
 
 	ParticleSettings settings;
@@ -169,7 +169,7 @@ private:
 		}
 
 		// create a dynamic vertex buffer
-		vertex_buffer = VertexBuffer::CreateDynamic(device, sizeof(ParticleVertex),
+		vertex_buffer = Mesh::CreateDynamic(device, sizeof(ParticleVertex),
 			settings.max_particles * 4, indices, indices.size());
 	}
 

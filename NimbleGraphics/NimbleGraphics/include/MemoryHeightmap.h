@@ -295,9 +295,11 @@ public:
 					AddUpperRight(i, j, cell.data.upperRight->normal, 3);
 					AddRight(i, j, cell.data.upperRight->normal, 1);
 					cell.data.upperRight->normal.Normalize();
+
+					cell.NormalizeNormals(); // ?? maybe?
 				}
 
-				//cell.NormalizeNormals(); // ?? maybe?
+
 			}
 		}
 
@@ -311,10 +313,10 @@ public:
 				auto& cell = _heightmap[j * _height + i];
 
 				// draw 4 normals lines for debug
-				//DebugLineManager::GetInstance().AddNormal(cell.data.upperLeft->position, cell.data.upperLeft->normal);
-				//DebugLineManager::GetInstance().AddNormal(cell.data.upperRight->position, cell.data.upperRight->normal);
-				//DebugLineManager::GetInstance().AddNormal(cell.data.bottomLeft->position, cell.data.bottomLeft->normal);
-				//DebugLineManager::GetInstance().AddNormal(cell.data.bottomRight->position, cell.data.bottomRight->normal);
+				DebugLineManager::GetInstance().AddNormal(cell.data.upperLeft->position, cell.data.upperLeft->normal);
+				DebugLineManager::GetInstance().AddNormal(cell.data.upperRight->position, cell.data.upperRight->normal);
+				DebugLineManager::GetInstance().AddNormal(cell.data.bottomLeft->position, cell.data.bottomLeft->normal);
+				DebugLineManager::GetInstance().AddNormal(cell.data.bottomRight->position, cell.data.bottomRight->normal);
 			}
 		}
 

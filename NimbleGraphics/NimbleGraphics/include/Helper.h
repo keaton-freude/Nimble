@@ -1,5 +1,6 @@
 #pragma once
 #include <CommonStates.h>
+#include <d3d11.h>
 #include <SimpleMath.h>
 #include <chrono>
 #include "Logger.h"

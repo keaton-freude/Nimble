@@ -3,6 +3,7 @@
 #include <rapidjson/writer.h>
 #include <rapidjson/document.h>
 #include <rapidjson/stringbuffer.h>
+#include <d3d11.h>
 #include <SimpleMath.h>
 #include <fstream>
 #include "Logger.h"
