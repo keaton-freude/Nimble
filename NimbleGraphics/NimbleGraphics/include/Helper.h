@@ -1,17 +1,12 @@
 #pragma once
 #include <CommonStates.h>
-#include <d3d11.h>
-#include <SimpleMath.h>
+#include "Typedefs.h"
 #include <chrono>
 #include "Logger.h"
 #include "Singleton.h"
-#include <wrl\client.h>
-using Microsoft::WRL::ComPtr;
-using DirectX::SimpleMath::Ray;
+
 using DirectX::CommonStates;
 using std::unique_ptr;
-using DirectX::SimpleMath::Vector3;
-using DirectX::SimpleMath::Color;
 
 
 inline void SetD3DDebugName(ID3D11DeviceChild* child, const std::string& name)

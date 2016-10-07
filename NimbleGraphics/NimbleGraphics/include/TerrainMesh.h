@@ -1,7 +1,6 @@
 #pragma once
 
 #include <d3d11.h>
-#include "IDrawable.h"
 #include "TerrainShader.h"
 #include "ShaderManager.h"
 #include "Mesh.h"

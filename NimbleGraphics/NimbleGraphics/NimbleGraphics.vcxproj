@@ -27,8 +27,6 @@
     <ClInclude Include="include\Frustum.h" />
     <ClInclude Include="include\Graphics.h" />
     <ClInclude Include="include\Helper.h" />
-    <ClInclude Include="include\IDrawable.h" />
-    <ClInclude Include="include\IResource.h" />
     <ClInclude Include="include\IShader.h" />
     <ClInclude Include="include\Light.h" />
     <ClInclude Include="include\LineMesh.h" />
@@ -67,7 +65,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\Graphics.cpp" />
+    <ClCompile Include="src\IShader.cpp" />
+    <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\LineMesh.cpp" />
     <ClCompile Include="src\NimbleD3D.cpp" />
     <ClCompile Include="src\placeholder.cpp" />
