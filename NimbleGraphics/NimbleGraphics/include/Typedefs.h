@@ -2,6 +2,7 @@
 #include <d3d11.h>
 #include <SimpleMath.h>
 #include <wrl/client.h>
+#include <memory>
 using DirectX::SimpleMath::Matrix;
 using DirectX::SimpleMath::Ray;
 using DirectX::SimpleMath::Vector2;
@@ -9,6 +10,11 @@ using DirectX::SimpleMath::Vector3;
 using DirectX::SimpleMath::Vector4;
 using DirectX::SimpleMath::Plane;
 using DirectX::SimpleMath::Color;
+
+using std::shared_ptr;
+using std::unique_ptr;
+using std::make_shared;
+using std::make_unique;
 
 using Microsoft::WRL::ComPtr;
 

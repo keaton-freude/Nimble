@@ -1,31 +1,16 @@
 #pragma once
-#include <d3d11.h>
-#include <SimpleMath.h>
-
-using DirectX::SimpleMath::Vector3;
-
+#include "Typedefs.h"
 
 class RayHit
 {
 public:
-	RayHit(): hit(false), distance(0)
-	{
-	}
+	RayHit();
 
-	RayHit(Vector3 origin, Vector3 hitLocation, float distance, bool hit): hit(hit), distance(distance), origin(origin), hit_location(hitLocation)
-	{
-	}
+	RayHit(Vector3 origin, Vector3 hitLocation, float distance, bool hit);
 
-	~RayHit()
-	{
-		
-	}
+	~RayHit();
 
-	static RayHit NoHit()
-	{
-		static auto noHit = RayHit(Vector3::Zero, Vector3::Zero, 0.0f, false);
-		return noHit;
-	}
+	static RayHit NoHit();
 
 	// true if the ray intersection test was successful, else false
 	// if false, then state of this object is not valid

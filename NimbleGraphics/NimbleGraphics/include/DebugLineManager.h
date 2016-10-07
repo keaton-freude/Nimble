@@ -5,27 +5,15 @@
 class DebugLineManager: public Singleton<DebugLineManager>
 {
 public:
-	
-	void Load(ComPtr<ID3D11Device> device)
-	{
-		_device = device;
-	}
+
+	void Load(ComPtr<ID3D11Device> device);
 
 	// direction is normalized, so we just draw from origin to direction
-	void AddNormal(Vector3 origin, Vector3 direction)
-	{
-		_lines.emplace_back(_device, origin, origin + direction);
-	}
+	void AddNormal(Vector3 origin, Vector3 direction);
 
-	vector<LineMesh>& GetLines()
-	{
-		return _lines;
-	}
+	vector<LineMesh>& GetLines();
 
-	void Clear()
-	{
-		_lines.clear();
-	}
+	void Clear();
 
 private:
 	vector<LineMesh> _lines;

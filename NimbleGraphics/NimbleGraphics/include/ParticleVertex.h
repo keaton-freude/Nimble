@@ -1,13 +1,6 @@
 #pragma once
-#include <d3d11.h>
-#include <SimpleMath.h>
-#include <memory>
+#include "Typedefs.h"
 
-using std::shared_ptr;
-using DirectX::SimpleMath::Vector2;
-using DirectX::SimpleMath::Vector3;
-using DirectX::SimpleMath::Vector4;
-using DirectX::SimpleMath::Color;
 
 struct ParticleVertex
 {

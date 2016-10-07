@@ -53,7 +53,6 @@
     <ClInclude Include="include\Transform.h" />
     <ClInclude Include="include\Typedefs.h" />
     <ClInclude Include="include\Mesh.h" />
-    <ClInclude Include="IndexedBuffer\Header.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Shaders\Color.ps" />
@@ -65,16 +64,32 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\ColorShader.cpp" />
+    <ClCompile Include="src\DebugLineManager.cpp" />
+    <ClCompile Include="src\Emitter.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\IShader.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\LineMesh.cpp" />
+    <ClCompile Include="src\MemoryHeightmap.cpp" />
     <ClCompile Include="src\NimbleD3D.cpp" />
+    <ClCompile Include="src\ParticleEffect.cpp" />
+    <ClCompile Include="src\ParticleEngine.cpp" />
+    <ClCompile Include="src\ParticleSettings.cpp" />
+    <ClCompile Include="src\ParticleShader.cpp" />
+    <ClCompile Include="src\ParticleSystem.cpp" />
     <ClCompile Include="src\placeholder.cpp" />
+    <ClCompile Include="src\RayHit.cpp" />
+    <ClCompile Include="src\ShaderManager.cpp" />
+    <ClCompile Include="src\Terrain.cpp" />
+    <ClCompile Include="src\TerrainChunk.cpp" />
     <ClCompile Include="src\TerrainMesh.cpp" />
+    <ClCompile Include="src\TerrainShader.cpp" />
+    <ClCompile Include="src\TerrainVertexField.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\Transform.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BE4AE97B-E112-4F31-84E9-CE99619194E7}</ProjectGuid>

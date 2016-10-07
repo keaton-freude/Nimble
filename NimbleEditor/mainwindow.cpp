@@ -251,12 +251,12 @@ bool GetMinMaxVector3(string text, Vector3& min, Vector3& max)
         min_z = std::stof(tokens_z[0]);
         max_z = std::stof(tokens_z[1]);
     }
-    catch (invalid_argument ex)
+    catch (std::invalid_argument ex)
     {
         cout << "One of the components of the text->vector is not a float." << endl;
         return false;
     }
-    catch (out_of_range ex)
+    catch (std::out_of_range ex)
     {
         cout << "One of the comonents of the text->vector is out of range." << endl;
         return false;
@@ -314,12 +314,12 @@ bool GetMinMaxVector2(string text, Vector2& min, Vector2& max)
         min_y = std::stof(tokens_y[0]);
         max_y = std::stof(tokens_y[1]);
     }
-    catch (invalid_argument ex)
+    catch (std::invalid_argument ex)
     {
         cout << "One of the components of the text->vector is not a float." << endl;
         return false;
     }
-    catch (out_of_range ex)
+    catch (std::out_of_range ex)
     {
         cout << "One of the comonents of the text->vector is out of range." << endl;
         return false;
@@ -355,12 +355,12 @@ bool GetVector2(string text, Vector2& vector)
         x = std::stof(tokens[0]);
         y = std::stof(tokens[1]);
     }
-    catch (invalid_argument ex)
+    catch (std::invalid_argument ex)
     {
         cout << "One of the components of the text->vector is not a float." << endl;
         return false;
     }
-    catch (out_of_range ex)
+    catch (std::out_of_range ex)
     {
         cout << "One of the comonents of the text->vector is out of range." << endl;
         return false;
@@ -397,12 +397,12 @@ bool GetVector3(string text, Vector3& vector)
         y = std::stof(tokens[1]);
         z = std::stof(tokens[2]);
     }
-    catch (invalid_argument ex)
+    catch (std::invalid_argument ex)
     {
         cout << "One of the components of the text->vector is not a float." << endl;
         return false;
     }
-    catch (out_of_range ex)
+    catch (std::out_of_range ex)
     {
         cout << "One of the comonents of the text->vector is out of range." << endl;
         return false;

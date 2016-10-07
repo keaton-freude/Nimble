@@ -1,18 +1,15 @@
 #pragma once
+#include "Typedefs.h"
 #include <unordered_map>
-#include <wrl\client.h>
 #include <iostream>
-#include <memory>
 
 #include "IShader.h"
 #include "ColorShader.h"
 #include "TerrainShader.h"
 
-using std::shared_ptr;
 using std::unordered_map;
 using std::cout;
 using std::endl;
-using Microsoft::WRL::ComPtr;
 
 enum SHADER
 {
@@ -24,39 +21,13 @@ enum SHADER
 class ShaderManager: public Singleton<ShaderManager>
 {
 public:
-	ShaderManager()
-	{
+	ShaderManager();
 
-	}
+	void Load(ComPtr<ID3D11Device> device);
 
-	void Load(ComPtr<ID3D11Device> device)
-	{
-		std::pair<SHADER, shared_ptr<IShader>> pair = std::pair<SHADER, shared_ptr<IShader>>(SHADER::COLOR,
-			make_shared<ColorShader>(device));
+	~ShaderManager();
 
-		_shaders.insert(pair);
-
-		pair = std::pair<SHADER, shared_ptr<IShader>>(SHADER::TERRAIN,
-			make_shared<TerrainShader>(device));
-
-		_shaders.insert(pair);
-
-		//pair = std::pair<SHADER, shared_ptr<IShader>>(SHADER::PARTICLE, make_shared<ParticleShader>(device));
-
-		//_shaders.insert(pair);
-	}
-
-	~ShaderManager()
-	{
-		this->Shutdown();
-		
-	}
-
-	void Shutdown()
-	{
-		LOG_INFO("Shader manager being shut down.");
-		_shaders.clear();
-	}
+	void Shutdown();
 
 	template<typename T>
     T* GetShader(SHADER shader)

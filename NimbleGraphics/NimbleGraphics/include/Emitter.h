@@ -1,21 +1,14 @@
 #pragma once
-#include <d3d11.h>
-#include <SimpleMath.h>
+#include "Typedefs.h"
 
 class Emitter
 {
 public:
-	Emitter(): fire_rate(0)
-	{
-	}
-
-	~Emitter()
-	{
-		
-	}
+	Emitter();
+	~Emitter();
 
 private:
-	DirectX::SimpleMath::Vector3 position;
-	DirectX::SimpleMath::Vector3 direction;
+	Vector3 position;
+	Vector3 direction;
 	int fire_rate; // per update, how many particles to emit
 };
