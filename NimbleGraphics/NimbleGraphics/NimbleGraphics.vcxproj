@@ -66,6 +66,8 @@
     <None Include="..\..\Assets\Shaders\Terrain.vs" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\LineMesh.cpp" />
     <ClCompile Include="src\NimbleD3D.cpp" />
     <ClCompile Include="src\placeholder.cpp" />

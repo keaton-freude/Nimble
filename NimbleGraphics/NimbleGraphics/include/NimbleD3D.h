@@ -18,7 +18,7 @@ using DirectX::XM_PIDIV4;
 class NimbleD3D
 {
 public:
-	NimbleD3D() = delete;
+	NimbleD3D();
 	NimbleD3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen, float screenDepth, float screenNear);
 	~NimbleD3D();
 

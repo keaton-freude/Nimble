@@ -420,7 +420,7 @@ void MainWindow::on_btnUpdate_clicked()
 	auto settings = GetParticleSettingsFromUI();
 
     ui->viewport_2->GetGraphics()->GetParticleEngine().Clear();
-    ui->viewport_2->GetGraphics()->GetParticleEngine().Add(ui->viewport_2->GetGraphics()->GetD3D()->GetDevice(), ui->viewport_2->GetGraphics()->GetD3D()->GetDeviceContext(), vector<ParticleSettings>( { settings } ));
+    ui->viewport_2->GetGraphics()->GetParticleEngine().Add(ui->viewport_2->GetGraphics()->GetD3D().GetDevice(), ui->viewport_2->GetGraphics()->GetD3D().GetDeviceContext(), vector<ParticleSettings>( { settings } ));
 }
 
 
@@ -467,5 +467,5 @@ void MainWindow::on_btnOpenSystem_clicked()
 	auto settings = ParticleSettings(file_path);
 
 	ui->viewport_2->GetGraphics()->GetParticleEngine().Clear();
-	ui->viewport_2->GetGraphics()->GetParticleEngine().Add(ui->viewport_2->GetGraphics()->GetD3D()->GetDevice(), ui->viewport_2->GetGraphics()->GetD3D()->GetDeviceContext(), vector<ParticleSettings>({ settings }));
+	ui->viewport_2->GetGraphics()->GetParticleEngine().Add(ui->viewport_2->GetGraphics()->GetD3D().GetDevice(), ui->viewport_2->GetGraphics()->GetD3D().GetDeviceContext(), vector<ParticleSettings>({ settings }));
 }

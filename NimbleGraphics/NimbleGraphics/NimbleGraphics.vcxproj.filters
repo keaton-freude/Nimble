@@ -220,5 +220,11 @@
     <ClCompile Include="src\TerrainMesh.cpp">
       <Filter>Source Files\Drawables</Filter>
     </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

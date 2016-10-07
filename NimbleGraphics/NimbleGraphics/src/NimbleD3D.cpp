@@ -2,6 +2,10 @@
 #include "Logger.h"
 #include "Helper.h"
 
+NimbleD3D::NimbleD3D()
+{
+}
+
 NimbleD3D::NimbleD3D(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen, float screenDepth, float screenNear)
 	: m_vsync_enabled(false), m_videoCardMemory(0), m_hwnd(nullptr), m_projectionMatrix(), m_worldMatrix()
 {

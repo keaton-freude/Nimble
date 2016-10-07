@@ -49,17 +49,8 @@ D3DRenderWidget::D3DRenderWidget(QWidget* parent)
     fps_calc = QSharedPointer<FPSCalc>::create(0.25f);
 
     // Get a pointer to the Graphics object
-    graphics = make_shared<Graphics>();
-
-    if (graphics->Init(this->geometry().width(), this->geometry().height(),
-                       (HWND)this->winId(), false, false, 1000.0f, 0.5f))
-    {
-        cout << "Graphics initialized correctly." << endl;
-    }
-    else
-    {
-        cout << "Graphics initialization failed." << endl;
-    }
+    graphics = make_shared<Graphics>(this->geometry().width(), this->geometry().height(),
+    	reinterpret_cast<HWND>(this->winId()), false, false, 1000.0f, 0.5f);
 
     setAttribute(Qt::WA_PaintOnScreen, true);
     setAttribute(Qt::WA_NativeWindow, true);
@@ -119,17 +110,17 @@ void D3DRenderWidget::resizeEvent(QResizeEvent * evt)
     if (this->objectName() == "minimap")
         return;
 
-	if (graphics->GetD3D()->GetSwapChain() == nullptr)
+	if (graphics->GetD3D().GetSwapChain() == nullptr)
 	{
 		return;
 	}
 
-    graphics->GetD3D()->ReleaseRenderTarget();
+    graphics->GetD3D().ReleaseRenderTarget();
     graphics->GetSwapChain()->ResizeBuffers(1, width(), height(),
                                             graphics->GetSwapChainDesc().BufferDesc.Format, 0);
-    graphics->GetD3D()->CreateRenderTarget(width(), height());
+    graphics->GetD3D().CreateRenderTarget(width(), height());
 
-    graphics->GetD3D()->UpdateProjectionMatrix(width(), height(), 0.1f, 1000.0f);
+    graphics->GetD3D().UpdateProjectionMatrix(width(), height(), 0.1f, 1000.0f);
 }
 
 void D3DRenderWidget::mouseMoveEvent(QMouseEvent *evt)
@@ -142,15 +133,14 @@ void D3DRenderWidget::mouseMoveEvent(QMouseEvent *evt)
 
     if (evt->buttons() == Qt::MouseButton::LeftButton)
     {
-		Matrix projectionMatrix = graphics->GetD3D()->GetProjectionMatrix();
+		Matrix projectionMatrix = graphics->GetD3D().GetProjectionMatrix();
 
-		Ray ray = graphics->getCamera().GetMouseRay(Vector2(pointX, pointY), projectionMatrix);
+		Ray ray = graphics->GetCamera().GetMouseRay(Vector2(pointX, pointY), projectionMatrix);
 
 		auto hit = graphics->IsRayIntersectingTerrain(ray);
 
 		if (hit.hit)
 		{
-			graphics->SetDebugLine(ray.position, hit.hit_location);
 			float intensity = std::stof(ui->hm_intensity->text().toStdString());
 			float radius = std::stof(ui->hm_radius->text().toStdString());
 			graphics->HeightmapAdd(hit.hit_location, radius, intensity);
@@ -167,7 +157,7 @@ void D3DRenderWidget::mouseMoveEvent(QMouseEvent *evt)
         translation.Normalize();
 
         // transform by camera rotation
-        Vector3 rot = graphics->getCamera().GetRotation();
+        Vector3 rot = graphics->GetCamera().GetRotation();
 
         Matrix rotX = Matrix::CreateRotationX(rot.x);
         Matrix rotY = Matrix::CreateRotationY(rot.y);
@@ -179,7 +169,7 @@ void D3DRenderWidget::mouseMoveEvent(QMouseEvent *evt)
         //transformed_translation.z = transformed_translation.y;
         transformed_translation.y = 0;
 
-        graphics->getCamera().Translate(transformed_translation * _mouse_speed);
+        graphics->GetCamera().Translate(transformed_translation * _mouse_speed);
 
         _prev_mouse_pos = curr_pos;
     }
@@ -194,10 +184,10 @@ void D3DRenderWidget::keyPressEvent(QKeyEvent * evt)
     switch (evt->key())
     {
     case Qt::Key_Down:
-        this->graphics->getCamera().Translate(Vector3(0, -1.0f, 0.0f));
+        this->graphics->GetCamera().Translate(Vector3(0, -1.0f, 0.0f));
         break;
     case Qt::Key_Up:
-        this->graphics->getCamera().Translate(Vector3(0, 1.0f, 0.0f));
+        this->graphics->GetCamera().Translate(Vector3(0, 1.0f, 0.0f));
         break;
     case Qt::Key_F1:
 
@@ -221,12 +211,12 @@ void D3DRenderWidget::wheelEvent(QWheelEvent *evt)
     {
         //roll forward
 
-        this->graphics->getCamera().Translate(Vector3(0, -1.0f, 0.0f));
+        this->graphics->GetCamera().Translate(Vector3(0, -1.0f, 0.0f));
     }
     else if (evt->delta() < 0)
     {
         //roll back
-        this->graphics->getCamera().Translate(Vector3(0, 1.0f, 0.0f));
+        this->graphics->GetCamera().Translate(Vector3(0, 1.0f, 0.0f));
     }
 }
 
@@ -241,15 +231,14 @@ void D3DRenderWidget::mousePressEvent(QMouseEvent *evt)
     if (evt->buttons() == Qt::MouseButton::LeftButton)
     {
 
-        Matrix projectionMatrix = graphics->GetD3D()->GetProjectionMatrix();
+        Matrix projectionMatrix = graphics->GetD3D().GetProjectionMatrix();
 
-        Ray ray = graphics->getCamera().GetMouseRay(Vector2(pointX, pointY), projectionMatrix);
+        Ray ray = graphics->GetCamera().GetMouseRay(Vector2(pointX, pointY), projectionMatrix);
 
         auto hit = graphics->IsRayIntersectingTerrain(ray);
 
         if (hit.hit)
         {
-            graphics->SetDebugLine(ray.position, hit.hit_location);
 			float intensity = std::stof(ui->hm_intensity->text().toStdString());
 			float radius = std::stof(ui->hm_radius->text().toStdString());
 			graphics->HeightmapAdd(hit.hit_location, radius, intensity);

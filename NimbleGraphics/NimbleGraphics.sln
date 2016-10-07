@@ -5,6 +5,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NimbleGraphics", "NimbleGraphics\NimbleGraphics.vcxproj", "{BE4AE97B-E112-4F31-84E9-CE99619194E7}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NimbleEditor", "..\NimbleEditor\NimbleEditor.vcxproj", "{A43A9E38-8FF2-32D1-81E5-3673559AFD7A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BE4AE97B-E112-4F31-84E9-CE99619194E7} = {BE4AE97B-E112-4F31-84E9-CE99619194E7}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
