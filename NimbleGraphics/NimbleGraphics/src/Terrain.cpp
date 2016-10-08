@@ -4,21 +4,19 @@ Terrain::Terrain(): _width(0), _height(0), _numChunksX(0), _numChunksZ(0), _vert
 {
 }
 
-Terrain::Terrain(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext, unsigned numChunksX, unsigned numChunksZ, string grassTexture, string slopeTexture, string rockTexture, string splatTexture): _numChunksX(numChunksX), _numChunksZ(numChunksZ), _grassTexture(nullptr),
-                                                                                                                                                                                                                       _slopeTexture(nullptr), _rockTexture(nullptr), _chunks()
+Terrain::Terrain(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext, unsigned numChunksX, unsigned numChunksZ, vector<wstring>& texture_paths)
+	: _numChunksX(numChunksX), _numChunksZ(numChunksZ), _chunks()
 {
 	_chunks.reserve(numChunksX * numChunksZ);
 	_width = _numChunksX * _chunkWidth;
 	_height = _numChunksZ * _chunkHeight;
 
 	this->_mem_heightmap = make_shared<MemoryHeightmap>(_width, _height, .5f);
-	//this->_heightMap = make_shared<Heightmap>(_width + numChunksX, _height + numChunksZ, 1.0f);
 
 	// Calculate the number of vertices in the terrain mesh.
 	_vertexCount = _width * _height * 4;
 
-	this->LoadTextures(device, deviceContext, grassTexture, slopeTexture, rockTexture, splatTexture);
-
+	textures = make_shared<TextureArray>(device.Get(), deviceContext.Get(), texture_paths);
 	this->Load(device, deviceContext);
 }
 
@@ -40,7 +38,7 @@ void Terrain::Draw(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> devi
 
 	terrain_shader->SetViewMatrix(viewMatrix);
 	terrain_shader->SetProjectionMatrix(projectionMatrix);
-	terrain_shader->SetShaderParameters(deviceContext, light, _grassTexture->GetTexture(), _slopeTexture->GetTexture(), _rockTexture->GetTexture(), _splatTexture->GetTexture());
+	terrain_shader->SetShaderParameters(deviceContext, light, *textures);
 
 	deviceContext->OMSetBlendState(StatesHelper::GetInstance().GetStates()->Opaque(), Black, 0xffffffff);
 
@@ -146,24 +144,6 @@ void Terrain::SetShadedRender(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceCo
 	deviceContext->RSSetState(rState);
 
 	rState->Release();
-}
-
-bool Terrain::LoadTextures(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext, string grass, string slope, string rock, string splat)
-{
-	bool result;
-
-	// Create the grass texture object.
-	_grassTexture = make_shared<Texture>(device, deviceContext, grass);
-
-	// Create the slope texture object.
-	_slopeTexture = make_shared<Texture>(device, deviceContext, slope);
-
-	// Create the rock texture object.
-	_rockTexture = make_shared<Texture>(device, deviceContext, rock);
-
-	_splatTexture = make_shared<Texture>(device, deviceContext, splat);
-
-	return true;
 }
 
 unsigned Terrain::GetTerrainChunkSubIndex(int i, int j, int chunk_height)

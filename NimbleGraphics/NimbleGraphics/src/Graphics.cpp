@@ -29,11 +29,12 @@ bool Graphics::Init(int screenWidth, int screenHeight, HWND hwnd, bool fullscree
 	_D3D = NimbleD3D(screenWidth, screenHeight, vSyncEnabled, hwnd, fullscreen, screenDepth, screenNear);
 	_camera = Camera(Vector3(0.0f, 5.0f, 0.0f), Vector3(0.78f, 0.0f, 0.0f));
 
-	ShaderManager::GetInstance().Load(_D3D.GetDevice().Get());
+	ShaderManager::GetInstance().Load(_D3D.GetDevice().Get(), _D3D.GetDeviceContext().Get());
 	DebugLineManager::GetInstance().Load(_D3D.GetDevice());
 
-	terrain = make_shared<Terrain>(_D3D.GetDevice(), _D3D.GetDeviceContext(), 1, 1, "..\\..\\Assets\\Textures\\grass8.tga", 
-		"..\\..\\Assets\\Textures\\weird_texture.tga", "..\\..\\Assets\\Textures\\grass4.tga", "..\\..\\Assets\\Textures\\splat1.tga");
+	vector<wstring> texture_paths = { NIMBLE_TEXTURE_W(splat1.png), NIMBLE_TEXTURE_W(grass8.png), NIMBLE_TEXTURE_W(grass5.png), NIMBLE_TEXTURE_W(weird_texture.png) };
+
+	terrain = make_shared<Terrain>(_D3D.GetDevice(), _D3D.GetDeviceContext(), 1, 1, texture_paths);
 
 	LOG_INFO("Graphics initialization complete.");
 

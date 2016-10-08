@@ -2,7 +2,7 @@
 
 Light::Light(): _lightBuffer()
 {
-	this->Create(Vector4(0.65f, 0.65f, 0.65f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f),
+	this->Create(Vector4(0.50f, 0.50f, 0.50f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f),
 	             Vector3(DirectX::XM_PI, 0.0, 0.0));
 }
 

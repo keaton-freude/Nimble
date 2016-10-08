@@ -50,6 +50,7 @@
     <ClInclude Include="include\TerrainShader.h" />
     <ClInclude Include="include\TerrainVertexField.h" />
     <ClInclude Include="include\Texture.h" />
+    <ClInclude Include="include\TextureArray.h" />
     <ClInclude Include="include\Transform.h" />
     <ClInclude Include="include\Typedefs.h" />
     <ClInclude Include="include\Mesh.h" />
@@ -89,6 +90,7 @@
     <ClCompile Include="src\TerrainVertexField.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\TextureArray.cpp" />
     <ClCompile Include="src\Transform.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -19,7 +19,7 @@ class Terrain
 public:
 	Terrain();
 	Terrain(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext, unsigned int numChunksX,
-	        unsigned int numChunksZ, string grassTexture, string slopeTexture, string rockTexture, string splatTexture);
+	        unsigned int numChunksZ, vector<wstring>& texture_paths);
 	~Terrain();
 
 	void Load(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext);
@@ -40,7 +40,6 @@ public:
 	void SetShadedRender(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext) const;
 
 private:
-	bool LoadTextures(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext, string grass, string slope, string rock, string splat);
 	static unsigned int GetTerrainChunkSubIndex(int i, int j, int chunk_height);
 	void LoadChunks(ComPtr<ID3D11Device> device);
 	void UpdateChunks(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext);
@@ -55,11 +54,7 @@ private:
 	const unsigned int _chunkWidth = 16;
 	const unsigned int _chunkHeight = 16;
 
-	shared_ptr<Texture> _grassTexture;
-	shared_ptr<Texture> _slopeTexture;
-	shared_ptr<Texture> _rockTexture;
-	shared_ptr<Texture> _splatTexture;
-	string texture_name;
+	shared_ptr<TextureArray> textures;
 
 	int _vertexCount;
 	vector<TerrainChunk> _chunks;

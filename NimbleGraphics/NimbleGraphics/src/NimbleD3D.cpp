@@ -272,7 +272,7 @@ bool NimbleD3D::Init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, b
 	}
 
 	// Get the number of modes that fit the DXGI_FORMAT_R8G8B8A8_UNORM display format for the adapter output (monitor).
-	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numModes, NULL);
+	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, DXGI_ENUM_MODES_INTERLACED, &numModes, NULL);
 	if (FAILED(result))
 	{
 		return false;
@@ -282,7 +282,7 @@ bool NimbleD3D::Init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, b
 	displayModeList = shared_ptr<DXGI_MODE_DESC>(new DXGI_MODE_DESC[numModes]);
 
 	// Now fill the display mode list structures.
-	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numModes, displayModeList.get());
+	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, DXGI_ENUM_MODES_INTERLACED, &numModes, displayModeList.get());
 	if (FAILED(result))
 	{
 		return false;
@@ -330,7 +330,7 @@ bool NimbleD3D::Init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, b
 	m_swapChainDesc.BufferDesc.Height = screenHeight;
 
 	// Set regular 32-bit surface for the back buffer.
-	m_swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	m_swapChainDesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
 
 	// Set the refresh rate of the back buffer.
 	if (m_vsync_enabled)
@@ -379,7 +379,7 @@ bool NimbleD3D::Init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, b
 	featureLevel = D3D_FEATURE_LEVEL_11_0;
 
 	// Create the swap chain, Direct3D device, and Direct3D device context.
-	result = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, NULL, &featureLevel, 1,
+	result = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, D3D11_CREATE_DEVICE_DEBUG, &featureLevel, 1,
 	                                           D3D11_SDK_VERSION, &m_swapChainDesc, m_swapChain.GetAddressOf(), m_device.GetAddressOf(), nullptr, m_deviceContext.GetAddressOf());
 	if (FAILED(result))
 	{

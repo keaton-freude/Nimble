@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Header Files\Interfaces">
       <UniqueIdentifier>{774453bd-ff81-4dc2-a8a4-f57debaad10c}</UniqueIdentifier>
     </Filter>
@@ -66,6 +62,10 @@
     </Filter>
     <Filter Include="Source Files\Particles">
       <UniqueIdentifier>{61a7f317-6ff1-4535-aa29-0e82c27ce36a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{36db1e60-b5da-4dd5-bdec-a7bbdf794a8a}</UniqueIdentifier>
+      <Extensions>.ps;.vs;</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -129,9 +129,6 @@
     <ClInclude Include="include\Emitter.h">
       <Filter>Header Files\Particles</Filter>
     </ClInclude>
-    <ClInclude Include="include\Typedefs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Mesh.h">
       <Filter>Header Files\D3D</Filter>
     </ClInclude>
@@ -171,25 +168,31 @@
     <ClInclude Include="include\TerrainVertexField.h">
       <Filter>Header Files\Terrain</Filter>
     </ClInclude>
+    <ClInclude Include="include\Typedefs.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TextureArray.h">
+      <Filter>Header Files\D3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Shaders\Color.ps">
-      <Filter>Resource Files</Filter>
+      <Filter>Shaders</Filter>
     </None>
     <None Include="..\..\Assets\Shaders\Color.vs">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\..\Assets\Shaders\ParticleShader.vs">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\..\Assets\Shaders\Terrain.ps">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\..\Assets\Shaders\Terrain.vs">
-      <Filter>Resource Files</Filter>
+      <Filter>Shaders</Filter>
     </None>
     <None Include="..\..\Assets\Shaders\ParticleShader.ps">
-      <Filter>Resource Files</Filter>
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Assets\Shaders\ParticleShader.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Assets\Shaders\Terrain.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Assets\Shaders\Terrain.vs">
+      <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -273,6 +276,9 @@
     </ClCompile>
     <ClCompile Include="src\TerrainVertexField.cpp">
       <Filter>Source Files\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextureArray.cpp">
+      <Filter>Source Files\D3D</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

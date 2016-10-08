@@ -30,3 +30,5 @@ using D3DTexture2D = ComPtr<ID3D11Texture2D>;
 using D3DRenderTargetView = ComPtr<ID3D11RenderTargetView>;
 using D3DShaderResourceView = ComPtr<ID3D11ShaderResourceView>;
 using D3DBuffer = ComPtr<ID3D11Buffer>;
+
+#define NIMBLE_TEXTURE_W(x) L"..\\..\\Assets\\Textures\\"#x

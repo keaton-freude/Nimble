@@ -40,6 +40,13 @@ typedef struct LightBuffer
 	float padding;
 } LightBuffer;
 
+struct SplatBuffer
+{
+	int32_t numTextures;
+	int32_t numSplats;
+	int32_t padding[2];
+};
+
 struct TerrainVertex
 {
 	Vector3 position;

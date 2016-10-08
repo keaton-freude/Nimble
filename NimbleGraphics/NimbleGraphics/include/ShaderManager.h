@@ -23,7 +23,7 @@ class ShaderManager: public Singleton<ShaderManager>
 public:
 	ShaderManager();
 
-	void Load(ComPtr<ID3D11Device> device);
+	void Load(ComPtr<ID3D11Device> device, D3DDeviceContext deviceContext);
 
 	~ShaderManager();
 

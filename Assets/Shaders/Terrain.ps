@@ -1,7 +1,4 @@
-Texture2D grassTexture : register(t0);
-Texture2D slopeTexture : register(t1);
-Texture2D rockTexture  : register(t2);
-Texture2D splatTexture : register(t3);
+Texture2D _textures[32];
 
 SamplerState SampleType;
 
@@ -25,6 +22,12 @@ cbuffer LightBuffer
 	float padding;
 };
 
+cbuffer splatInfo
+{
+	int _numTextures;
+	int _numSplatMaps;
+}
+
 struct PixelInputType
 {
 	float4 position : SV_POSITION;
@@ -32,51 +35,18 @@ struct PixelInputType
 	float3 normal : NORMAL;
 };
 
+float4 GetTextureColor(float2 uv);
+
 float4 TerrainPixelShader(PixelInputType input) : SV_TARGET
 {
-	float4 grassColor;
-	float4 slopeColor;
-	float4 rockColor;
-	//float slope;
-	float blendAmount;
-	float4 textureColor = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	float4 textureColor = GetTextureColor(input.tex);
 	float3 lightDir;
 	float lightIntensity;
 	float4 color = ambientColor;
 
+	//textureColor = _textures[1].Sample(SampleType, input.tex);
 
-	//grassColor = grassTexture.Sample(SampleType, input.tex);
-
-	//slopeColor = slopeTexture.Sample(SampleType, input.tex);
-
-	//rockColor = rockTexture.Sample(SampleType, input.tex);
-
-	//slope = 1.0f - input.normal.y;
-
-	/*if (slope < 0.2)
-	{
-		blendAmount = slope / 0.2f;
-		textureColor = lerp(grassColor, slopeColor, blendAmount);
-	}
-	
-	if((slope < 0.7) && (slope >= 0.2f))
-	{
-		blendAmount = (slope - 0.2f) * (1.0f / (0.7f - 0.2f));
-		textureColor = lerp(slopeColor, rockColor, blendAmount);
-	}
-
-	if (slope >= 0.7)
-	{
-		textureColor = rockColor;
-	}*/
-
-	float4 splat = splatTexture.Sample(SampleType, input.tex);
-	float4 grass = grassTexture.Sample(SampleType, input.tex);
-	float4 rock = rockTexture.Sample(SampleType, input.tex);
-	float4 slope = slopeTexture.Sample(SampleType, input.tex);
-
-	textureColor = grass * splat.g + rock * splat.r + slope * splat.b;
-
+	//textureColor = float4(1.0f, 1.0f, 1.0f, 1.0f);
 
     // Invert the light direction for calculations.
     lightDir = -lightDirection;
@@ -94,4 +64,31 @@ float4 TerrainPixelShader(PixelInputType input) : SV_TARGET
     color = color * textureColor;
 
  	return color;
+}
+
+float4 GetTextureColor(float2 uv)
+{
+	float4 color = float4(0.0f, 0.0f, 0.0f, 0.0f);
+
+	// Our texture array must look like this:
+	// [0] splat_map_0 - first splatmap, covers the next 4 detail textures
+	// [1] texture_0 - Detail Texture 1, maps to red
+	// [2] texture_1 - Detail Texture 2, maps to green
+	// [3] texture_2 - Detail Texture 3, maps to blue
+	// [4] texture_3 - Detail Texture 4, maps to alpha
+	// [5] splat_map_1 - second splat map
+	// [6] texture_0 - and so on ...
+
+	// _numSplatMaps is how many blocks of color lerping we need to do
+	for (int i = 0; i < _numSplatMaps; i += 5)
+	{
+		float4 splat = _textures[i].Sample(SampleType, uv);
+
+		color = lerp(color, _textures[i + 1].Sample(SampleType, uv), splat.r);
+		color = lerp(color, _textures[i + 2].Sample(SampleType, uv), splat.g);
+		color = lerp(color, _textures[i + 3].Sample(SampleType, uv), splat.b);
+		//color = lerp(color, _textures[i + 4].Sample(SampleType, uv), splat.a);
+	}
+	
+	return color;
 }

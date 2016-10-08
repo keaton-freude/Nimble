@@ -104,7 +104,7 @@ bool Texture::Init(D3DDevice device, D3DDeviceContext deviceContext, string text
 	textureDesc.Width = width;
 	textureDesc.MipLevels = 1;
 	textureDesc.ArraySize = 1;
-	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	textureDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
 	textureDesc.SampleDesc.Count = 1;
 	textureDesc.SampleDesc.Quality = 0;
 	textureDesc.Usage = D3D11_USAGE_DYNAMIC;

@@ -1,5 +1,6 @@
 #include "TerrainShader.h"
 #include "Helper.h"
+#include "TextureArray.h"
 
 TerrainShader::TerrainShader(): IShader(), _lightBuffer(), _sampleState()
 {
@@ -12,8 +13,10 @@ TerrainShader::TerrainShader(): IShader(), _lightBuffer(), _sampleState()
 	this->_psVersion = "ps_5_0";
 }
 
-TerrainShader::TerrainShader(ComPtr<ID3D11Device> device): IShader(), _lightBuffer(), _sampleState()
+TerrainShader::TerrainShader(ComPtr<ID3D11Device> device, D3DDeviceContext deviceContext): IShader(), _lightBuffer(), _sampleState()
 {
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+
 	LOG_INFO("Terrain Shader overloaded C'tor!");
 	this->_vsFilename = L"..\\..\\Assets\\Shaders\\Terrain.vs";
 	this->_psFilename = L"..\\..\\Assets\\Shaders\\Terrain.ps";
@@ -23,6 +26,15 @@ TerrainShader::TerrainShader(ComPtr<ID3D11Device> device): IShader(), _lightBuff
 	this->_psVersion = "ps_5_0";
 
 	this->Load(device);
+
+	deviceContext->Map(_splatBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+
+	SplatBuffer* splatPtr = static_cast<SplatBuffer*>(mappedResource.pData);
+
+	splatPtr->numSplats = 1;
+	splatPtr->numTextures = 3;
+
+	deviceContext->Unmap(_splatBuffer.Get(), 0);
 }
 
 TerrainShader::~TerrainShader()
@@ -36,6 +48,7 @@ bool TerrainShader::Load(ComPtr<ID3D11Device> device)
 	HRESULT result;
 	D3D11_SAMPLER_DESC samplerDesc;
 	D3D11_BUFFER_DESC lightBufferDesc;
+	D3D11_BUFFER_DESC splatBufferDesc;
 
 	// Do basic load work
 	if (!IShader::Load(device))
@@ -79,16 +92,26 @@ bool TerrainShader::Load(ComPtr<ID3D11Device> device)
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 	result = device->CreateBuffer(&lightBufferDesc, NULL, _lightBuffer.GetAddressOf());
+
 	if (FAILED(result))
 	{
 		cout << "Failed to create light Buffer Description." << endl;
 		return false;
 	}
 
+	splatBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	splatBufferDesc.ByteWidth = sizeof(SplatBuffer);
+	splatBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	splatBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	splatBufferDesc.MiscFlags = 0;
+	splatBufferDesc.StructureByteStride = 0;
+
+	auto hr = device->CreateBuffer(&splatBufferDesc, NULL, _splatBuffer.GetAddressOf());
+
 	return true;
 }
 
-bool TerrainShader::Draw(ComPtr<ID3D11DeviceContext> deviceContext, int indexCount, const Matrix& worldMatrix, const Matrix& viewMatrix, const Matrix& projectionMatrix, const Light& light, ComPtr<ID3D11ShaderResourceView> grass, ComPtr<ID3D11ShaderResourceView> slope, ComPtr<ID3D11ShaderResourceView> rock, ComPtr<ID3D11ShaderResourceView> splat)
+bool TerrainShader::Draw(ComPtr<ID3D11DeviceContext> deviceContext, int indexCount, const Matrix& worldMatrix, const Matrix& viewMatrix, const Matrix& projectionMatrix, const Light& light, TextureArray& textures)
 {
 	bool result;
 
@@ -98,7 +121,7 @@ bool TerrainShader::Draw(ComPtr<ID3D11DeviceContext> deviceContext, int indexCou
 	this->_projectionMatrix = projectionMatrix;
 
 	// Set the shader parameters that it will use for rendering.
-	result = this->SetShaderParameters(deviceContext, light, grass, slope, rock, splat);
+	result = this->SetShaderParameters(deviceContext, light, textures);
 
 	if (!result)
 	{
@@ -160,7 +183,7 @@ void TerrainShader::RenderShader(ComPtr<ID3D11DeviceContext> deviceContext, int 
 	deviceContext->DrawIndexed(indexCount, 0, 0);
 }
 
-bool TerrainShader::SetShaderParameters(ComPtr<ID3D11DeviceContext> deviceContext, const Light& light, ComPtr<ID3D11ShaderResourceView> grass, ComPtr<ID3D11ShaderResourceView> slope, ComPtr<ID3D11ShaderResourceView> rock, ComPtr<ID3D11ShaderResourceView> splat)
+bool TerrainShader::SetShaderParameters(ComPtr<ID3D11DeviceContext> deviceContext, const Light& light, TextureArray& textures)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -184,12 +207,14 @@ bool TerrainShader::SetShaderParameters(ComPtr<ID3D11DeviceContext> deviceContex
 
 	deviceContext->Unmap(_lightBuffer.Get(), 0);
 
+
+
+
 	bufferNumber = 0;
 	deviceContext->PSSetConstantBuffers(bufferNumber, 1, _lightBuffer.GetAddressOf());
-	deviceContext->PSSetShaderResources(0, 1, grass.GetAddressOf());
-	deviceContext->PSSetShaderResources(1, 1, slope.GetAddressOf());
-	deviceContext->PSSetShaderResources(2, 1, rock.GetAddressOf());
-	deviceContext->PSSetShaderResources(3, 1, splat.GetAddressOf());
+	deviceContext->PSSetConstantBuffers(1, 1, _splatBuffer.GetAddressOf());
+	deviceContext->PSSetShaderResources(0, textures.GetNumberOfTextures(), textures.GetTextureViews());
+
 	// Must let IShader do its Matrix Buffer copies!
 	return IShader::SetShaderParameters(deviceContext);
 }
