@@ -17,6 +17,12 @@ inline void SetD3DDebugName(ID3D11DeviceChild* child, const std::string& name)
 	}
 }
 
+inline float Vector2XZDistance(const Vector3& a, const Vector3& b)
+{
+	Vector2 v = Vector2(a.x - b.x, a.z - b.z);
+	return sqrt(v.x * v.x + v.y * v.y);
+}
+
 inline float lerp(float value1, float value2, float amount)
 {
 	return value1 + ((value2 - value1) * amount);

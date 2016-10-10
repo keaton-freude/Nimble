@@ -43,13 +43,12 @@ void MemoryHeightmap::CalculateTextureCoordinates()
 
 	float tu, tv;
 
-	tv = 1.0f;
+	tv = 1.0f * TEXTURE_REPEAT;
 	tu = 0.0f;
 
 	auto vf_height = _vertex_field.GetHeight();
 	auto vf_width = _vertex_field.GetWidth();
 
-	incrementCount = _width / TEXTURE_REPEAT;
 	auto& p_vertex_field = GetVertexField()->GetVertices();
 
 	for (unsigned int j = 0; j < vf_height; ++j)
@@ -85,7 +84,7 @@ void MemoryHeightmap::SmoothAdd(DirectX::SimpleMath::Vector3 location, float rad
 
 			TerrainVertex& vert = p_verts[index];
 
-			auto distance = Vector3::Distance(location, vert.position);
+			auto distance = Vector2XZDistance(location, vert.position);
 
 			if (distance <= radius)
 			{

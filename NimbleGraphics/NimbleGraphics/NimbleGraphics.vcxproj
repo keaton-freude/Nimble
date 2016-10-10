@@ -40,6 +40,7 @@
     <ClInclude Include="include\ParticleSystem.h" />
     <ClInclude Include="include\ParticleVertex.h" />
     <ClInclude Include="include\Singleton.h" />
+    <ClInclude Include="include\SplatMap.h" />
     <ClInclude Include="include\spline.h" />
     <ClInclude Include="include\TerrainChunk.h" />
     <ClInclude Include="include\RayHit.h" />
@@ -83,6 +84,7 @@
     <ClCompile Include="src\placeholder.cpp" />
     <ClCompile Include="src\RayHit.cpp" />
     <ClCompile Include="src\ShaderManager.cpp" />
+    <ClCompile Include="src\SplatMap.cpp" />
     <ClCompile Include="src\Terrain.cpp" />
     <ClCompile Include="src\TerrainChunk.cpp" />
     <ClCompile Include="src\TerrainMesh.cpp" />

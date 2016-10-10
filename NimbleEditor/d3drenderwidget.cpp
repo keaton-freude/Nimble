@@ -141,9 +141,11 @@ void D3DRenderWidget::mouseMoveEvent(QMouseEvent *evt)
 
 		if (hit.hit)
 		{
-			float intensity = std::stof(ui->hm_intensity->text().toStdString());
-			float radius = std::stof(ui->hm_radius->text().toStdString());
-			graphics->HeightmapAdd(hit.hit_location, radius, intensity);
+			//float intensity = std::stof(ui->hm_intensity->text().toStdString());
+			//float radius = std::stof(ui->hm_radius->text().toStdString());
+			//graphics->HeightmapAdd(hit.hit_location, radius, intensity);
+			graphics->GetTerrain()->SplatTexture(graphics->GetD3D().GetDevice(), graphics->GetD3D().GetDeviceContext(), hit.hit_location, .5f, 10, 2);
+
 		}
     }
     else if (evt->buttons() == Qt::MouseButton::RightButton)
@@ -239,9 +241,11 @@ void D3DRenderWidget::mousePressEvent(QMouseEvent *evt)
 
         if (hit.hit)
         {
-			float intensity = std::stof(ui->hm_intensity->text().toStdString());
-			float radius = std::stof(ui->hm_radius->text().toStdString());
-			graphics->HeightmapAdd(hit.hit_location, radius, intensity);
+			//float intensity = std::stof(ui->hm_intensity->text().toStdString());
+			//float radius = std::stof(ui->hm_radius->text().toStdString());
+			//graphics->HeightmapAdd(hit.hit_location, radius, intensity);
+
+			graphics->GetTerrain()->SplatTexture(graphics->GetD3D().GetDevice(), graphics->GetD3D().GetDeviceContext(), hit.hit_location, .5f, 10, 2);
         }
 
         //emit statusEvent(message);

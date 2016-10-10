@@ -49,7 +49,7 @@ public:
 	float GetDT() const;
 	shared_ptr<Terrain> GetTerrain() const;
 	const Light& GetLight() const;
-
+	shared_ptr<Terrain> GetTerrain();
 	RayHit IsRayIntersectingTerrain(Ray r) const;
 
 	void PrintDebugObjects() const;

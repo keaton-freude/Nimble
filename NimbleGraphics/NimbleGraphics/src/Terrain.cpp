@@ -1,4 +1,5 @@
 #include "Terrain.h"
+#include <algorithm>
 
 Terrain::Terrain(): _width(0), _height(0), _numChunksX(0), _numChunksZ(0), _vertexCount(0)
 {
@@ -16,7 +17,8 @@ Terrain::Terrain(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> device
 	// Calculate the number of vertices in the terrain mesh.
 	_vertexCount = _width * _height * 4;
 
-	textures = make_shared<TextureArray>(device.Get(), deviceContext.Get(), texture_paths);
+	splatMap = make_shared<SplatMap>();
+	splatMap->LoadFromFile(device, deviceContext, texture_paths);
 	this->Load(device, deviceContext);
 }
 
@@ -38,7 +40,7 @@ void Terrain::Draw(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> devi
 
 	terrain_shader->SetViewMatrix(viewMatrix);
 	terrain_shader->SetProjectionMatrix(projectionMatrix);
-	terrain_shader->SetShaderParameters(deviceContext, light, *textures);
+	terrain_shader->SetShaderParameters(deviceContext, light, *splatMap);
 
 	deviceContext->OMSetBlendState(StatesHelper::GetInstance().GetStates()->Opaque(), Black, 0xffffffff);
 
@@ -54,18 +56,121 @@ void Terrain::Draw(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> devi
 
 void Terrain::SmoothHeightmapAdd(Vector3 location, float radius, float intensity, ComPtr<ID3D11DeviceContext> deviceContext, ComPtr<ID3D11Device> device)
 {
-	//StartDebugTimer();
+	StartDebugTimer();
 	_mem_heightmap->SmoothAdd(location, radius, intensity);
 	//_mem_heightmap->CalculateTextureCoordinates();
-	//EndDebugTimer("SmoothAdd: ");
+	EndDebugTimer("SmoothAdd: ");
 
-	//StartDebugTimer();
+	StartDebugTimer();
 	_mem_heightmap->CalculateNormalsDifferently(location, radius + 2.0f);
-	//EndDebugTimer("Calculate normals: ");
+	EndDebugTimer("Calculate normals: ");
 
-	//StartDebugTimer();
+	StartDebugTimer();
 	UpdateChunks(device, deviceContext);
-	//EndDebugTimer("Chunks Updated: ");
+	EndDebugTimer("Chunks Updated: ");
+}
+
+void Terrain::SplatTexture(D3DDevice device, D3DDeviceContext deviceContext, Vector3 location, float radius, int intensity, int texture_number)
+{
+	// To splat a texture, we just access the splat map and draw the correct color.
+	const auto splat = splatMap->GetSplat(texture_number);
+
+	auto color = splatMap->GetColorComponent(texture_number);
+
+	D3D11_MAPPED_SUBRESOURCE subresource_data;
+
+	ID3D11Texture2D* texture = static_cast<ID3D11Texture2D*>(splat);
+
+	D3D11_TEXTURE2D_DESC desc;
+	texture->GetDesc(&desc);
+
+	auto width = desc.Width;
+	auto height = desc.Height;
+
+	auto terrain_height = _numChunksZ * 0.5f * _chunkHeight;
+	auto terrain_width = _numChunksX * 0.5f * _chunkWidth;
+
+	Vector2 vector_coords = Vector2(location.x, terrain_height - location.z);
+	Vector2 coords_pixel_space = Vector2((location.x / terrain_width) * width,
+		((terrain_height - location.z) / terrain_height) * height);
+	Vector2 extents = Vector2(radius, radius);
+
+	Vector2 start_position = vector_coords - Vector2(radius, radius);
+	Vector2 end_position = vector_coords + Vector2(radius, radius);
+
+	
+
+	// We need the value between 0 and 1024 for both x and y
+	// but we have a physical location
+
+
+	int start_j = (start_position.y / terrain_height) * height;
+	int start_i = (start_position.x / terrain_width) * width;
+
+	if (start_j < 0)
+		start_j = 0;
+	if (start_i < 0)
+		start_i = 0;
+
+	int end_j = (end_position.y / terrain_height) * height;
+	int end_i = (end_position.x / terrain_width) * height;
+
+	D3D11_TEXTURE2D_DESC copyDesc = desc;
+	D3DTexture2D copyTexture;
+	D3D11_MAPPED_SUBRESOURCE copyResourceData;
+
+	// Only thing we'll do different is the usage and access
+	copyDesc.Usage = D3D11_USAGE_STAGING;
+	copyDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE | D3D11_CPU_ACCESS_READ;
+	copyDesc.BindFlags = 0;
+
+	device->CreateTexture2D(&copyDesc, NULL, copyTexture.GetAddressOf());
+
+	deviceContext->CopyResource(copyTexture.Get(), texture);
+
+	deviceContext->Map(copyTexture.Get(), 0, D3D11_MAP_READ_WRITE, 0, &copyResourceData);
+
+	Vector2 current_loc;
+
+	unsigned char* data_ptr = (unsigned char*)(copyResourceData.pData);
+
+	for (int j = start_j; j < end_j; ++j)
+	{
+		for (int i = start_i; i < end_i; ++i)
+		{
+			if (i > width)
+				continue;
+			if (j > height)
+				continue;
+
+			current_loc = Vector2(((float)i / (float)width) * terrain_width, ((float)j / (float)height) * terrain_height);
+			auto distance = Vector2::Distance(current_loc, vector_coords);
+			if (Vector2::Distance(current_loc, vector_coords) > radius)
+				continue;
+
+			auto index = (j * height + i) * 4;
+
+			unsigned char new_value = 0;
+
+			if (*(data_ptr + index + color) + intensity > 255)
+				new_value = 255;
+			else
+				new_value = *(data_ptr + index + color) + intensity;
+			
+			*(data_ptr + index + color) = new_value;
+		}
+	}
+
+	deviceContext->Map(splat, 0, D3D11_MAP_WRITE_DISCARD, 0, &subresource_data);
+
+	unsigned char* real_data_ptr = (unsigned char*)(subresource_data.pData);
+
+	memcpy(real_data_ptr, data_ptr, 4 * width * height);
+
+	deviceContext->Unmap(splat, 0);
+
+	deviceContext->Unmap(copyTexture.Get(), 0);
+	
 }
 
 RayHit Terrain::IsRayIntersectingTerrain(Ray r) const

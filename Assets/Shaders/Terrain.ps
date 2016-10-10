@@ -35,18 +35,15 @@ struct PixelInputType
 	float3 normal : NORMAL;
 };
 
-float4 GetTextureColor(float2 uv);
+float4 GetTextureColor(float2 splat_uv, float2 texture_uv);
 
 float4 TerrainPixelShader(PixelInputType input) : SV_TARGET
 {
-	float4 textureColor = GetTextureColor(input.tex);
+	float2 normalized_tex = input.tex / 4.0f;
+	float4 textureColor = GetTextureColor(normalized_tex, input.tex);
 	float3 lightDir;
 	float lightIntensity;
 	float4 color = ambientColor;
-
-	//textureColor = _textures[1].Sample(SampleType, input.tex);
-
-	//textureColor = float4(1.0f, 1.0f, 1.0f, 1.0f);
 
     // Invert the light direction for calculations.
     lightDir = -lightDirection;
@@ -66,28 +63,32 @@ float4 TerrainPixelShader(PixelInputType input) : SV_TARGET
  	return color;
 }
 
-float4 GetTextureColor(float2 uv)
+float4 GetTextureColor(float2 splat_uv, float2 texture_uv)
 {
 	float4 color = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
 	// Our texture array must look like this:
-	// [0] splat_map_0 - first splatmap, covers the next 4 detail textures
-	// [1] texture_0 - Detail Texture 1, maps to red
-	// [2] texture_1 - Detail Texture 2, maps to green
-	// [3] texture_2 - Detail Texture 3, maps to blue
-	// [4] texture_3 - Detail Texture 4, maps to alpha
-	// [5] splat_map_1 - second splat map
-	// [6] texture_0 - and so on ...
+	// [0] splat_map_0 - first splat map
+	// [1] texture_0 - Special Base Texture, all colors start here
+	// [2] texture_1 - Detail Texture 2, maps to red
+	// [3] texture_2 - Detail Texture 3, maps to green
+	// [4] texture_3 - Detail Texture 4, maps to blue
+	// [5] texture_4 - Detail Texture 5, maps to alpha (1 - alpha)
+	// [6] splat_map_1 - second splat map
+	// [7] texture_5 - Detail Texture 6, maps to red
+	// etc
+
+	color = _textures[1].Sample(SampleType, texture_uv);
 
 	// _numSplatMaps is how many blocks of color lerping we need to do
-	for (int i = 0; i < _numSplatMaps; i += 5)
+	for (int i = 1; i <= _numSplatMaps; i += 5)
 	{
-		float4 splat = _textures[i].Sample(SampleType, uv);
+		float4 splat = _textures[i - 1].Sample(SampleType, splat_uv);
 
-		color = lerp(color, _textures[i + 1].Sample(SampleType, uv), splat.r);
-		color = lerp(color, _textures[i + 2].Sample(SampleType, uv), splat.g);
-		color = lerp(color, _textures[i + 3].Sample(SampleType, uv), splat.b);
-		//color = lerp(color, _textures[i + 4].Sample(SampleType, uv), splat.a);
+		color = lerp(color, _textures[i + 1].Sample(SampleType, texture_uv), splat.r);
+		color = lerp(color, _textures[i + 2].Sample(SampleType, texture_uv), splat.g);
+		color = lerp(color, _textures[i + 3].Sample(SampleType, texture_uv), splat.b);
+		color = lerp(color, _textures[i + 4].Sample(SampleType, texture_uv), 1 - splat.a);
 	}
 	
 	return color;

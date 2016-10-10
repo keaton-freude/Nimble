@@ -111,7 +111,7 @@ bool TerrainShader::Load(ComPtr<ID3D11Device> device)
 	return true;
 }
 
-bool TerrainShader::Draw(ComPtr<ID3D11DeviceContext> deviceContext, int indexCount, const Matrix& worldMatrix, const Matrix& viewMatrix, const Matrix& projectionMatrix, const Light& light, TextureArray& textures)
+bool TerrainShader::Draw(ComPtr<ID3D11DeviceContext> deviceContext, int indexCount, const Matrix& worldMatrix, const Matrix& viewMatrix, const Matrix& projectionMatrix, const Light& light, SplatMap& splat_map)
 {
 	bool result;
 
@@ -121,7 +121,7 @@ bool TerrainShader::Draw(ComPtr<ID3D11DeviceContext> deviceContext, int indexCou
 	this->_projectionMatrix = projectionMatrix;
 
 	// Set the shader parameters that it will use for rendering.
-	result = this->SetShaderParameters(deviceContext, light, textures);
+	result = this->SetShaderParameters(deviceContext, light, splat_map);
 
 	if (!result)
 	{
@@ -183,7 +183,7 @@ void TerrainShader::RenderShader(ComPtr<ID3D11DeviceContext> deviceContext, int 
 	deviceContext->DrawIndexed(indexCount, 0, 0);
 }
 
-bool TerrainShader::SetShaderParameters(ComPtr<ID3D11DeviceContext> deviceContext, const Light& light, TextureArray& textures)
+bool TerrainShader::SetShaderParameters(ComPtr<ID3D11DeviceContext> deviceContext, const Light& light, SplatMap& splat_map)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -207,13 +207,10 @@ bool TerrainShader::SetShaderParameters(ComPtr<ID3D11DeviceContext> deviceContex
 
 	deviceContext->Unmap(_lightBuffer.Get(), 0);
 
-
-
-
 	bufferNumber = 0;
 	deviceContext->PSSetConstantBuffers(bufferNumber, 1, _lightBuffer.GetAddressOf());
 	deviceContext->PSSetConstantBuffers(1, 1, _splatBuffer.GetAddressOf());
-	deviceContext->PSSetShaderResources(0, textures.GetNumberOfTextures(), textures.GetTextureViews());
+	deviceContext->PSSetShaderResources(0, splat_map.GetNumberOfViews(), splat_map.GetTextureViews());
 
 	// Must let IShader do its Matrix Buffer copies!
 	return IShader::SetShaderParameters(deviceContext);

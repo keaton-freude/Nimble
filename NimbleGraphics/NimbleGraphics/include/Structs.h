@@ -100,7 +100,7 @@ struct TerrainVertex
 
 };
 
-const int TEXTURE_REPEAT = 1;
+const int TEXTURE_REPEAT = 4;
 
 _declspec(align(16))
 struct TimeBuffer

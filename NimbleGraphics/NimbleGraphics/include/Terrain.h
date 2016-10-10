@@ -7,6 +7,7 @@
 #include "Texture.h"
 #include "MemoryHeightmap.h"
 #include "Frustum.h"
+#include "SplatMap.h"
 
 using std::string;
 using std::vector;
@@ -28,6 +29,8 @@ public:
 	          const Matrix& viewMatrix, const Matrix& projectionMatrix, const Light& light, const Frustum& frustum);
 	void SmoothHeightmapAdd(Vector3 location, float radius, float intensity, ComPtr<ID3D11DeviceContext> deviceContext,
 	                        ComPtr<ID3D11Device> device);
+
+	void SplatTexture(D3DDevice device, D3DDeviceContext deviceContext, Vector3 location, float radius, int intensity, int texture_number);
 
 	RayHit IsRayIntersectingTerrain(Ray r) const;
 
@@ -51,10 +54,10 @@ private:
 	unsigned int _height;
 	unsigned int _numChunksX;
 	unsigned int _numChunksZ;
-	const unsigned int _chunkWidth = 16;
-	const unsigned int _chunkHeight = 16;
+	const unsigned int _chunkWidth = 256;
+	const unsigned int _chunkHeight = 256;
 
-	shared_ptr<TextureArray> textures;
+	shared_ptr<SplatMap> splatMap;
 
 	int _vertexCount;
 	vector<TerrainChunk> _chunks;
