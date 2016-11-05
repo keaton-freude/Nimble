@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Structs.h"
+#include "TerrainCell.h"
 
 /* This class represents the actual vertices for a terrain.
  * The terrain class and other things based on this, create views

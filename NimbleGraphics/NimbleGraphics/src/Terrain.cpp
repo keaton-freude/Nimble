@@ -12,7 +12,7 @@ Terrain::Terrain(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> device
 	_width = _numChunksX * _chunkWidth;
 	_height = _numChunksZ * _chunkHeight;
 
-	this->_mem_heightmap = make_shared<MemoryHeightmap>(_width, _height, .5f);
+	this->_mem_heightmap = make_shared<MemoryHeightmap>(_width, _height, 1.0f);
 
 	// Calculate the number of vertices in the terrain mesh.
 	_vertexCount = _width * _height * 4;
@@ -185,13 +185,13 @@ RayHit Terrain::IsRayIntersectingTerrain(Ray r) const
 		Vector3 triangle1[3];
 		Vector3 triangle2[3];
 
-		triangle1[0] = current_cell.data.upperLeft->position;
-		triangle1[1] = current_cell.data.upperRight->position;
-		triangle1[2] = current_cell.data.bottomLeft->position;
+		triangle1[0] = current_cell.data.upperLeft.position;
+		triangle1[1] = current_cell.data.upperRight.position;
+		triangle1[2] = current_cell.data.bottomLeft.position;
 
-		triangle2[0] = current_cell.data.bottomLeft->position;
-		triangle2[1] = current_cell.data.upperRight->position;
-		triangle2[2] = current_cell.data.bottomRight->position;
+		triangle2[0] = current_cell.data.bottomLeft.position;
+		triangle2[1] = current_cell.data.upperRight.position;
+		triangle2[2] = current_cell.data.bottomRight.position;
 
 		float distance;
 

@@ -7,6 +7,7 @@ Graphics::Graphics()
 
 Graphics::Graphics(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen, bool vSyncEnabled, float screenDepth, float screenNear)
 {
+	LOG_INFO("CWD: ", GetCurrentWorkingDirectory());
 	Init(screenWidth, screenHeight, hwnd, fullscreen, vSyncEnabled, screenDepth, screenNear);
 }
 
@@ -172,6 +173,13 @@ bool Graphics::RenderViewport()
 
 	_frustum.ConstructFrustum(1000.0f, projectionMatrix, viewMatrix);
 	terrain->Draw(_D3D.GetDevice(), _D3D.GetDeviceContext(), viewMatrix, projectionMatrix, _light0, _frustum);
+	
+	auto lines = DebugLineManager::GetInstance().GetLines();
+
+	for (auto& line : lines)
+	{
+		line.Draw(_D3D.GetDeviceContext(), viewMatrix, projectionMatrix);
+	}
 
 	_D3D.EndScene();
 

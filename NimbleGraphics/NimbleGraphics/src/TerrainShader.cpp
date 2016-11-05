@@ -5,8 +5,8 @@
 TerrainShader::TerrainShader(): IShader(), _lightBuffer(), _sampleState()
 {
 	LOG_INFO("Terrain Shader Construct!");
-	this->_vsFilename = L"..\\..\\Assets\\Shaders\\Terrain.vs";
-	this->_psFilename = L"..\\..\\Assets\\Shaders\\Terrain.ps";
+	this->_vsFilename = L"..\\Assets\\Shaders\\Terrain.vs";
+	this->_psFilename = L"..\\Assets\\Shaders\\Terrain.ps";
 	this->_vertexShaderEntryPoint = "vertexMain";
 	this->_pixelShaderEntryPoint = "TerrainPixelShader";
 	this->_vsVersion = "vs_5_0";
@@ -18,8 +18,8 @@ TerrainShader::TerrainShader(ComPtr<ID3D11Device> device, D3DDeviceContext devic
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 
 	LOG_INFO("Terrain Shader overloaded C'tor!");
-	this->_vsFilename = L"..\\..\\Assets\\Shaders\\Terrain.vs";
-	this->_psFilename = L"..\\..\\Assets\\Shaders\\Terrain.ps";
+	this->_vsFilename = L"..\\Assets\\Shaders\\Terrain.vs";
+	this->_psFilename = L"..\\Assets\\Shaders\\Terrain.ps";
 	this->_vertexShaderEntryPoint = "vertexMain";
 	this->_pixelShaderEntryPoint = "TerrainPixelShader";
 	this->_vsVersion = "vs_5_0";

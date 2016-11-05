@@ -119,5 +119,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="NimbleEditor.pro" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

@@ -1,11 +1,8 @@
 #pragma once
 #include "Typedefs.h"
+#include "Structs.h"
 #include <memory>
 #include <vector>
-
-#include "Structs.h"
-
-
 #include <wrl/client.h>
 #include <DirectXColors.h>
 

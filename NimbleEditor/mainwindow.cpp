@@ -22,6 +22,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->cmbBlendMode->addItem("Additive");
     ui->cmbBlendMode->setCurrentIndex(0);
 
+	this->ui->btnHeightmap->setCheckable(true);
+	this->ui->btnTexture->setCheckable(true);
+
     spline_points_x.push_back(0.0);
     spline_points_y.push_back(0.0);
 
@@ -83,7 +86,7 @@ ParticleSettings MainWindow::GetParticleSettingsFromUI()
 	ParticleSettings settings;
 
 	settings.system_name = ui->txtParticleSystemName->text().toStdString();
-	settings.texture_name = "..\\..\\Assets\\Textures\\" + ui->txtTextureName->text().toStdString();
+	settings.texture_name = "..\\Assets\\Textures\\" + ui->txtTextureName->text().toStdString();
 	settings.particles_per_second = std::stof(ui->txtParticlesPerSecond->text().toStdString());
 	settings.max_particles = stof(ui->txtMaxParticles->text().toStdString());
 
@@ -443,7 +446,7 @@ void MainWindow::on_btnChooseEndColor_clicked()
 
 void MainWindow::on_btnChooseTexture_clicked()
 {
-    string file_path = QFileDialog::getOpenFileName(this, tr("Open Image"), "..\\..\\Assets\\Textures", tr("Image Files (*.tga)")).toStdString();
+    string file_path = QFileDialog::getOpenFileName(this, tr("Open Image"), "..\\Assets\\Textures", tr("Image Files (*.tga)")).toStdString();
     cout << file_path << endl;
     vector<string> tokens = split(file_path, '/');
     cout << tokens.back() << endl;
@@ -455,17 +458,35 @@ void MainWindow::on_btnSaveSystem_clicked()
 {
 	auto settings = GetParticleSettingsFromUI();
 
-	string save_path = QFileDialog::getSaveFileName(this, tr("Save System"), "..\\..\\Assets\\ParticleSystems", tr("Particle Systems (*.ps)")).toStdString();
+	string save_path = QFileDialog::getSaveFileName(this, tr("Save System"), "..\\Assets\\ParticleSystems", tr("Particle Systems (*.ps)")).toStdString();
 	
 	settings.WriteToFile(save_path);
 }
 
 void MainWindow::on_btnOpenSystem_clicked()
 {
-	string file_path = QFileDialog::getOpenFileName(this, tr("Open System"), "..\\..\\Assets\\ParticleSystems", tr("Particle Systems (*.ps)")).toStdString();
+	string file_path = QFileDialog::getOpenFileName(this, tr("Open System"), "..\\Assets\\ParticleSystems", tr("Particle Systems (*.ps)")).toStdString();
 
 	auto settings = ParticleSettings(file_path);
 
 	ui->viewport_2->GetGraphics()->GetParticleEngine().Clear();
 	ui->viewport_2->GetGraphics()->GetParticleEngine().Add(ui->viewport_2->GetGraphics()->GetD3D().GetDevice(), ui->viewport_2->GetGraphics()->GetD3D().GetDeviceContext(), vector<ParticleSettings>({ settings }));
+}
+
+void MainWindow::on_btnHeightmap_clicked()
+{
+	if (ui->btnHeightmap->isChecked())
+	{
+		// Turn off
+		ui->btnHeightmap->setChecked(false);
+	}
+	else
+	{
+		// Turn on
+		ui->btnHeightmap->setChecked(true);
+	}
+}
+
+void MainWindow::on_btnTexture_clicked()
+{
 }

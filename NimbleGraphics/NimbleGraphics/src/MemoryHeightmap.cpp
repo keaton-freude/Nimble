@@ -8,8 +8,11 @@ MemoryHeightmap::~MemoryHeightmap()
 {
 }
 
-MemoryHeightmap::MemoryHeightmap(unsigned width, unsigned height, float resolution): highest_point(0.0f), _width(width), _height(height), _heightmap(width * height), _vertex_field(width + 1, height + 1, resolution)
+MemoryHeightmap::MemoryHeightmap(unsigned width, unsigned height, float resolution)
+	: highest_point(0.0f), _width(width), _height(height), _vertex_field(width + 1, height + 1, resolution)
 {
+	_heightmap.reserve(width * height);
+
 	auto& p_verts = _vertex_field.GetVertices();
 	for (unsigned int j = 0; j < _height; ++j)
 	{
@@ -23,11 +26,8 @@ MemoryHeightmap::MemoryHeightmap(unsigned width, unsigned height, float resoluti
 			auto ulIndex = (j + 1) * vf_height + i;
 			auto urIndex = (j + 1) * vf_height + (i + 1);
 
-			// Create _symbolic_ links to the underlying verts				
-			_heightmap[index].data.upperLeft = &p_verts[ulIndex];
-			_heightmap[index].data.upperRight = &p_verts[urIndex];
-			_heightmap[index].data.bottomLeft = &p_verts[blIndex];
-			_heightmap[index].data.bottomRight = &p_verts[brIndex];
+			// Create _symbolic_ links to the underlying verts.
+			_heightmap.push_back(TerrainCell(p_verts[ulIndex], p_verts[urIndex], p_verts[blIndex], p_verts[brIndex]));
 		}
 	}
 
@@ -247,39 +247,39 @@ bool MemoryHeightmap::CalculateNormalsDifferently(Vector3 position, float radius
 			{
 				// bottomLeft vertex
 				// Need: Face2 on Left, Face1/2 on Bottom-Left, Face1 on Bottom
-				cell.data.bottomLeft->normal += cell.GetFaceNormal1();
-				cell.data.bottomLeft->normal += cell.GetFaceNormal2();
-				AddLeft(i, j, cell.data.bottomLeft->normal, 2);
-				AddBottomLeft(i, j, cell.data.bottomLeft->normal, 3);
-				AddDown(i, j, cell.data.bottomLeft->normal, 1);
-				cell.data.bottomLeft->normal.Normalize();
+				cell.data.bottomLeft.normal += cell.GetFaceNormal1();
+				cell.data.bottomLeft.normal += cell.GetFaceNormal2();
+				AddLeft(i, j, cell.data.bottomLeft.normal, 2);
+				AddBottomLeft(i, j, cell.data.bottomLeft.normal, 3);
+				AddDown(i, j, cell.data.bottomLeft.normal, 1);
+				cell.data.bottomLeft.normal.Normalize();
 
 				// bottomRight vertex
 				// Need: Face1 on Bottom, 
-				cell.data.bottomRight->normal += cell.GetFaceNormal2();
-				AddDown(i, j, cell.data.bottomRight->normal, 3);
-				AddBottomRight(i, j, cell.data.bottomRight->normal, 1);
-				AddRight(i, j, cell.data.bottomRight->normal, 3);
-				cell.data.bottomRight->normal.Normalize();
+				cell.data.bottomRight.normal += cell.GetFaceNormal2();
+				AddDown(i, j, cell.data.bottomRight.normal, 3);
+				AddBottomRight(i, j, cell.data.bottomRight.normal, 1);
+				AddRight(i, j, cell.data.bottomRight.normal, 3);
+				cell.data.bottomRight.normal.Normalize();
 
 				// upperLeft vertex
 				// Need: Face1/2 Above, Face2 Upper-left, Face1/2 Left, Face1 on self
-				cell.data.upperLeft->normal += cell.GetFaceNormal1(); //1
-				AddUp(i, j, cell.data.upperLeft->normal, 3); //2
-				AddUpperLeft(i, j, cell.data.upperLeft->normal, 2);// 1
-				AddLeft(i, j, cell.data.upperLeft->normal, 3); // 2
-				cell.data.upperLeft->normal.Normalize();
+				cell.data.upperLeft.normal += cell.GetFaceNormal1(); //1
+				AddUp(i, j, cell.data.upperLeft.normal, 3); //2
+				AddUpperLeft(i, j, cell.data.upperLeft.normal, 2);// 1
+				AddLeft(i, j, cell.data.upperLeft.normal, 3); // 2
+				cell.data.upperLeft.normal.Normalize();
 
 				// upperRight vertex
 				// face1/2 on self, face2 above, face1/2 upper-right, face1 right
-				cell.data.upperRight->normal += cell.GetFaceNormal1();
-				cell.data.upperRight->normal += cell.GetFaceNormal2();
-				AddUp(i, j, cell.data.upperRight->normal, 2);
-				AddUpperRight(i, j, cell.data.upperRight->normal, 3);
-				AddRight(i, j, cell.data.upperRight->normal, 1);
-				cell.data.upperRight->normal.Normalize();
+				cell.data.upperRight.normal += cell.GetFaceNormal1();
+				cell.data.upperRight.normal += cell.GetFaceNormal2();
+				AddUp(i, j, cell.data.upperRight.normal, 2);
+				AddUpperRight(i, j, cell.data.upperRight.normal, 3);
+				AddRight(i, j, cell.data.upperRight.normal, 1);
+				cell.data.upperRight.normal.Normalize();
 
-				cell.NormalizeNormals(); // ?? maybe?
+				//cell.NormalizeNormals(); // ?? maybe?
 			}
 		}
 	}
@@ -294,10 +294,10 @@ bool MemoryHeightmap::CalculateNormalsDifferently(Vector3 position, float radius
 			auto& cell = _heightmap[j * _height + i];
 
 			// draw 4 normals lines for debug
-			DebugLineManager::GetInstance().AddNormal(cell.data.upperLeft->position, cell.data.upperLeft->normal);
-			DebugLineManager::GetInstance().AddNormal(cell.data.upperRight->position, cell.data.upperRight->normal);
-			DebugLineManager::GetInstance().AddNormal(cell.data.bottomLeft->position, cell.data.bottomLeft->normal);
-			DebugLineManager::GetInstance().AddNormal(cell.data.bottomRight->position, cell.data.bottomRight->normal);
+			DebugLineManager::GetInstance().AddNormal(cell.data.upperLeft.position, cell.data.upperLeft.normal);
+			DebugLineManager::GetInstance().AddNormal(cell.data.upperRight.position, cell.data.upperRight.normal);
+			DebugLineManager::GetInstance().AddNormal(cell.data.bottomLeft.position, cell.data.bottomLeft.normal);
+			DebugLineManager::GetInstance().AddNormal(cell.data.bottomRight.position, cell.data.bottomRight.normal);
 		}
 	}
 

@@ -4,7 +4,7 @@ ColorShader::ColorShader()
 	: IShader()
 {
 	this->_vsFilename = L"..\\..\\Assets\\Shaders\\Color.vs";
-	this->_psFilename = L"..\\..\\Assets\\Shaders\\Color.ps";
+	this->_psFilename = L"..\\Assets\\Shaders\\Color.ps";
 	this->_vertexShaderEntryPoint = "ColorVertexShader";
 	this->_pixelShaderEntryPoint = "ColorPixelShader";
 	this->_vsVersion = "vs_5_0";
@@ -14,8 +14,8 @@ ColorShader::ColorShader()
 ColorShader::ColorShader(ComPtr<ID3D11Device> device)
 	: IShader()
 {
-	this->_vsFilename = L"..\\..\\Assets\\Shaders\\Color.vs";
-	this->_psFilename = L"..\\..\\Assets\\Shaders\\Color.ps";
+	this->_vsFilename = L"..\\Assets\\Shaders\\Color.vs";
+	this->_psFilename = L"..\\Assets\\Shaders\\Color.ps";
 	this->_vertexShaderEntryPoint = "ColorVertexShader";
 	this->_pixelShaderEntryPoint = "ColorPixelShader";
 	this->_vsVersion = "vs_5_0";

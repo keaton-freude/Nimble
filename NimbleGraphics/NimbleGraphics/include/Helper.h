@@ -4,6 +4,7 @@
 #include <chrono>
 #include "Logger.h"
 #include "Singleton.h"
+#include <direct.h>
 
 using DirectX::CommonStates;
 using std::unique_ptr;
@@ -148,4 +149,11 @@ inline static void EndDebugTimer(const std::string& label = "")
 
 	std::chrono::duration<double> elapsed_seconds = g_end - g_start;
 	LOG_INFO(label, elapsed_seconds.count());
+}
+
+inline std::string GetCurrentWorkingDirectory() 
+{
+	char buff[220];
+	_getcwd(buff, 220);
+	return std::string(buff);
 }

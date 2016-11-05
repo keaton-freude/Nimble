@@ -3,8 +3,8 @@
 ParticleShader::ParticleShader(): IShader()
 {
 	LOG_INFO("Particle Shader Construct!");
-	this->_vsFilename = L"..\\..\\Assets\\Shaders\\ParticleShader.vs";
-	this->_psFilename = L"..\\..\\Assets\\Shaders\\ParticleShader.ps";
+	this->_vsFilename = L"..\\Assets\\Shaders\\ParticleShader.vs";
+	this->_psFilename = L"..\\Assets\\Shaders\\ParticleShader.ps";
 	this->_vertexShaderEntryPoint = "ParticleVertexShader";
 	this->_pixelShaderEntryPoint = "ParticlePixelShader";
 	this->_vsVersion = "vs_5_0";
@@ -19,8 +19,8 @@ ParticleShader::~ParticleShader()
 ParticleShader::ParticleShader(ComPtr<ID3D11Device> device, ParticleSettings settings): IShader()
 {
 	LOG_INFO("Particle Shader Construct!");
-	this->_vsFilename = L"..\\..\\Assets\\Shaders\\ParticleShader.vs";
-	this->_psFilename = L"..\\..\\Assets\\Shaders\\ParticleShader.ps";
+	this->_vsFilename = L"..\\Assets\\Shaders\\ParticleShader.vs";
+	this->_psFilename = L"..\\Assets\\Shaders\\ParticleShader.ps";
 	this->_vertexShaderEntryPoint = "ParticleVertexShader";
 	this->_pixelShaderEntryPoint = "ParticlePixelShader";
 	this->_vsVersion = "vs_5_0";
@@ -93,7 +93,8 @@ void ParticleShader::Update(const Matrix& worldMatrix, const Matrix& viewMatrix,
 	this->_projectionMatrix = projectionMatrix;
 }
 
-bool ParticleShader::Draw(ComPtr<ID3D11DeviceContext> deviceContext, int indexCount, int startIndexLocation, int baseVertexLocation, Texture* texture, Vector2 viewport, float current_time, bool update)
+bool ParticleShader::Draw(ComPtr<ID3D11DeviceContext> deviceContext, int indexCount, int startIndexLocation, int baseVertexLocation, 
+	Texture* texture, Vector2 viewport, float current_time, bool update)
 {
 	// Set the shader parameters that it will use for rendering.
 	this->SetShaderParameters(deviceContext, texture->GetTexture(), viewport, current_time, update);

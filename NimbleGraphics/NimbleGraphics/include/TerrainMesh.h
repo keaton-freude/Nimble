@@ -5,6 +5,7 @@
 #include "ShaderManager.h"
 #include "Mesh.h"
 #include "Transform.h"
+#include "TerrainVertex.h"
 
 using std::shared_ptr;
 using Microsoft::WRL::ComPtr;

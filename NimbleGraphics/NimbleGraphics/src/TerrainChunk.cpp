@@ -2,7 +2,7 @@
 
 TerrainChunk::TerrainChunk(int chunk_x, int chunk_z, unsigned width, unsigned height, ComPtr<ID3D11Device> device, vector<TerrainVertex>& vertices, vector<unsigned long>& indices)
 	: _vertexCount(vertices.size()), _indexCount(indices.size()), _positionX(0), _positionZ(0), _width(width), _height(height),
-	_drawable(device, vertices, indices), _terrainCellData(width * height), chunk_x(chunk_x), chunk_z(chunk_z)
+	_drawable(device, vertices, indices), _terrainCellData(), chunk_x(chunk_x), chunk_z(chunk_z)
 {
 	BoundingBox::CreateFromPoints(_boundingBox, Vector3(0.0f, 0.0f, 0.0f), Vector3(_width, 1.0f, height));
 	auto vert_index = 0;

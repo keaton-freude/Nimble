@@ -177,6 +177,12 @@
     <ClInclude Include="include\SplatMap.h">
       <Filter>Header Files\D3D</Filter>
     </ClInclude>
+    <ClInclude Include="include\TerrainCell.h">
+      <Filter>Header Files\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TerrainVertex.h">
+      <Filter>Header Files\Terrain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Shaders\Color.ps">
@@ -197,6 +203,7 @@
     <None Include="..\..\Assets\Shaders\Terrain.vs">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\placeholder.cpp">

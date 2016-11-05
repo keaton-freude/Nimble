@@ -54,6 +54,10 @@ private slots:
 
 	void on_btnOpenSystem_clicked();
 
+	void on_btnHeightmap_clicked();
+
+	void on_btnTexture_clicked();
+
 private:
     vector<double> spline_points_x;
     vector<double> spline_points_y;
