@@ -20,6 +20,9 @@ The resulting executable makes an assumption about the file structure in which i
 
 # Credits
 This project is a hodge-podge of techniques and learning from many sources. Big thanks to:
+
 http://www.rastertek.com/ - I used RasterTek to learn the individual techniques, and some boilerplate still exists (mainly the Shader classes and D3D class). 
+
 https://github.com/Microsoft/DirectXTK - I am very familiar with XNA, and this C++ port of the XNA utility libraries has been extremely helpful.
+
 ParticleEngine implementation is based on the XNA GPU-Particles tutorial/sample. I reimplemented it in Nimble as a starting point, and to compare performance details.
