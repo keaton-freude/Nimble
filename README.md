@@ -17,3 +17,9 @@ Besides that, Visual Studio 2015 Service Update 3 or better is required. This pr
 To build the Editor, Qt5+ must be installed. This project uses the QtPackage extension to integrate Qt into Visual Studio. This must be installed, and your Qt version selected within its options.
 
 The resulting executable makes an assumption about the file structure in which its running. It should work correctly when running from Visual Studio. I have a mental TODO to rework this to be much smarter and straight forward about locating assets.
+
+# Credits
+This project is a hodge-podge of techniques and learning from many sources. Big thanks to:
+http://www.rastertek.com/ - I used RasterTek to learn the individual techniques, and some boilerplate still exists (mainly the Shader classes and D3D class). 
+https://github.com/Microsoft/DirectXTK - I am very familiar with XNA, and this C++ port of the XNA utility libraries has been extremely helpful.
+ParticleEngine implementation is based on the XNA GPU-Particles tutorial/sample. I reimplemented it in Nimble as a starting point, and to compare performance details.
