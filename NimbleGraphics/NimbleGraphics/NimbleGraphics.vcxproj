@@ -157,7 +157,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Matem\Desktop\Nimble\Nimble\Externals\rapidjson\include;.\include;..\..\Externals\directxtk\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\Externals\rapidjson\include;.\include;..\..\Externals\directxtk\include;$(IncludePath)</IncludePath>
     <OutDir>..\..\bin\</OutDir>
     <LibraryPath>..\..\directxtk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
