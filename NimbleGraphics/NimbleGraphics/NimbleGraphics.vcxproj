@@ -23,6 +23,8 @@
     <ClInclude Include="..\..\Externals\Bitmap\bitmap_image.hpp" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\ColorShader.h" />
+    <ClInclude Include="include\D3D11Cache.h" />
+    <ClInclude Include="include\D3D11Object.h" />
     <ClInclude Include="include\DebugLineManager.h" />
     <ClInclude Include="include\Emitter.h" />
     <ClInclude Include="include\Frustum.h" />
@@ -55,6 +57,7 @@
     <ClInclude Include="include\TerrainVertexField.h" />
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\TextureArray.h" />
+    <ClInclude Include="include\Tile.h" />
     <ClInclude Include="include\Transform.h" />
     <ClInclude Include="include\Typedefs.h" />
     <ClInclude Include="include\Mesh.h" />
@@ -69,8 +72,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="include\Tile.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\ColorShader.cpp" />
+    <ClCompile Include="src\D3D11Cache.cpp" />
     <ClCompile Include="src\DebugLineManager.cpp" />
     <ClCompile Include="src\Emitter.cpp" />
     <ClCompile Include="src\Frustum.cpp" />

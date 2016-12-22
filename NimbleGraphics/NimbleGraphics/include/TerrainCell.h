@@ -14,14 +14,17 @@ struct TerrainData
 		TerrainVertex& bottom_right)
 		: upperLeft(upper_left), upperRight(upper_right), bottomLeft(bottom_left), bottomRight(bottom_right)
 	{
+		auto vectorSum = upperLeft.position + upperRight.position + bottomLeft.position + bottomRight.position;
+
+		m_averagePosition =  vectorSum / 4.0f;
 	}
 
 	Vector3 GetAveragePosition() const
 	{
-		auto vectorSum = upperLeft.position + upperRight.position + bottomLeft.position + bottomRight.position;
-
-		return vectorSum / 4.0f;
+		return m_averagePosition;
 	}
+
+	Vector3 m_averagePosition;
 };
 
 class TerrainCell

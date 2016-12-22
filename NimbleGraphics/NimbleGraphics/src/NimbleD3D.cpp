@@ -1,6 +1,7 @@
 #include "NimbleD3D.h"
 #include "Logger.h"
 #include "Helper.h"
+#include "D3D11Cache.h"
 
 NimbleD3D::NimbleD3D()
 {
@@ -525,6 +526,7 @@ bool NimbleD3D::Init(int screenWidth, int screenHeight, bool vsync, HWND hwnd, b
 	m_worldMatrix = Matrix::Identity;
 
 	StatesHelper::GetInstance().Load(m_device);
+	D3D11Cache::GetInstance().Load(m_device, m_deviceContext);
 
 	return true;
 }
