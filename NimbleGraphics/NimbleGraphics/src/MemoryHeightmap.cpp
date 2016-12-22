@@ -68,7 +68,7 @@ void MemoryHeightmap::CalculateTextureCoordinates()
 	}
 }
 
-void MemoryHeightmap::SmoothAdd(DirectX::SimpleMath::Vector3 location, float radius, float intensity)
+void MemoryHeightmap::SmoothAdd(Vector3 location, float radius, float intensity)
 {
 	auto const dampening_factor = 1.0f;
 	auto& p_verts = _vertex_field.GetVertices();
@@ -281,23 +281,6 @@ bool MemoryHeightmap::CalculateNormalsDifferently(Vector3 position, float radius
 
 				//cell.NormalizeNormals(); // ?? maybe?
 			}
-		}
-	}
-
-	DebugLineManager::GetInstance().Clear();
-
-	// Add debug lines
-	for (auto j = 0; j < _height; ++j)
-	{
-		for (auto i = 0; i < _width; ++i)
-		{
-			auto& cell = _heightmap[j * _height + i];
-
-			// draw 4 normals lines for debug
-			DebugLineManager::GetInstance().AddNormal(cell.data.upperLeft.position, cell.data.upperLeft.normal);
-			DebugLineManager::GetInstance().AddNormal(cell.data.upperRight.position, cell.data.upperRight.normal);
-			DebugLineManager::GetInstance().AddNormal(cell.data.bottomLeft.position, cell.data.bottomLeft.normal);
-			DebugLineManager::GetInstance().AddNormal(cell.data.bottomRight.position, cell.data.bottomRight.normal);
 		}
 	}
 

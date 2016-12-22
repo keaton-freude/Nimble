@@ -67,6 +67,12 @@
       <UniqueIdentifier>{36db1e60-b5da-4dd5-bdec-a7bbdf794a8a}</UniqueIdentifier>
       <Extensions>.ps;.vs;</Extensions>
     </Filter>
+    <Filter Include="Source Files\Tilemap">
+      <UniqueIdentifier>{b12b707a-198e-48eb-a6ab-d0ff19477841}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tilemap">
+      <UniqueIdentifier>{e427488e-89d9-410c-b621-5ef6e24dee21}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\IShader.h">
@@ -183,6 +189,15 @@
     <ClInclude Include="include\TerrainVertex.h">
       <Filter>Header Files\Terrain</Filter>
     </ClInclude>
+    <ClInclude Include="include\D3D11Cache.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Tile.h">
+      <Filter>Header Files\Tilemap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\D3D11Object.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Shaders\Color.ps">
@@ -292,6 +307,12 @@
     </ClCompile>
     <ClCompile Include="src\SplatMap.cpp">
       <Filter>Source Files\D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Tile.cpp">
+      <Filter>Source Files\Tilemap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\D3D11Cache.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

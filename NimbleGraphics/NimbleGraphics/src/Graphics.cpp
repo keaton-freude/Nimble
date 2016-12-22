@@ -33,9 +33,11 @@ bool Graphics::Init(int screenWidth, int screenHeight, HWND hwnd, bool fullscree
 	ShaderManager::GetInstance().Load(_D3D.GetDevice().Get(), _D3D.GetDeviceContext().Get());
 	DebugLineManager::GetInstance().Load(_D3D.GetDevice());
 
+	tile = make_shared<Tile>();
+
 	vector<wstring> texture_paths = { NIMBLE_TEXTURE_W(splat1.png), NIMBLE_TEXTURE_W(grass5.png), NIMBLE_TEXTURE_W(grass8.png), NIMBLE_TEXTURE_W(weird_texture.png) };
 
-	terrain = make_shared<Terrain>(_D3D.GetDevice(), _D3D.GetDeviceContext(), 1, 1, texture_paths);
+	terrain = make_shared<Terrain>(_D3D.GetDevice(), _D3D.GetDeviceContext(), 4, 4, texture_paths);
 
 	LOG_INFO("Graphics initialization complete.");
 

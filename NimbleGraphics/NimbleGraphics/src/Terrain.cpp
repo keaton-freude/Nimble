@@ -12,7 +12,7 @@ Terrain::Terrain(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> device
 	_width = _numChunksX * _chunkWidth;
 	_height = _numChunksZ * _chunkHeight;
 
-	this->_mem_heightmap = make_shared<MemoryHeightmap>(_width, _height, 1.0f);
+	this->_mem_heightmap = make_shared<MemoryHeightmap>(_width, _height, .1f);
 
 	// Calculate the number of vertices in the terrain mesh.
 	_vertexCount = _width * _height * 4;

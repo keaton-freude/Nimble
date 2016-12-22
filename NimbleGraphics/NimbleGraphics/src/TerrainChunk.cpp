@@ -30,8 +30,7 @@ vector<TerrainCell>& TerrainChunk::GetTerrainCellData()
 void TerrainChunk::Update(ComPtr<ID3D11DeviceContext> deviceContext, MemoryHeightmap& mem_heightmap, unsigned chunk_x, unsigned chunk_z)
 {
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	TerrainVertex* dataPtr = nullptr;
-	auto stride = sizeof(TerrainVertex);
+	TerrainVertex* dataPtr;
 
 	auto p_map_vertices = mem_heightmap.GetVertexField()->GetVertices();
 
@@ -39,15 +38,10 @@ void TerrainChunk::Update(ComPtr<ID3D11DeviceContext> deviceContext, MemoryHeigh
 
 	dataPtr = static_cast<TerrainVertex*>(mappedResource.pData);
 
-	auto vert_index = 0;
-
 	for (auto j = 0; j < (_height + 1); ++j)
 	{
 		for (auto i = 0; i < (_width + 1); ++i)
 		{
-			//auto index = 
-			////index += (_width * chunk_x) + (chunk_z * vertex_field->GetHeight() * _height);
-			//dataPtr[vert_index++] = p_field[index];
 			auto vert_index = j * (_height + 1) + i;
 			auto map_index = mem_heightmap.GetIndex(chunk_z, chunk_x, _width, _height, j, i);
 

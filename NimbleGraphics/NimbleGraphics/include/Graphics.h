@@ -14,6 +14,7 @@
 #include "Light.h"
 #include "ParticleEngine.h"
 #include <CommonStates.h>
+#include "Tile.h"
 
 using DirectX::CommonStates;
 using DirectX::SimpleMath::Vector3;
@@ -74,6 +75,7 @@ private:
 	Light _light0;
 	Frustum _frustum;
 	ParticleEngine particleEngine;
+	shared_ptr<Tile> tile;
 
 	// How much time has passed since the last frame, used for smooth interpolation
 	float _dt;
