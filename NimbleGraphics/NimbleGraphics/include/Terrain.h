@@ -54,8 +54,8 @@ private:
 	unsigned int _height;
 	unsigned int _numChunksX;
 	unsigned int _numChunksZ;
-	const unsigned int _chunkWidth = 32;
-	const unsigned int _chunkHeight = 32;
+	const unsigned int _chunkWidth = 64;
+	const unsigned int _chunkHeight = 64;
 
 	shared_ptr<SplatMap> splatMap;
 
