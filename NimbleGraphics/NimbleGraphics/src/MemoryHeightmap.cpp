@@ -68,7 +68,7 @@ void MemoryHeightmap::CalculateTextureCoordinates()
 	}
 }
 
-void MemoryHeightmap::SmoothAdd(Vector3 location, float radius, float intensity)
+void MemoryHeightmap::SmoothAdd(const Vector3& location, const float& radius, const float& intensity)
 {
 	auto const dampening_factor = 1.0f;
 	auto& p_verts = _vertex_field.GetVertices();
@@ -226,8 +226,7 @@ bool MemoryHeightmap::CalculateNormalsDifferently(Vector3 position, float radius
 			auto distance = Vector3::Distance(position, cell.GetAveragePosition());
 			if (distance <= radius)
 			{
-				// clear out the normals
-				cell.ClearNormals();
+				// Recalculate the normals of each cell that is affected
 				cell.SetNormal();
 			}
 		}
@@ -287,7 +286,7 @@ bool MemoryHeightmap::CalculateNormalsDifferently(Vector3 position, float radius
 	return true;
 }
 
-unsigned MemoryHeightmap::GetIndex(unsigned chunk_y, unsigned chunk_x, unsigned chunk_width, unsigned chunk_height, unsigned j, unsigned i)
+unsigned int MemoryHeightmap::GetIndex(unsigned int chunk_y, unsigned int chunk_x, unsigned int chunk_width, unsigned int chunk_height, unsigned int j, unsigned int i)
 {
 	/* For this function we assume that the VertexField is partioned like such:
 	 

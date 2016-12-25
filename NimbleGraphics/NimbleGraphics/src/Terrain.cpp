@@ -54,7 +54,7 @@ void Terrain::Draw(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> devi
 	}
 }
 
-void Terrain::SmoothHeightmapAdd(Vector3 location, float radius, float intensity, ComPtr<ID3D11DeviceContext> deviceContext, ComPtr<ID3D11Device> device)
+void Terrain::SmoothHeightmapAdd(const Vector3& location, const float& radius, const float& intensity, ComPtr<ID3D11DeviceContext> deviceContext, ComPtr<ID3D11Device> device)
 {
 	StartDebugTimer();
 	_mem_heightmap->SmoothAdd(location, radius, intensity);
@@ -173,15 +173,11 @@ void Terrain::SplatTexture(D3DDevice device, D3DDeviceContext deviceContext, Vec
 	
 }
 
-RayHit Terrain::IsRayIntersectingTerrain(Ray r) const
+RayHit Terrain::IsRayIntersectingTerrain(const Ray& r) const
 {
-	auto& vertices = _mem_heightmap->GetHeightmapData();
-
-	for (int i = 0; i < _mem_heightmap->GetHeight() * _mem_heightmap->GetWidth(); ++i)
+	for (const auto& current_cell: _mem_heightmap->GetHeightmapData())
 	{
 		// every cell has 2 triangles
-		auto& current_cell = vertices[i];
-
 		Vector3 triangle1[3];
 		Vector3 triangle2[3];
 
