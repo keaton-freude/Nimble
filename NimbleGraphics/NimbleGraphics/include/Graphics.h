@@ -38,7 +38,7 @@ public:
 		float screenDepth, float screenNear);
 	~Graphics();
 
-	void HeightmapAdd(Vector3 location, float radius, float intensity);
+	void HeightmapAdd(const Vector3& location, const float& radius, const float& intensity);
 
 	bool ResizeBuffers(UINT width, UINT height) const;
 
@@ -51,7 +51,7 @@ public:
 	shared_ptr<Terrain> GetTerrain() const;
 	const Light& GetLight() const;
 	shared_ptr<Terrain> GetTerrain();
-	RayHit IsRayIntersectingTerrain(Ray r) const;
+	RayHit IsRayIntersectingTerrain(const Ray& r) const;
 
 	void PrintDebugObjects() const;
 	static string GetStatistics();
