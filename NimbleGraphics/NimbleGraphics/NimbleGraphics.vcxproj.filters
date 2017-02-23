@@ -9,12 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Header Files\Interfaces">
-      <UniqueIdentifier>{774453bd-ff81-4dc2-a8a4-f57debaad10c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Drawables">
-      <UniqueIdentifier>{74cb467a-bb7d-411f-810e-2158613d2a03}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Shaders">
       <UniqueIdentifier>{3fd892ad-fc71-4548-83d1-e6336bb93d62}</UniqueIdentifier>
     </Filter>
@@ -73,18 +67,21 @@
     <Filter Include="Header Files\Tilemap">
       <UniqueIdentifier>{e427488e-89d9-410c-b621-5ef6e24dee21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Rendering">
+      <UniqueIdentifier>{74cb467a-bb7d-411f-810e-2158613d2a03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Rendering\Shaders">
+      <UniqueIdentifier>{ce21925b-1dcd-44f1-8f19-52593e967586}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Rendering\Shaders\Components">
+      <UniqueIdentifier>{87e3195d-bc6a-45fc-9c64-634624bde442}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\DeleteMaybe">
+      <UniqueIdentifier>{f50dbf74-99e3-4c1e-91d3-4a2c0caa3f9f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\IShader.h">
-      <Filter>Header Files\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ColorShader.h">
-      <Filter>Header Files\Shaders</Filter>
-    </ClInclude>
     <ClInclude Include="include\ShaderManager.h">
-      <Filter>Header Files\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="include\TerrainShader.h">
       <Filter>Header Files\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="include\Texture.h">
@@ -111,17 +108,11 @@
     <ClInclude Include="include\Light.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Transform.h">
-      <Filter>Header Files\Misc</Filter>
-    </ClInclude>
     <ClInclude Include="include\Logger.h">
       <Filter>Header Files\Misc</Filter>
     </ClInclude>
     <ClInclude Include="include\RayHit.h">
       <Filter>Header Files\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Frustum.h">
-      <Filter>Header Files\Misc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Externals\Bitmap\bitmap_image.hpp">
       <Filter>Header Files\Graphics</Filter>
@@ -134,15 +125,6 @@
     </ClInclude>
     <ClInclude Include="include\Emitter.h">
       <Filter>Header Files\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Mesh.h">
-      <Filter>Header Files\D3D</Filter>
-    </ClInclude>
-    <ClInclude Include="include\LineMesh.h">
-      <Filter>Header Files\Drawables</Filter>
-    </ClInclude>
-    <ClInclude Include="include\TerrainMesh.h">
-      <Filter>Header Files\Drawables</Filter>
     </ClInclude>
     <ClInclude Include="include\DebugLineManager.h">
       <Filter>Header Files\Graphics</Filter>
@@ -198,6 +180,57 @@
     <ClInclude Include="include\D3D11Object.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Mesh.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DiffuseShaderComponent.h">
+      <Filter>Header Files\Rendering\Shaders\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SamplerStateShaderComponent.h">
+      <Filter>Header Files\Rendering\Shaders\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\WVPShaderComponent.h">
+      <Filter>Header Files\Rendering\Shaders\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BasicShader.h">
+      <Filter>Header Files\Rendering\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DiffuseShader.h">
+      <Filter>Header Files\Rendering\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TileMaterial.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Material.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IShaderComponent.h">
+      <Filter>Header Files\Rendering\Shaders\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderObject.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderSystem.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LineMesh.h">
+      <Filter>Header Files\DeleteMaybe</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TerrainMesh.h">
+      <Filter>Header Files\DeleteMaybe</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DiffuseMaterial.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IShader.h">
+      <Filter>Header Files\Rendering\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Frustum.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Transform.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Shaders\Color.ps">
@@ -219,6 +252,8 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="..\..\Assets\Shaders\Diffuse.ps" />
+    <None Include="..\..\Assets\Shaders\Diffuse.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\placeholder.cpp">
@@ -308,11 +343,50 @@
     <ClCompile Include="src\SplatMap.cpp">
       <Filter>Source Files\D3D</Filter>
     </ClCompile>
-    <ClCompile Include="include\Tile.cpp">
-      <Filter>Source Files\Tilemap</Filter>
-    </ClCompile>
     <ClCompile Include="src\D3D11Cache.cpp">
       <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Material.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TileMaterial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\TileShader.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TileShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BasicShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DiffuseShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DiffuseShaderComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SamplerStateShaderComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DiffuseMaterial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tile.cpp">
+      <Filter>Source Files\Tilemap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WVPShaderComponent.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

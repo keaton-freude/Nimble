@@ -1,18 +1,12 @@
 #include <d3drenderwidget.h>
 #include <iostream>
 #include <QKeyEvent>
-#include <QCoreApplication>
 #include <Windows.h>
 #include <QTimer>
-#include <cstdio>
 #include <ctime>
-#include <QGuiApplication>
 #include <fpscalc.h>
-#include <QStatusBar>
-#include <d3d11.h>
 #include <SimpleMath.h>
 #include "Logger.h"
-#include "ShaderManager.h"
 #include "RayHit.h"
 #include "ui_mainwindow.h"
 

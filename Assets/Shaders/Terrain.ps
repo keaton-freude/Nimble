@@ -39,6 +39,8 @@ float4 GetTextureColor(float2 splat_uv, float2 texture_uv);
 
 float4 TerrainPixelShader(PixelInputType input) : SV_TARGET
 {
+	//return ambientColor;
+
 	float2 normalized_tex = input.tex / 4.0f;
 	float4 textureColor = GetTextureColor(normalized_tex, input.tex);
 	float3 lightDir;

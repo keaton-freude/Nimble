@@ -5,11 +5,14 @@
 #include <vector>
 #include <wrl/client.h>
 #include <DirectXColors.h>
+#include "MemoryHeightmap.h"
 
 using DirectX::SimpleMath::Vector3;
 using std::shared_ptr;
 using Microsoft::WRL::ComPtr;
 using std::vector;
+
+class MemoryHeightmap;
 
 class Mesh
 {
@@ -48,12 +51,25 @@ public:
 
 	void LoadLine(D3DDevice device, Vector3 p1, Vector3 p2);
 
+	static shared_ptr<Mesh> CreateFromHeightmap(D3DDevice device, MemoryHeightmap& mem_heightmap)
+	{
+		auto vb = new Mesh();
+		vb->LoadFromHeightmap(device, mem_heightmap);
+		return shared_ptr<Mesh>(vb);
+	}
+
+	void LoadFromHeightmap(D3DDevice device, MemoryHeightmap& mem_heightmap);
+
 	template<typename T>
 	void Load(D3DDevice device, vector<T>& vertices, vector<unsigned long>& indicies, bool dynamic)
 	{
 		D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 		D3D11_SUBRESOURCE_DATA vertexData, indexData;
 		HRESULT result;
+
+		meshData.stride = sizeof(T);
+		meshData.numVertices = vertices.size();
+		meshData.numIndicies = indicies.size();
 
 		auto usage = dynamic ? D3D11_USAGE_DYNAMIC : D3D11_USAGE_DEFAULT;
 
@@ -113,6 +129,29 @@ public:
 		deviceContext->Unmap(this->vertexBuffer.Get(), 0);
 	}
 
+	template<typename T>
+	void SetDataRegion(D3DDeviceContext deviceContext, unsigned int x, unsigned int y, size_t width, size_t height, T* data)
+	{
+		D3D11_MAPPED_SUBRESOURCE resource;
+
+		deviceContext->Map(this->vertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+		auto dataPtr = static_cast<T*>(resource.pData);
+
+		for (auto iy = y; iy < height; ++iy)
+		{
+			for(auto ix = x; ix < width; ++ix)
+			{
+				dataPtr[iy * width + ix] = data[iy * width + ix];
+			}
+		}
+
+		deviceContext->Unmap(vertexBuffer.Get(), 0);
+	}
+
+	const MeshData& GetMeshData() const
+	{
+		return meshData;
+	}
 
 private:
 	D3DBuffer vertexBuffer;

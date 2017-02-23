@@ -1,7 +1,8 @@
 #include "ColorShader.h"
+#include "BaseShader.h"
 
 ColorShader::ColorShader()
-	: IShader()
+	: BaseShader()
 {
 	this->_vsFilename = L"..\\..\\Assets\\Shaders\\Color.vs";
 	this->_psFilename = L"..\\Assets\\Shaders\\Color.ps";
@@ -11,8 +12,8 @@ ColorShader::ColorShader()
 	this->_psVersion = "ps_5_0";
 }
 
-ColorShader::ColorShader(ComPtr<ID3D11Device> device)
-	: IShader()
+ColorShader::ColorShader(ComPtr<ID3D11Device> device, D3DDeviceContext deviceContext)
+	: BaseShader(device, deviceContext)
 {
 	this->_vsFilename = L"..\\Assets\\Shaders\\Color.vs";
 	this->_psFilename = L"..\\Assets\\Shaders\\Color.ps";
@@ -21,7 +22,7 @@ ColorShader::ColorShader(ComPtr<ID3D11Device> device)
 	this->_vsVersion = "vs_5_0";
 	this->_psVersion = "ps_5_0";
 
-	ColorShader::Load(device);
+	ColorShader::Load();
 }
 
 ColorShader::~ColorShader()
@@ -29,33 +30,16 @@ ColorShader::~ColorShader()
 	LOG_INFO("Color Shader Destruct!");
 }
 
-bool ColorShader::Load(ComPtr<ID3D11Device> device)
+bool ColorShader::Load()
 {
-	return IShader::Load(device);
+	// Do our loading, then call BaseShader's Load
+	return BaseShader::Load();
 }
 
-bool ColorShader::Draw(ComPtr<ID3D11DeviceContext> deviceContext, int indexCount, MatrixRef world, MatrixRef view, MatrixRef projection)
+void ColorShader::Draw(int indexCount)
 {
-	bool result;
-
-	// set the matrices here
-	this->_worldMatrix = world;
-	this->_viewMatrix = view;
-	this->_projectionMatrix = projection;
-
-	// Set the shader parameters that it will use for rendering.
-	result = this->SetShaderParameters(deviceContext);
-
-	if (!result)
-	{
-		return false;
-	}
-
-	// Now render the prepared buffers with the shader.
-	RenderShader(deviceContext, indexCount);
-
-	return true;
 }
+
 
 ComPtr<ID3D11VertexShader> ColorShader::GetVertexShader()
 {
@@ -85,15 +69,24 @@ void ColorShader::GetPolygonLayout(shared_ptr<D3D11_INPUT_ELEMENT_DESC>& desc, u
 	desc.get()[1].InstanceDataStepRate = 0;
 }
 
-void ColorShader::RenderShader(ComPtr<ID3D11DeviceContext> deviceContext, int indexCount)
+void ColorShader::RenderShader(int indexCount)
 {
 	// Set the vertex input layout.
-	deviceContext->IASetInputLayout(this->_layout.Get());
+	_deviceContext->IASetInputLayout(this->_layout.Get());
 
 	// Set the vertex and pixel shaders that will be used to render this triangle.
-	deviceContext->VSSetShader(this->_vertexShader.Get(), NULL, 0);
-	deviceContext->PSSetShader(this->_pixelShader.Get(), NULL, 0);
+	_deviceContext->VSSetShader(this->_vertexShader.Get(), NULL, 0);
+	_deviceContext->PSSetShader(this->_pixelShader.Get(), NULL, 0);
 
 	// Draw the triangle.
-	deviceContext->DrawIndexed(indexCount, 0, 0);
+	_deviceContext->DrawIndexed(indexCount, 0, 0);
+}
+
+std::vector<shared_ptr<IShaderComponent>>& ColorShader::GetComponents()
+{
+	return std::vector<shared_ptr<IShaderComponent>>();
+}
+
+void ColorShader::SetComponents()
+{
 }

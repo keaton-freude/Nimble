@@ -1,11 +1,9 @@
 #ifndef D3DRENDERWIDGET
 #define D3DRENDERWIDGET
 #include <memory>
-#include <QSharedPointer>
 #include <QDockWidget>
 #include "mainwindow.h"
 #include "Graphics.h"
-#include "Camera.h"
 #include "QTimer"
 #include "fpscalc.h"
 

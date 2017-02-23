@@ -1,6 +1,11 @@
 #pragma once
 #include "Singleton.h"
 #include "LineMesh.h"
+#include <vector>
+
+using std::vector;
+
+class LineMesh;
 
 class DebugLineManager: public Singleton<DebugLineManager>
 {

@@ -5,16 +5,17 @@
 #include <memory>
 #include <wrl/client.h>
 
-#include "NimbleD3D.h"
-#include "RayHit.h"
-#include "Frustum.h"
 #include "Camera.h"
+#include "Frustum.h"
+#include "Light.h"
+#include "NimbleD3D.h"
+#include "ParticleEngine.h"
+#include "RayHit.h"
 #include "SimpleMath.h"
 #include "Terrain.h"
-#include "Light.h"
-#include "ParticleEngine.h"
-#include <CommonStates.h>
 #include "Tile.h"
+#include <CommonStates.h>
+#include "RenderSystem.h"
 
 using DirectX::CommonStates;
 using DirectX::SimpleMath::Vector3;
@@ -26,58 +27,60 @@ using Microsoft::WRL::ComPtr;
 
 enum RENDER_MODE
 {
-	Viewport = 0,
-	Minimap = 1
+    Viewport = 0,
+    Minimap = 1
 };
 
 class Graphics
 {
 public:
-	Graphics();
-	Graphics(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen, bool vSyncEnabled,
-		float screenDepth, float screenNear);
-	~Graphics();
+    Graphics();
+    Graphics(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen,
+             bool vSyncEnabled, float screenDepth, float screenNear);
+    ~Graphics();
 
-	void HeightmapAdd(Vector3 location, float radius, float intensity);
+    void HeightmapAdd(Vector3 location, float radius, float intensity);
 
-	bool ResizeBuffers(UINT width, UINT height) const;
+    bool ResizeBuffers(UINT width, UINT height) const;
 
-	auto GetSwapChain() const -> ComPtr<IDXGISwapChain>;
-	Camera& GetCamera();
-	DXGI_SWAP_CHAIN_DESC GetSwapChainDesc() const;
-	NimbleD3D& GetD3D();
-	void SetDT(float new_dt);
-	float GetDT() const;
-	shared_ptr<Terrain> GetTerrain() const;
-	const Light& GetLight() const;
-	shared_ptr<Terrain> GetTerrain();
-	RayHit IsRayIntersectingTerrain(Ray r) const;
+    auto GetSwapChain() const -> ComPtr<IDXGISwapChain>;
+    Camera& GetCamera();
+    DXGI_SWAP_CHAIN_DESC GetSwapChainDesc() const;
+    NimbleD3D& GetD3D();
+    void SetDT(float new_dt);
+    float GetDT() const;
+    shared_ptr<Terrain> GetTerrain() const;
+    const Light& GetLight() const;
+    shared_ptr<Terrain> GetTerrain();
+    RayHit IsRayIntersectingTerrain(Ray r) const;
 
-	void PrintDebugObjects() const;
-	static string GetStatistics();
+    void PrintDebugObjects() const;
+    static string GetStatistics();
 
-	void SetLightDirection(float x, float y, float z);
-	void SetAmbientLight(float r, float g, float b);
-	void SetDiffuseColor(float r, float g, float b);
-	bool Draw(RENDER_MODE mode, float dt);
-	ParticleEngine& GetParticleEngine();
-
-private:
-	bool RenderMinimap() const;
-	bool RenderViewport();
-	bool Init(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen,
-		bool vSyncEnabled, float screenDepth, float screenNear);
+    void SetLightDirection(float x, float y, float z);
+    void SetAmbientLight(float r, float g, float b);
+    void SetDiffuseColor(float r, float g, float b);
+    bool Draw(RENDER_MODE mode, float dt);
+    //ParticleEngine& GetParticleEngine();
 
 private:
-	NimbleD3D _D3D;
-	Camera _camera;
-	shared_ptr<Terrain> terrain;
-	Light _light0;
-	Frustum _frustum;
-	ParticleEngine particleEngine;
-	shared_ptr<Tile> tile;
+    bool RenderMinimap() const;
+    bool RenderViewport();
+    bool Init(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen,
+              bool vSyncEnabled, float screenDepth, float screenNear);
 
-	// How much time has passed since the last frame, used for smooth interpolation
-	float _dt;
-	float _currentTime;
+private:
+    NimbleD3D _D3D;
+    Camera _camera;
+    shared_ptr<Terrain> terrain;
+    Light _light0;
+    Frustum _frustum;
+    //ParticleEngine particleEngine;
+    //shared_ptr<Tile> tile;
+	shared_ptr<RenderSystem> renderSystem;
+
+    // How much time has passed since the last frame, used for smooth
+    // interpolation
+    float _dt;
+    float _currentTime;
 };

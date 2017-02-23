@@ -49,11 +49,11 @@ public:
 	unsigned int GetIndex(unsigned int chunk_y, unsigned int chunk_x, unsigned int chunk_width, unsigned int chunk_height,
 	                      unsigned int j, unsigned int i);
 
+
+
 	TerrainVertexField* GetVertexField();
 
 private:
-	TerrainCell* GetHeightmapDataPointer();
-
 	void CalculateHighestPoint();
 	float highest_point;
 	unsigned int _width;

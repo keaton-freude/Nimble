@@ -15,8 +15,10 @@ typedef struct MeshData
 {
 	UINT numVertices;
 	UINT numIndicies;
+	UINT stride;
+	D3D_PRIMITIVE_TOPOLOGY topology;
 
-	MeshData() : numVertices(0), numIndicies(0) {}
+	MeshData() : numVertices(0), numIndicies(0), stride(0), topology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST) {}
 } MeshData;
 
 /* necessary information for ColorShader. Contains Vec3 position and a Color vector*/
@@ -24,6 +26,13 @@ struct ColorVertex
 {
 	Vector3 position;
 	Color color;
+};
+
+struct MatrixBuffer
+{
+	Matrix world;
+	Matrix view;
+	Matrix projection;
 };
 
 

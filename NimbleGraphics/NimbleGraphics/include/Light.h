@@ -12,6 +12,13 @@ public:
 	Light();
 	~Light();
 
+	Light(Vector3 lightDirection, Vector4 diffuseColor, Vector4 ambientLight)
+	{
+		_lightBuffer.ambientLight = ambientLight;
+		_lightBuffer.diffuseColor = diffuseColor;
+		_lightBuffer.lightDirection = lightDirection;
+	}
+
 	const LightBuffer& GetLightBuffer() const;
 
 	void SetAmbientLight(Vector4 ambientLight);

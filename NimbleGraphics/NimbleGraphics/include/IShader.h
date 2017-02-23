@@ -4,6 +4,8 @@
 #include <memory>
 #include <D3Dcompiler.h>
 #include "Logger.h"
+#include "IShaderComponent.h"
+#include <vector>
 
 using DirectX::SimpleMath::Matrix;
 using std::string;
@@ -17,38 +19,23 @@ class IShader
 public:
 	IShader();
 
+	IShader(D3DDevice device, D3DDeviceContext deviceContext);
+
 	virtual ~IShader();
 
-	virtual bool Load(ComPtr<ID3D11Device> device);
-
-	void Unload();
-
-	void SetWorldMatrix(const Matrix& worldMatrix);
-
-	void SetViewMatrix(const Matrix& viewMatrix);
-
-	void SetProjectionMatrix(const Matrix& projectionMatrix);
+	virtual bool Load() = 0;
+	virtual void Draw(int indexCount) = 0;
+	virtual bool SetShaderParameters() = 0;
+	virtual std::vector<shared_ptr<IShaderComponent>>& GetComponents() = 0;
 
 protected:
-	virtual D3D11_BUFFER_DESC GetMatrixBufferDescription();
-
 	virtual void GetPolygonLayout(shared_ptr<D3D11_INPUT_ELEMENT_DESC>& desc, 
 		unsigned int & numElements) = 0;
 
-	virtual bool SetShaderParameters(ComPtr<ID3D11DeviceContext> deviceContext);
 
-	virtual bool Init(ComPtr<ID3D11Device> device);
+	virtual void SetComponents() = 0;
+	std::vector<shared_ptr<IShaderComponent>> _components;
 
-
-	virtual void Shutdown();
-
-protected:
-	struct MatrixBuffer
-	{
-		Matrix world;
-		Matrix view;
-		Matrix projection;
-	};
 protected:
 	wstring _vsFilename;
 	wstring _psFilename;
@@ -59,10 +46,7 @@ protected:
 	
 	ComPtr<ID3D11VertexShader> _vertexShader;
 	ComPtr<ID3D11PixelShader> _pixelShader;
-	ComPtr<ID3D11InputLayout> _layout;
-	ComPtr<ID3D11Buffer> _matrixBuffer;
 
-	Matrix _worldMatrix;
-	Matrix _viewMatrix;
-	Matrix _projectionMatrix;
+	D3DDevice _device;
+	D3DDeviceContext _deviceContext;
 };

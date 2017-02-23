@@ -1,4 +1,5 @@
 #include "ShaderManager.h"
+#include "DiffuseShader.h"
 
 ShaderManager::ShaderManager()
 {
@@ -6,14 +7,19 @@ ShaderManager::ShaderManager()
 
 void ShaderManager::Load(ComPtr<ID3D11Device> device, D3DDeviceContext deviceContext)
 {
-	std::pair<SHADER, shared_ptr<IShader>> pair = std::pair<SHADER, shared_ptr<IShader>>(SHADER::COLOR,
-	                                                                                     make_shared<ColorShader>(device));
+	//std::pair<SHADER, shared_ptr<IShader>> pair = std::pair<SHADER, shared_ptr<IShader>>(SHADER::COLOR,
+//	                                                                                     make_shared<ColorShader>(device, deviceContext));
 
-	_shaders.insert(pair);
+	//_shaders.insert(pair);
 
-	pair = std::pair<SHADER, shared_ptr<IShader>>(SHADER::TERRAIN,
-	                                              make_shared<TerrainShader>(device, deviceContext));
+	//pair = std::pair<SHADER, shared_ptr<IShader>>(SHADER::TERRAIN,
+	 //                                             make_shared<TerrainShader>(device, deviceContext));
 
+	//_shaders.insert(pair);
+
+	auto pair = std::pair<SHADER, shared_ptr<IShader>>(SHADER::DIFFUSE,
+		make_shared<DiffuseShader>(device, deviceContext));
+	pair.second->Load();
 	_shaders.insert(pair);
 
 	//pair = std::pair<SHADER, shared_ptr<IShader>>(SHADER::PARTICLE, make_shared<ParticleShader>(device));

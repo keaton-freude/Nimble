@@ -3,6 +3,7 @@
 #include <SimpleMath.h>
 #include <wrl/client.h>
 #include <memory>
+#include "../../packages/directxtk_desktop_2015.2016.10.6.1/build/native/include/SimpleMath.h"
 using DirectX::SimpleMath::Matrix;
 using DirectX::SimpleMath::Ray;
 using DirectX::SimpleMath::Vector2;
@@ -30,5 +31,8 @@ using D3DTexture2D = ComPtr<ID3D11Texture2D>;
 using D3DRenderTargetView = ComPtr<ID3D11RenderTargetView>;
 using D3DShaderResourceView = ComPtr<ID3D11ShaderResourceView>;
 using D3DBuffer = ComPtr<ID3D11Buffer>;
+using D3DInputLayout = ComPtr<ID3D11InputLayout>;
+using D3DSamplerState = ComPtr<ID3D11SamplerState>;
 
 #define NIMBLE_TEXTURE_W(x) L"..\\Assets\\Textures\\"#x
+#define NIMBLE_TEXTURE(x) "..\\Assets\\Textures\\"#x

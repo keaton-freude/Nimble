@@ -60,5 +60,5 @@ private:
 	shared_ptr<SplatMap> splatMap;
 
 	int _vertexCount;
-	vector<TerrainChunk> _chunks;
+//	vector<TerrainChunk> _chunks;
 };

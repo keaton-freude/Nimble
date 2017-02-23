@@ -5,6 +5,8 @@
 #include "Logger.h"
 #include "Singleton.h"
 #include <direct.h>
+#include <vector>
+#include "TerrainVertex.h"
 
 using DirectX::CommonStates;
 using std::unique_ptr;
@@ -121,7 +123,7 @@ inline Color RandomColor(const Color& a, const Color& b)
 class StatesHelper: public Singleton<StatesHelper>
 {
 public:
-	inline CommonStates* GetStates() const
+	inline CommonStates* GetStates()
 	{
 		return states.get();
 	}

@@ -4,8 +4,6 @@
 #include <iostream>
 
 #include "IShader.h"
-#include "ColorShader.h"
-#include "TerrainShader.h"
 
 using std::unordered_map;
 using std::cout;
@@ -15,7 +13,8 @@ enum SHADER
 {
 	COLOR = 0,
 	TERRAIN = 1,
-	PARTICLE = 2
+	PARTICLE = 2,
+	DIFFUSE = 3
 };
 
 class ShaderManager: public Singleton<ShaderManager>
@@ -30,7 +29,7 @@ public:
 	void Shutdown();
 
 	template<typename T>
-    T* GetShader(SHADER shader)
+    shared_ptr<T> GetShader(SHADER shader)
 	{
 		auto element = _shaders.find(shader);
 		if (element == _shaders.end())
@@ -38,14 +37,7 @@ public:
 			return nullptr;
 		}
 
-		T* resource = dynamic_cast<T*>(element->second.get());
-
-		if (resource)
-		{
-			return resource;
-		}
-
-		return nullptr;
+		return std::dynamic_pointer_cast<T>(element->second);
 	}
 protected:
 	ShaderManager(ShaderManager const& other) = delete;

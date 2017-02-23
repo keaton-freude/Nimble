@@ -2,7 +2,7 @@
 #include "Helper.h"
 #include "TextureArray.h"
 
-TerrainShader::TerrainShader(): IShader(), _lightBuffer(), _sampleState()
+TerrainShader::TerrainShader(): BaseShader(), _lightBuffer(), _sampleState()
 {
 	LOG_INFO("Terrain Shader Construct!");
 	this->_vsFilename = L"..\\Assets\\Shaders\\Terrain.vs";
@@ -13,7 +13,7 @@ TerrainShader::TerrainShader(): IShader(), _lightBuffer(), _sampleState()
 	this->_psVersion = "ps_5_0";
 }
 
-TerrainShader::TerrainShader(ComPtr<ID3D11Device> device, D3DDeviceContext deviceContext): IShader(), _lightBuffer(), _sampleState()
+TerrainShader::TerrainShader(ComPtr<ID3D11Device> device, D3DDeviceContext deviceContext): BaseShader(device, deviceContext), _lightBuffer(), _sampleState()
 {
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 
@@ -25,7 +25,7 @@ TerrainShader::TerrainShader(ComPtr<ID3D11Device> device, D3DDeviceContext devic
 	this->_vsVersion = "vs_5_0";
 	this->_psVersion = "ps_5_0";
 
-	this->Load(device);
+	this->TerrainShader::Load();
 
 	deviceContext->Map(_splatBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
@@ -43,7 +43,7 @@ TerrainShader::~TerrainShader()
 	IShader::~IShader();
 }
 
-bool TerrainShader::Load(ComPtr<ID3D11Device> device)
+bool TerrainShader::Load()
 {
 	HRESULT result;
 	D3D11_SAMPLER_DESC samplerDesc;
@@ -51,9 +51,9 @@ bool TerrainShader::Load(ComPtr<ID3D11Device> device)
 	D3D11_BUFFER_DESC splatBufferDesc;
 
 	// Do basic load work
-	if (!IShader::Load(device))
+	if (!BaseShader::Load())
 	{
-		cout << "IShader failed to load correctly in TerrainShader. " << endl;
+		cout << "BaseShader failed to load correctly in TerrainShader. " << endl;
 		return false;
 	}
 
@@ -76,7 +76,7 @@ bool TerrainShader::Load(ComPtr<ID3D11Device> device)
 
 	// Create the texture sampler state.
 
-	result = device->CreateSamplerState(&samplerDesc, _sampleState.GetAddressOf());
+	result = _device->CreateSamplerState(&samplerDesc, _sampleState.GetAddressOf());
 	if (FAILED(result))
 	{
 		LOG_ERROR("Failed to create sampler state.");
@@ -91,7 +91,7 @@ bool TerrainShader::Load(ComPtr<ID3D11Device> device)
 	lightBufferDesc.StructureByteStride = 0;
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	result = device->CreateBuffer(&lightBufferDesc, NULL, _lightBuffer.GetAddressOf());
+	result = _device->CreateBuffer(&lightBufferDesc, NULL, _lightBuffer.GetAddressOf());
 
 	if (FAILED(result))
 	{
@@ -106,35 +106,30 @@ bool TerrainShader::Load(ComPtr<ID3D11Device> device)
 	splatBufferDesc.MiscFlags = 0;
 	splatBufferDesc.StructureByteStride = 0;
 
-	auto hr = device->CreateBuffer(&splatBufferDesc, NULL, _splatBuffer.GetAddressOf());
+	auto hr = _device->CreateBuffer(&splatBufferDesc, NULL, _splatBuffer.GetAddressOf());
 
 	return true;
 }
 
+void TerrainShader::Draw(int indexCount)
+{
+	RenderShader(indexCount);
+}
+
 bool TerrainShader::Draw(ComPtr<ID3D11DeviceContext> deviceContext, int indexCount, const Matrix& worldMatrix, const Matrix& viewMatrix, const Matrix& projectionMatrix, const Light& light, SplatMap& splat_map)
 {
-	bool result;
-
 	// set the matrices here
 	this->_worldMatrix = worldMatrix;
 	this->_viewMatrix = viewMatrix;
 	this->_projectionMatrix = projectionMatrix;
 
-	// Set the shader parameters that it will use for rendering.
-	result = this->SetShaderParameters(deviceContext, light, splat_map);
-
-	if (!result)
-	{
-		return false;
-	}
-
 	// Now render the prepared buffers with the shader.
-	RenderShader(deviceContext, indexCount);
+	RenderShader(indexCount);
 
 	return true;
 }
 
-void TerrainShader::GetPolygonLayout(shared_ptr<D3D11_INPUT_ELEMENT_DESC>& desc, unsigned& numElements)
+void TerrainShader::GetPolygonLayout(shared_ptr<D3D11_INPUT_ELEMENT_DESC>& desc, unsigned int& numElements)
 {
 	numElements = 3;
 
@@ -165,32 +160,41 @@ void TerrainShader::GetPolygonLayout(shared_ptr<D3D11_INPUT_ELEMENT_DESC>& desc,
 	desc.get()[2].InstanceDataStepRate = 0;
 }
 
-void TerrainShader::RenderShader(ComPtr<ID3D11DeviceContext> deviceContext, int indexCount)
+vector<shared_ptr<IShaderComponent>>& TerrainShader::GetComponents()
+{
+	return vector<shared_ptr<IShaderComponent>>();
+}
+
+void TerrainShader::SetComponents()
+{
+}
+
+void TerrainShader::RenderShader(int indexCount)
 {
 	// Set the vertex input layout.
-	deviceContext->IASetInputLayout(this->_layout.Get());
+	_deviceContext->IASetInputLayout(this->_layout.Get());
 
 	// Set the vertex and pixel shaders that will be used to render this triangle.
-	deviceContext->VSSetShader(this->_vertexShader.Get(), NULL, 0);
-	deviceContext->PSSetShader(this->_pixelShader.Get(), NULL, 0);
+	_deviceContext->VSSetShader(this->_vertexShader.Get(), NULL, 0);
+	_deviceContext->PSSetShader(this->_pixelShader.Get(), NULL, 0);
 
 	auto ss = StatesHelper::GetInstance().GetStates()->LinearWrap();
-	deviceContext->PSSetSamplers(0, 1, &ss);
+	_deviceContext->PSSetSamplers(0, 1, &ss);
 
 	//deviceContext->PSSetSamplers(0, 1, _sampleState.GetAddressOf());
 
 	// Draw the triangle.
-	deviceContext->DrawIndexed(indexCount, 0, 0);
+	_deviceContext->DrawIndexed(indexCount, 0, 0);
 }
 
-bool TerrainShader::SetShaderParameters(ComPtr<ID3D11DeviceContext> deviceContext, const Light& light, SplatMap& splat_map)
+bool TerrainShader::SetShaderParameters()
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	unsigned int bufferNumber;
 	LightBuffer* dataPtr;
 
-	result = deviceContext->Map(_lightBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	result = _deviceContext->Map(_lightBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if (FAILED(result))
 	{
 		return false;
@@ -205,13 +209,19 @@ bool TerrainShader::SetShaderParameters(ComPtr<ID3D11DeviceContext> deviceContex
 	dataPtr->lightDirection = lightBuffer.lightDirection;
 	dataPtr->padding = 0.0f;
 
-	deviceContext->Unmap(_lightBuffer.Get(), 0);
+	_deviceContext->Unmap(_lightBuffer.Get(), 0);
 
 	bufferNumber = 0;
-	deviceContext->PSSetConstantBuffers(bufferNumber, 1, _lightBuffer.GetAddressOf());
-	deviceContext->PSSetConstantBuffers(1, 1, _splatBuffer.GetAddressOf());
-	deviceContext->PSSetShaderResources(0, splat_map.GetNumberOfViews(), splat_map.GetTextureViews());
+	_deviceContext->PSSetConstantBuffers(bufferNumber, 1, _lightBuffer.GetAddressOf());
+	_deviceContext->PSSetConstantBuffers(1, 1, _splatBuffer.GetAddressOf());
+	_deviceContext->PSSetShaderResources(0, splat_map.GetNumberOfViews(), splat_map.GetTextureViews());
 
 	// Must let IShader do its Matrix Buffer copies!
-	return IShader::SetShaderParameters(deviceContext);
+	return BaseShader::SetShaderParameters();
+}
+
+void TerrainShader::Update(Light& light, SplatMap& splat_map)
+{
+	light = light;
+	this->splat_map = splat_map;
 }

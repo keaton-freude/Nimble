@@ -322,11 +322,6 @@ TerrainVertexField* MemoryHeightmap::GetVertexField()
 	return &_vertex_field;
 }
 
-TerrainCell* MemoryHeightmap::GetHeightmapDataPointer()
-{
-	return &_heightmap[0];
-}
-
 void MemoryHeightmap::CalculateHighestPoint()
 {
 }

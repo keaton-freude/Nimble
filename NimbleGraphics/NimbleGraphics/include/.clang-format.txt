@@ -1,0 +1,6 @@
+UseTab: UT_ForIndentation
+IndentWidth: 12
+BreakBeforeBraces: Allman
+AllowShortIfStatementsOnASingleLine: false
+IndentCaseLabels: false
+ColumnLimit: 0

@@ -97,6 +97,40 @@ void Mesh::LoadLine(D3DDevice device, Vector3 p1, Vector3 p2)
 	device->CreateBuffer(&indexBufferDesc, &indexData, indexBuffer.GetAddressOf());
 }
 
+void Mesh::LoadFromHeightmap(D3DDevice device, MemoryHeightmap& mem_heightmap)
+{
+	vector<TerrainVertex> vertices((mem_heightmap.GetWidth() + 1) * (mem_heightmap.GetHeight() + 1));
+
+	vector<unsigned long> indices(mem_heightmap.GetWidth() * 6 * mem_heightmap.GetHeight());
+	unsigned int index = 0;
+	auto width = mem_heightmap.GetWidth();
+	auto height = mem_heightmap.GetHeight() + 1;
+	auto p_map = mem_heightmap.GetVertexField()->GetVertices();
+
+	// indices
+	for(auto j = 0; j < height - 1; ++j)
+	{
+		for(auto i = 0; i < width; ++i)
+		{
+			unsigned int bottomLeft = (j * height) + i;
+			unsigned int bottomRight = (j * height) + (i + 1);
+			unsigned int topLeft = ((j + 1) * height) + i;
+			unsigned int topRight = ((j + 1) * height) + (i + 1);
+
+			//upperLeft
+			indices[index++] = topLeft;
+			indices[index++] = topRight;
+			indices[index++] = bottomLeft;
+
+			indices[index++] = bottomLeft;
+			indices[index++] = topRight;
+			indices[index++] = bottomRight;
+		}
+	}
+
+	Load<TerrainVertex>(device, mem_heightmap.GetVertexField()->GetVertices(), indices, true);
+}
+
 void Mesh::LoadDynamic(D3DDevice device, size_t vertexSize, size_t vertexCount, vector<unsigned long> indices, size_t index_count)
 {
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
