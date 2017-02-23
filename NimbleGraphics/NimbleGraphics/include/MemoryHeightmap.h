@@ -23,7 +23,7 @@ public:
 
 	void CalculateTextureCoordinates();
 
-	void SmoothAdd(Vector3 location, float radius, float intensity);
+	void SmoothAdd(const Vector3& location, const float& radius, const float& intensity);
 
 	float GetHighestPoint() const;
 
@@ -41,6 +41,7 @@ public:
 	void AddBottomRight(int i, int j, Vector3& normal, int faces);
 	void AddUpperLeft(int i, int j, Vector3& normal, int faces);
 	void AddUpperRight(int i, int j, Vector3& normal, int faces);
+	
 
 	bool CalculateNormalsDifferently(Vector3 position, float radius);
 

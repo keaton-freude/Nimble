@@ -9,6 +9,7 @@ struct TerrainData
 	TerrainVertex& upperRight;
 	TerrainVertex& bottomLeft;
 	TerrainVertex& bottomRight;
+	Vector3 m_averagePosition;
 
 	TerrainData(TerrainVertex& upper_left, TerrainVertex& upper_right, TerrainVertex& bottom_left, 
 		TerrainVertex& bottom_right)
@@ -24,7 +25,7 @@ struct TerrainData
 		return m_averagePosition;
 	}
 
-	Vector3 m_averagePosition;
+
 };
 
 class TerrainCell

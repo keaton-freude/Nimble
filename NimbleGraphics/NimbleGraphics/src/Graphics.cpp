@@ -22,7 +22,7 @@ Graphics::~Graphics()
     ShaderManager::GetInstance().Shutdown();
 }
 
-void Graphics::HeightmapAdd(Vector3 location, float radius, float intensity)
+void Graphics::HeightmapAdd(const Vector3& location, const float& radius, const float& intensity)
 {
     //terrain->SmoothHeightmapAdd(location, radius, intensity, _D3D.GetDeviceContext(), _D3D.GetDevice());
 }
@@ -116,7 +116,7 @@ shared_ptr<Terrain> Graphics::GetTerrain()
     return terrain;
 }
 
-RayHit Graphics::IsRayIntersectingTerrain(Ray r) const
+RayHit Graphics::IsRayIntersectingTerrain(const Ray& r) const
 {
     //return terrain->IsRayIntersectingTerrain(r);
 	return RayHit::NoHit();
