@@ -36,6 +36,7 @@
     <ClInclude Include="include\IShader.h" />
     <ClInclude Include="include\IShaderComponent.h" />
     <ClInclude Include="include\Light.h" />
+    <ClInclude Include="include\LightShaderComponent.h" />
     <ClInclude Include="include\LineMesh.h" />
     <ClInclude Include="include\Logger.h" />
     <ClInclude Include="include\Material.h" />
@@ -81,8 +82,11 @@
     <None Include="..\..\Assets\Shaders\Terrain.ps" />
     <None Include="..\..\Assets\Shaders\Terrain.vs" />
     <None Include="packages.config" />
+    <None Include="TileShader.ps" />
+    <None Include="TileShader.vs" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\LightShaderComponent.cpp" />
     <ClCompile Include="src\Tile.cpp" />
     <ClCompile Include="include\TileShader.h" />
     <ClCompile Include="src\BaseShader.cpp" />

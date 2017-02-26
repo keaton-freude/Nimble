@@ -36,3 +36,39 @@ void RenderObject::Draw(D3DDevice device, D3DDeviceContext deviceContext)
 	_material->GetShader()->SetShaderParameters();
 	_material->GetShader()->Draw(_mesh->GetMeshData().numIndicies);
 }
+
+RayHit RenderObject::CastRay(const Ray& ray)
+{
+	auto& triangles = _mesh->GetTriangles();
+
+	for(const auto& triangle : triangles)
+	{
+		float distance;
+
+		if (rayTriangleIntersect(ray, triangle.vertices, distance))
+		{
+			LOG_INFO("Hit! Distance: ", distance);
+			Vector3 hit_location = (ray.position + (ray.direction * distance));
+			return RayHit(ray.position, hit_location, distance, true);
+		}
+	}
+
+	//for(auto i = 0; i < verts.size(); i += 3)
+	//{
+	//	Vector3 triangle[3];
+	//	triangle[0] = verts[i].position;
+	//	triangle[1] = verts[i + 1].position;
+	//	triangle[2] = verts[i + 2].position;
+
+	//	float distance;
+
+	//	if (rayTriangleIntersect(ray, triangle, distance))
+	//	{
+	//		LOG_INFO("Hit! Distance: ", distance);
+	//		Vector3 hit_location = (ray.position + (ray.direction * distance));
+	//		return RayHit(ray.position, hit_location, distance, true);
+	//	}
+	//}
+
+	return RayHit::NoHit();
+}

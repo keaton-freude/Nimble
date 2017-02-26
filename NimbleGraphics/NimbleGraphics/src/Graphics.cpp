@@ -22,9 +22,10 @@ Graphics::~Graphics()
     ShaderManager::GetInstance().Shutdown();
 }
 
-void Graphics::HeightmapAdd(const Vector3& location, const float& radius, const float& intensity)
+void Graphics::HeightmapAdd(Vector3 location, float radius, float intensity)
 {
     //terrain->SmoothHeightmapAdd(location, radius, intensity, _D3D.GetDeviceContext(), _D3D.GetDevice());
+	//renderSystem->CastRay()
 }
 
 bool Graphics::Init(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen, bool vSyncEnabled, float screenDepth, float screenNear)
@@ -44,7 +45,7 @@ bool Graphics::Init(int screenWidth, int screenHeight, HWND hwnd, bool fullscree
 	shared_ptr<Texture> grassTexture = make_shared<Texture>(_D3D.GetDevice(), _D3D.GetDeviceContext(), NIMBLE_TEXTURE(grass5.tga));
 
 	auto heightMapMaterial = std::make_shared<TileMaterial>(_D3D.GetDevice(), _D3D.GetDeviceContext(), texture_paths);
-	auto material = std::make_shared<DiffuseMaterial>(_D3D.GetDevice(), _D3D.GetDeviceContext(), grassTexture);
+	auto material = std::make_shared<DiffuseMaterial>(grassTexture);
 
 	//shared_ptr<WVPShaderComponent> blah = make_shared<WVPShaderComponent>();
 	
@@ -101,7 +102,7 @@ float Graphics::GetDT() const
     return _dt;
 }
 
-shared_ptr<Terrain> Graphics::GetTerrain() const
+shared_ptr<Terrain> Graphics::GetTerrain()
 {
     return this->terrain;
 }
@@ -111,15 +112,15 @@ const Light& Graphics::GetLight() const
     return _light0;
 }
 
-shared_ptr<Terrain> Graphics::GetTerrain()
-{
-    return terrain;
-}
-
-RayHit Graphics::IsRayIntersectingTerrain(const Ray& r) const
+RayHit Graphics::IsRayIntersectingTerrain(Ray r)
 {
     //return terrain->IsRayIntersectingTerrain(r);
 	return RayHit::NoHit();
+}
+
+RayHit Graphics::CastRay(const Ray& ray)
+{
+	return renderSystem->CastRay(ray);
 }
 
 void Graphics::PrintDebugObjects() const

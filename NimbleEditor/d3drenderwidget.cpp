@@ -231,14 +231,14 @@ void D3DRenderWidget::mousePressEvent(QMouseEvent *evt)
 
         Ray ray = graphics->GetCamera().GetMouseRay(Vector2(pointX, pointY), projectionMatrix);
 
-        auto hit = graphics->IsRayIntersectingTerrain(ray);
+        auto hit = graphics->CastRay(ray);
 
         if (hit.hit)
         {
 			float intensity = std::stof(ui->hm_intensity->text().toStdString());
 			float radius = std::stof(ui->hm_radius->text().toStdString());
-			graphics->HeightmapAdd(hit.hit_location, radius, intensity);
-
+			//graphics->HeightmapAdd(hit.hit_location, radius, intensity);
+			LOG_INFO(hit.hit_location.x, "\t", hit.hit_location.y, "\t", hit.hit_location.z);
 			//graphics->GetTerrain()->SplatTexture(graphics->GetD3D().GetDevice(), graphics->GetD3D().GetDeviceContext(), hit.hit_location, .5f, 10, 2);
         }
 

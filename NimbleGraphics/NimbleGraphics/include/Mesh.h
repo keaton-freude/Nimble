@@ -153,7 +153,13 @@ public:
 		return meshData;
 	}
 
+	const vector<Triangle>& GetTriangles() const
+	{
+		return _triangles;
+	}
+
 private:
+	vector<Triangle> _triangles;
 	D3DBuffer vertexBuffer;
 	D3DBuffer indexBuffer;
 	MeshData meshData;

@@ -4,6 +4,8 @@
 #include "Light.h"
 #include "SplatMap.h"
 
+class TileShader;
+
 class TileMaterial: public Material
 {
 public:
@@ -25,4 +27,5 @@ private:
 
 	D3DDevice _device;
 	D3DDeviceContext _deviceContext;
+	std::weak_ptr<TileShader> _shader;
 };

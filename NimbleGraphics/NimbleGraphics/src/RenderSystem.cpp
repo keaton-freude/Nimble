@@ -29,3 +29,17 @@ void RenderSystem::Draw()
 		ro.Draw(_device, _deviceContext);
 	}
 }
+
+RayHit RenderSystem::CastRay(const Ray& ray)
+{
+	for (auto& ro : _renderObjects)
+	{
+		auto result = ro.CastRay(ray);
+		if (result.hit)
+		{
+			return result;
+		}
+	}
+
+	return RayHit::NoHit();
+}

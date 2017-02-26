@@ -6,7 +6,7 @@ class DiffuseMaterial: public Material
 {
 public:
 	DiffuseMaterial();
-	explicit DiffuseMaterial(D3DDevice device, D3DDeviceContext deviceContext, shared_ptr<Texture> texture);
+	explicit DiffuseMaterial(shared_ptr<Texture> texture);
 	~DiffuseMaterial()
 	{
 		

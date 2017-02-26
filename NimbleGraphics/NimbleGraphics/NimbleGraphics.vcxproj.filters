@@ -79,6 +79,9 @@
     <Filter Include="Header Files\DeleteMaybe">
       <UniqueIdentifier>{f50dbf74-99e3-4c1e-91d3-4a2c0caa3f9f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Rendering\Materials">
+      <UniqueIdentifier>{2374f13c-ebd2-4b98-9ed3-34f8446fcfe5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ShaderManager.h">
@@ -198,12 +201,6 @@
     <ClInclude Include="include\DiffuseShader.h">
       <Filter>Header Files\Rendering\Shaders</Filter>
     </ClInclude>
-    <ClInclude Include="include\TileMaterial.h">
-      <Filter>Header Files\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Material.h">
-      <Filter>Header Files\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="include\IShaderComponent.h">
       <Filter>Header Files\Rendering\Shaders\Components</Filter>
     </ClInclude>
@@ -219,9 +216,6 @@
     <ClInclude Include="include\TerrainMesh.h">
       <Filter>Header Files\DeleteMaybe</Filter>
     </ClInclude>
-    <ClInclude Include="include\DiffuseMaterial.h">
-      <Filter>Header Files\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="include\IShader.h">
       <Filter>Header Files\Rendering\Shaders</Filter>
     </ClInclude>
@@ -230,6 +224,18 @@
     </ClInclude>
     <ClInclude Include="include\Transform.h">
       <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DiffuseMaterial.h">
+      <Filter>Header Files\Rendering\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Material.h">
+      <Filter>Header Files\Rendering\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TileMaterial.h">
+      <Filter>Header Files\Rendering\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LightShaderComponent.h">
+      <Filter>Header Files\Rendering\Shaders\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -252,8 +258,18 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="packages.config" />
-    <None Include="..\..\Assets\Shaders\Diffuse.ps" />
-    <None Include="..\..\Assets\Shaders\Diffuse.vs" />
+    <None Include="..\..\Assets\Shaders\Diffuse.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Assets\Shaders\Diffuse.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="TileShader.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="TileShader.ps">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\placeholder.cpp">
@@ -361,9 +377,6 @@
     <ClCompile Include="src\BaseShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\TileShader.h">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\TileShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -386,6 +399,12 @@
       <Filter>Source Files\Tilemap</Filter>
     </ClCompile>
     <ClCompile Include="src\WVPShaderComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\TileShader.h">
+      <Filter>Header Files\Rendering\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LightShaderComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

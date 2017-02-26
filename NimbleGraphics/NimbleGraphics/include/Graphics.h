@@ -49,10 +49,10 @@ public:
     NimbleD3D& GetD3D();
     void SetDT(float new_dt);
     float GetDT() const;
-    shared_ptr<Terrain> GetTerrain() const;
-    const Light& GetLight() const;
     shared_ptr<Terrain> GetTerrain();
-    RayHit IsRayIntersectingTerrain(Ray r) const;
+    const Light& GetLight() const;
+    RayHit IsRayIntersectingTerrain(Ray r);
+	RayHit CastRay(const Ray& ray);
 
     void PrintDebugObjects() const;
     static string GetStatistics();

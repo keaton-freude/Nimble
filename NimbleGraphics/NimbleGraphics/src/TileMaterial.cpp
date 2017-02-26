@@ -11,9 +11,9 @@ TileMaterial::TileMaterial(D3DDevice device, D3DDeviceContext deviceContext, vec
 	: Material(ShaderManager::GetInstance().GetShader<DiffuseShader>(SHADER::DIFFUSE)), _device(device), _deviceContext(deviceContext),
 	_heightmap(32, 32, 1.0f), light(Vector3(.45f, 0.0f, .45f), Vector4::One, Vector4::One), _splatMap()
 {
-	//_shader = ShaderManager::GetInstance().GetShader<TerrainShader>(SHADER::TERRAIN);
+	//_shader = ShaderManager::GetInstance().GetShader<TileShader>(SHADER::TERRAIN);
 	_splatMap.LoadFromFile(device, deviceContext, splatTextures);
-	//_shader.lock()->Update(light, _splatMap);
+	//_shader.lock().g
 
 	HRESULT result;
 
@@ -60,5 +60,6 @@ MemoryHeightmap& TileMaterial::GetHeightmap()
 void TileMaterial::Apply(D3DDeviceContext deviceContext)
 {
 	// Set the shader parameters that it will use for rendering.
-	//bool result = _shader.lock()->SetShaderParameters();
+	//_shader.lock()->
+//	bool result = _shader.lock()->SetShaderParameters();
 }

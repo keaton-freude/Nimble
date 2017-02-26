@@ -2,6 +2,7 @@
 #include "Typedefs.h"
 #include <vector>
 #include "RenderObject.h"
+#include "RayHit.h"
 
 using std::vector;
 /*
@@ -19,6 +20,7 @@ public:
 	void AddObject(const RenderObject& renderObjectToAdd);
 	void Update(MatrixRef viewMatrix, MatrixRef projectionMatrix);
 	void Draw();
+	RayHit CastRay(const Ray& ray);
 
 private:
 	D3DDevice _device;

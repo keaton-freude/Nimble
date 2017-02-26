@@ -28,6 +28,30 @@ struct ColorVertex
 	Color color;
 };
 
+struct PositionVertex
+{
+	Vector3 position;
+};
+
+struct Triangle
+{
+	Triangle()
+	{
+		vertices[0] = Vector3::Zero;
+		vertices[1] = Vector3::Zero;
+		vertices[2] = Vector3::Zero;
+	}
+
+	Triangle(Vector3 one, Vector3 two, Vector3 three)
+	{
+		vertices[0] = one;
+		vertices[1] = two;
+		vertices[2] = three;
+	}
+
+	Vector3 vertices[3];
+};
+
 struct MatrixBuffer
 {
 	Matrix world;

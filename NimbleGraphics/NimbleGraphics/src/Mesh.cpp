@@ -100,17 +100,18 @@ void Mesh::LoadLine(D3DDevice device, Vector3 p1, Vector3 p2)
 void Mesh::LoadFromHeightmap(D3DDevice device, MemoryHeightmap& mem_heightmap)
 {
 	vector<TerrainVertex> vertices((mem_heightmap.GetWidth() + 1) * (mem_heightmap.GetHeight() + 1));
-
 	vector<unsigned long> indices(mem_heightmap.GetWidth() * 6 * mem_heightmap.GetHeight());
+	//_positionVertices.reserve((mem_heightmap.GetWidth() + 1) * (mem_heightmap.GetHeight() + 1));
+	_triangles.resize(mem_heightmap.GetWidth() * mem_heightmap.GetHeight() * 2);
 	unsigned int index = 0;
 	auto width = mem_heightmap.GetWidth();
-	auto height = mem_heightmap.GetHeight() + 1;
+	auto height = mem_heightmap.GetHeight();
 	auto p_map = mem_heightmap.GetVertexField()->GetVertices();
 
 	// indices
-	for(auto j = 0; j < height - 1; ++j)
+	for (auto j = 0; j < height; ++j)
 	{
-		for(auto i = 0; i < width; ++i)
+		for (auto i = 0; i < width; ++i)
 		{
 			unsigned int bottomLeft = (j * height) + i;
 			unsigned int bottomRight = (j * height) + (i + 1);
@@ -129,6 +130,26 @@ void Mesh::LoadFromHeightmap(D3DDevice device, MemoryHeightmap& mem_heightmap)
 	}
 
 	Load<TerrainVertex>(device, mem_heightmap.GetVertexField()->GetVertices(), indices, true);
+
+	//unsigned int i = 0;
+	//for (const auto& vert : mem_heightmap.GetVertexField()->GetVertices())
+	//{
+	//	_positionVertices[i++].position = vert.position;
+	//}
+	auto& data = mem_heightmap.GetHeightmapData();
+
+	index = 0;
+	for(auto j = 0; j < height; ++j)
+	{
+		for (auto i = 0; i < width; ++i)
+		{
+			auto& cell = data[j * height + i];
+
+			_triangles[index++] = Triangle(cell.data.upperLeft.position, cell.data.upperRight.position, cell.data.bottomLeft.position);
+			_triangles[index++] = Triangle(cell.data.bottomLeft.position, cell.data.upperRight.position, cell.data.bottomRight.position);
+		}
+	}
+
 }
 
 void Mesh::LoadDynamic(D3DDevice device, size_t vertexSize, size_t vertexCount, vector<unsigned long> indices, size_t index_count)
