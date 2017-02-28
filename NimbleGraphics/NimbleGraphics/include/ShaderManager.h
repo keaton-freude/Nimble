@@ -14,7 +14,8 @@ enum SHADER
 	COLOR = 0,
 	TERRAIN = 1,
 	PARTICLE = 2,
-	DIFFUSE = 3
+	DIFFUSE = 3,
+	TILE = 4
 };
 
 class ShaderManager: public Singleton<ShaderManager>

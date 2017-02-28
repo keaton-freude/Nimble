@@ -26,18 +26,15 @@ struct IVertex
 	
 };
 
-/* necessary information for ColorShader. Contains Vec3 position and a Color vector*/
-struct ColorVertex: public IVertex
+struct PositionVertex : public IVertex
 {
 	Vector3 position;
-	Color color;
 };
 
-
-
-struct PositionVertex: public IVertex
+/* necessary information for ColorShader. Contains Vec3 position and a Color vector*/
+struct ColorVertex: public PositionVertex
 {
-	Vector3 position;
+	Color color;
 };
 
 struct Triangle

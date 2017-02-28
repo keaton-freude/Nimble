@@ -3,8 +3,7 @@
 #include "MemoryHeightmap.h"
 #include "Light.h"
 #include "SplatMap.h"
-
-class TileShader;
+#include "TileShader.h"
 
 class TileMaterial: public Material
 {
@@ -23,7 +22,6 @@ private:
 	// D3D Resources
 	D3DBuffer _lightBuffer;
 	D3DBuffer _splatBuffer;
-	D3DSamplerState _sampleState;
 
 	D3DDevice _device;
 	D3DDeviceContext _deviceContext;

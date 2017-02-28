@@ -317,6 +317,7 @@ public:
 
 private:
 	vector<Triangle> _triangles;
+
 	D3DBuffer vertexBuffer;
 	D3DBuffer indexBuffer;
 	MeshData meshData;

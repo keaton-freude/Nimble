@@ -281,12 +281,6 @@
     <ClCompile Include="src\Texture.cpp">
       <Filter>Source Files\D3D</Filter>
     </ClCompile>
-    <ClCompile Include="src\LineMesh.cpp">
-      <Filter>Source Files\Drawables</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TerrainMesh.cpp">
-      <Filter>Source Files\Drawables</Filter>
-    </ClCompile>
     <ClCompile Include="src\Camera.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
@@ -311,20 +305,8 @@
     <ClCompile Include="src\RayHit.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\ColorShader.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
     <ClCompile Include="src\ShaderManager.cpp">
       <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TerrainShader.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Terrain.cpp">
-      <Filter>Source Files\Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TerrainChunk.cpp">
-      <Filter>Source Files\Terrain</Filter>
     </ClCompile>
     <ClCompile Include="src\DebugLineManager.cpp">
       <Filter>Source Files\Graphics</Filter>
@@ -369,9 +351,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\TileMaterial.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\BaseShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\TileShader.cpp">

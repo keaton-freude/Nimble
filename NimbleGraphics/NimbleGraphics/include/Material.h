@@ -9,7 +9,7 @@ class Material
 {
 public:
 	Material();
-	explicit Material(shared_ptr<IShader> shader);
+	Material(shared_ptr<IShader> shader);
 	virtual ~Material();
 
 	IShader* GetShader();

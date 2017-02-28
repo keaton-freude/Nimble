@@ -89,10 +89,8 @@
     <ClCompile Include="src\LightShaderComponent.cpp" />
     <ClCompile Include="src\Tile.cpp" />
     <ClCompile Include="include\TileShader.h" />
-    <ClCompile Include="src\BaseShader.cpp" />
     <ClCompile Include="src\BasicShader.cpp" />
     <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\ColorShader.cpp" />
     <ClCompile Include="src\D3D11Cache.cpp" />
     <ClCompile Include="src\DebugLineManager.cpp" />
     <ClCompile Include="src\DiffuseMaterial.cpp" />
@@ -103,7 +101,6 @@
     <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\IShader.cpp" />
     <ClCompile Include="src\Light.cpp" />
-    <ClCompile Include="src\LineMesh.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\MemoryHeightmap.cpp" />
     <ClCompile Include="src\NimbleD3D.cpp" />
@@ -119,10 +116,6 @@
     <ClCompile Include="src\SamplerStateShaderComponent.cpp" />
     <ClCompile Include="src\ShaderManager.cpp" />
     <ClCompile Include="src\SplatMap.cpp" />
-    <ClCompile Include="src\Terrain.cpp" />
-    <ClCompile Include="src\TerrainChunk.cpp" />
-    <ClCompile Include="src\TerrainMesh.cpp" />
-    <ClCompile Include="src\TerrainShader.cpp" />
     <ClCompile Include="src\TerrainVertexField.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\TextureArray.cpp" />

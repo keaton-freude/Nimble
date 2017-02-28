@@ -2,13 +2,14 @@
 #include "DiffuseShader.h"
 
 TileMaterial::TileMaterial()
-	: Material(ShaderManager::GetInstance().GetShader<DiffuseShader>(SHADER::DIFFUSE)), _device(nullptr), _deviceContext(nullptr)
+	: Material(ShaderManager::GetInstance().GetShader<TileShader>(SHADER::TILE)), _device(nullptr), _deviceContext(nullptr)
 {
-	//_shader = ShaderManager::GetInstance().GetShader<DiffuseShader>(SHADER::DIFFUSE);
+
+	_shader = ShaderManager::GetInstance().GetShader<TileShader>(SHADER::TILE);
 }
 
 TileMaterial::TileMaterial(D3DDevice device, D3DDeviceContext deviceContext, vector<wstring> splatTextures)
-	: Material(ShaderManager::GetInstance().GetShader<DiffuseShader>(SHADER::DIFFUSE)), _device(device), _deviceContext(deviceContext),
+	: Material(ShaderManager::GetInstance().GetShader<TileShader>(SHADER::TILE)), _device(device), _deviceContext(deviceContext),
 	_heightmap(2, 2, 1.0f), light(Vector3(.45f, 0.0f, .45f), Vector4::One, Vector4::One), _splatMap()
 {
 	//_shader = ShaderManager::GetInstance().GetShader<TileShader>(SHADER::TERRAIN);

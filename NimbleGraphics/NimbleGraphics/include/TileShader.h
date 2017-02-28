@@ -1,8 +1,7 @@
 #pragma once
 #include "BasicShader.h"
-#include "SplatMap.h"
 
-class TileShader : BasicShader
+class TileShader : public BasicShader
 {
 public:
 	TileShader(const D3DDevice& device, const D3DDeviceContext& deviceContext)
@@ -14,6 +13,10 @@ public:
 		this->_pixelShaderEntryPoint = "pixelMain";
 		this->_vsVersion = "vs_5_0";
 		this->_psVersion = "ps_5_0";
+	}
+
+	~TileShader()
+	{
 	}
 
 protected:
