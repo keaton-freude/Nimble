@@ -1,5 +1,6 @@
 #pragma once
 #include "BasicShader.h"
+#include "Texture.h"
 
 class TileShader : public BasicShader
 {
@@ -19,9 +20,11 @@ public:
 	{
 	}
 
+	void SetDiffuseTexture(shared_ptr<Texture> texture);
+
 protected:
 	void SetComponents() override;
-	void GetPolygonLayout(shared_ptr<D3D11_INPUT_ELEMENT_DESC>& desc, unsigned& numElements) override;
+	void GetPolygonLayout(shared_ptr<D3D11_INPUT_ELEMENT_DESC>& desc, unsigned int& numElements) override;
 	
 
 private:

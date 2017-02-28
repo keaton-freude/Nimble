@@ -17,7 +17,9 @@ using std::string;
 class Texture
 {
 public:
-  Texture(D3DDevice device, D3DDeviceContext deviceContext, string textureName);
+	Texture() = default;
+	Texture(D3DDevice device, D3DDeviceContext deviceContext, string textureName);
+	Texture(D3DDevice device, D3DDeviceContext deviceContext, const wchar_t* textureName);
 
   ~Texture();
   D3DShaderResourceView GetTexture() const;

@@ -4,18 +4,24 @@
 #include "WVPShaderComponent.h"
 #include "LightShaderComponent.h"
 
+void TileShader::SetDiffuseTexture(shared_ptr<Texture> texture)
+{
+	auto& comps = this->GetComponents();
+	auto ptr = static_cast<DiffuseShaderComponent*>(_components[2].get());
+	ptr->SetTexture(texture);
+}
+
 void TileShader::SetComponents()
 {
 	_components = std::vector<shared_ptr<IShaderComponent>>
 	({
 		make_shared<WVPShaderComponent>(),
 		make_shared<SamplerStateShaderComponent>(StatesHelper::GetInstance().GetStates()->LinearWrap()),
-		make_shared<DiffuseShaderComponent>(),
-		make_shared<LightShaderComponent>()
+		make_shared<DiffuseShaderComponent>()
 	});
 }
 
-void TileShader::GetPolygonLayout(shared_ptr<D3D11_INPUT_ELEMENT_DESC>& desc, unsigned& numElements)
+void TileShader::GetPolygonLayout(shared_ptr<D3D11_INPUT_ELEMENT_DESC>& desc, unsigned int& numElements)
 {
 	numElements = 3;
 

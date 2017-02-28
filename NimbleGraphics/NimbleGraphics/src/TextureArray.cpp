@@ -74,6 +74,7 @@ void TextureArray::CreateForSplat(D3DDevice device, D3DDeviceContext deviceConte
 		else
 			hr = DirectX::CreateWICTextureFromFileEx(device.Get(), s.c_str(), 0, D3D11_USAGE_DYNAMIC, D3D11_BIND_SHADER_RESOURCE,
 				D3D11_CPU_ACCESS_WRITE, 0, false, &_textures[i], &_textureViews[i]);
+
 		i++;
 		if (FAILED(hr))
 		{

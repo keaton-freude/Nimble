@@ -15,8 +15,9 @@ public:
 	void Apply(D3DDeviceContext deviceContext) override;
 	//void Update()
 private:
+	shared_ptr<Texture> _texture;
 	MemoryHeightmap _heightmap;
-	SplatMap _splatMap;
+	//SplatMap _splatMap;
 	Light light;
 
 	// D3D Resources

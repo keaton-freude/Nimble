@@ -1,5 +1,6 @@
 #include "Texture.h"
 #include "Logger.h"
+#include <codecvt>
 
 Texture::Texture(D3DDevice device, D3DDeviceContext deviceContext, string textureName)
 {
@@ -7,6 +8,21 @@ Texture::Texture(D3DDevice device, D3DDeviceContext deviceContext, string textur
 	{
 		LOG_ERROR("Cannot load texture:");
 		LOG_ERROR(textureName);
+	}
+}
+
+Texture::Texture(D3DDevice device, D3DDeviceContext deviceContext, const wchar_t* textureName)
+{
+	std::wstring wstring_to_convert(textureName);
+	using convert_type = std::codecvt_utf8<wchar_t>;
+	std::wstring_convert<convert_type, wchar_t> converter;
+
+	std::string converted_str = converter.to_bytes(wstring_to_convert);
+
+	if (!this->Init(device, deviceContext, converted_str))
+	{
+		LOG_ERROR("Cannot load texture: ", converted_str);
+		LOG_ERROR(converted_str);
 	}
 }
 

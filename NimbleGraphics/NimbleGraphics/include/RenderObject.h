@@ -22,10 +22,11 @@ public:
 
 	void Update(MatrixRef viewMatrix, MatrixRef projectionMatrix)
 	{
-		auto baseShader = dynamic_cast<DiffuseShader*>(_material->GetShader());
+		auto baseShader = dynamic_cast<BasicShader*>(_material->GetShader());
 		auto componentPtr = static_cast<WVPShaderComponent*>(baseShader->GetComponents()[0].get());
 		componentPtr->SetMatrices(_transform.GetWorldMatrix(), viewMatrix, projectionMatrix);
 	}
+
 	void Draw(D3DDevice device, D3DDeviceContext deviceContext)
 	{
 		auto vb = _mesh->GetVertexBuffer().Get();
