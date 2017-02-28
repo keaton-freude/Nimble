@@ -1,8 +1,9 @@
 #pragma once
 #include "Typedefs.h"
 #include <fstream>
+#include "Structs.h"
 
-struct TerrainVertex
+struct TerrainVertex: public IVertex
 {
 	Vector3 position;
 	Vector2 texture;

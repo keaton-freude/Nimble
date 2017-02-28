@@ -36,7 +36,7 @@ bool Graphics::Init(int screenWidth, int screenHeight, HWND hwnd, bool fullscree
     _camera = Camera(Vector3(0.0f, 5.0f, 0.0f), Vector3(0.78f, 0.0f, 0.0f));
 
     ShaderManager::GetInstance().Load(_D3D.GetDevice().Get(), _D3D.GetDeviceContext().Get());
-    DebugLineManager::GetInstance().Load(_D3D.GetDevice());
+//    DebugLineManager::GetInstance().Load(_D3D.GetDevice());
 
 	vector<wstring> texture_paths = { NIMBLE_TEXTURE_W(splat1.png), NIMBLE_TEXTURE_W(grass5.png), NIMBLE_TEXTURE_W(grass8.png), NIMBLE_TEXTURE_W(weird_texture.png) };
     //tile = make_shared<Tile>();
@@ -51,7 +51,9 @@ bool Graphics::Init(int screenWidth, int screenHeight, HWND hwnd, bool fullscree
 	
 	
 
-	RenderObject renderObject(Mesh::CreateFromHeightmap(_D3D.GetDevice(), heightMapMaterial->GetHeightmap()), material, Transform(Vector3::Zero, Vector3::Zero, Vector3::One));
+	RenderObject renderObject(Mesh::CreateFromHeightmap(_D3D.GetDevice(), heightMapMaterial->GetHeightmap()), 
+		material, Transform(Vector3::Zero, Vector3::Zero, Vector3::One));
+
 	renderSystem->AddObject(renderObject);
     
 

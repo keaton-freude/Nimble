@@ -12,7 +12,6 @@
 using std::string;
 using std::vector;
 using DirectX::BoundingBox;
-using namespace DirectX::Colors;
 
 
 class Terrain

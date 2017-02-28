@@ -9,7 +9,7 @@ TileMaterial::TileMaterial()
 
 TileMaterial::TileMaterial(D3DDevice device, D3DDeviceContext deviceContext, vector<wstring> splatTextures)
 	: Material(ShaderManager::GetInstance().GetShader<DiffuseShader>(SHADER::DIFFUSE)), _device(device), _deviceContext(deviceContext),
-	_heightmap(32, 32, 1.0f), light(Vector3(.45f, 0.0f, .45f), Vector4::One, Vector4::One), _splatMap()
+	_heightmap(2, 2, 1.0f), light(Vector3(.45f, 0.0f, .45f), Vector4::One, Vector4::One), _splatMap()
 {
 	//_shader = ShaderManager::GetInstance().GetShader<TileShader>(SHADER::TERRAIN);
 	_splatMap.LoadFromFile(device, deviceContext, splatTextures);

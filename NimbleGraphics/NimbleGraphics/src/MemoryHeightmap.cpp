@@ -8,7 +8,7 @@ MemoryHeightmap::~MemoryHeightmap()
 {
 }
 
-MemoryHeightmap::MemoryHeightmap(unsigned width, unsigned height, float resolution)
+MemoryHeightmap::MemoryHeightmap(unsigned int width, unsigned int height, float resolution)
 	: highest_point(0.0f), _width(width), _height(height), _vertex_field(width + 1, height + 1, resolution)
 {
 	_heightmap.reserve(width * height);

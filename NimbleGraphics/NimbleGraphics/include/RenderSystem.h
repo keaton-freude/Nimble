@@ -3,6 +3,7 @@
 #include <vector>
 #include "RenderObject.h"
 #include "RayHit.h"
+#include "Structs.h"
 
 using std::vector;
 /*
@@ -17,7 +18,10 @@ public:
 	RenderSystem();
 	RenderSystem(D3DDevice device, D3DDeviceContext deviceContext);
 
-	void AddObject(const RenderObject& renderObjectToAdd);
+	void AddObject(const RenderObject& renderObjectToAdd)
+	{
+		_renderObjects.push_back(renderObjectToAdd);
+	}
 	void Update(MatrixRef viewMatrix, MatrixRef projectionMatrix);
 	void Draw();
 	RayHit CastRay(const Ray& ray);

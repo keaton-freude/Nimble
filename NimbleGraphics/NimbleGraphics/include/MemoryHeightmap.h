@@ -6,8 +6,8 @@
 #include "DebugLineManager.h"
 #include "TerrainVertexField.h"
 
-namespace DirectX{
-	namespace SimpleMath{
+namespace DirectX {
+	namespace SimpleMath {
 		struct Vector3;
 	}
 }
@@ -41,14 +41,14 @@ public:
 	void AddBottomRight(int i, int j, Vector3& normal, int faces);
 	void AddUpperLeft(int i, int j, Vector3& normal, int faces);
 	void AddUpperRight(int i, int j, Vector3& normal, int faces);
-	
+
 
 	bool CalculateNormalsDifferently(Vector3 position, float radius);
 
 	// A utility method which returns the index of the cell which is within a given chunk
 	// i and j refer to a selector within the grid
 	unsigned int GetIndex(unsigned int chunk_y, unsigned int chunk_x, unsigned int chunk_width, unsigned int chunk_height,
-	                      unsigned int j, unsigned int i);
+		unsigned int j, unsigned int i);
 
 
 

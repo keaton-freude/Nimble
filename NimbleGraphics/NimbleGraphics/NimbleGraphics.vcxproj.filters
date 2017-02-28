@@ -281,9 +281,6 @@
     <ClCompile Include="src\Texture.cpp">
       <Filter>Source Files\D3D</Filter>
     </ClCompile>
-    <ClCompile Include="src\Mesh.cpp">
-      <Filter>Source Files\D3D</Filter>
-    </ClCompile>
     <ClCompile Include="src\LineMesh.cpp">
       <Filter>Source Files\Drawables</Filter>
     </ClCompile>

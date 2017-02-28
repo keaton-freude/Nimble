@@ -1,6 +1,7 @@
-#include "Graphics.h"
+#include "MemoryHeightmap.h"
 
 int main()
 {
+	MemoryHeightmap map;
 	return 0;
 }

@@ -125,7 +125,6 @@
     <ClCompile Include="src\TerrainShader.cpp" />
     <ClCompile Include="src\TerrainVertexField.cpp" />
     <ClCompile Include="src\Texture.cpp" />
-    <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\TextureArray.cpp" />
     <ClCompile Include="src\TileMaterial.cpp" />
     <ClCompile Include="src\TileShader.cpp" />

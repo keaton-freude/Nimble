@@ -21,14 +21,21 @@ typedef struct MeshData
 	MeshData() : numVertices(0), numIndicies(0), stride(0), topology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST) {}
 } MeshData;
 
+struct IVertex
+{
+	
+};
+
 /* necessary information for ColorShader. Contains Vec3 position and a Color vector*/
-struct ColorVertex
+struct ColorVertex: public IVertex
 {
 	Vector3 position;
 	Color color;
 };
 
-struct PositionVertex
+
+
+struct PositionVertex: public IVertex
 {
 	Vector3 position;
 };

@@ -9,11 +9,6 @@ RenderSystem::RenderSystem(D3DDevice device, D3DDeviceContext deviceContext)
 {
 }
 
-void RenderSystem::AddObject(const RenderObject& renderObjectToAdd)
-{
-	_renderObjects.push_back(renderObjectToAdd);
-}
-
 void RenderSystem::Update(MatrixRef viewMatrix, MatrixRef projectionMatrix)
 {
 	for(auto& ro : _renderObjects)
