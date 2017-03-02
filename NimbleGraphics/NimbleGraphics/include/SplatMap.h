@@ -23,7 +23,7 @@ class SplatMap
 {
 public:
 	SplatMap();
-	void LoadFromFile(D3DDevice device, D3DDeviceContext deviceContext, vector<wstring> textures);
+	void LoadFromFile(D3DDevice device, D3DDeviceContext deviceContext, const vector<wstring>& textures);
 	~SplatMap();
 
 	ID3D11ShaderResourceView** GetTextureViews();

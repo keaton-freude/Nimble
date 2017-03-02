@@ -21,7 +21,6 @@ private:
 	Light light;
 
 	// D3D Resources
-	D3DBuffer _lightBuffer;
 	D3DBuffer _splatBuffer;
 
 	D3DDevice _device;

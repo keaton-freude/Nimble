@@ -6,6 +6,7 @@
 #include "Logger.h"
 #include "IShaderComponent.h"
 #include <vector>
+#include "ShaderComponentManager.h"
 
 using DirectX::SimpleMath::Matrix;
 using std::string;
@@ -26,7 +27,6 @@ public:
 	virtual bool Load() = 0;
 	virtual void Draw(int indexCount) = 0;
 	virtual bool SetShaderParameters() = 0;
-	virtual std::vector<shared_ptr<IShaderComponent>>& GetComponents() = 0;
 
 protected:
 	virtual void GetPolygonLayout(shared_ptr<D3D11_INPUT_ELEMENT_DESC>& desc, 
@@ -34,7 +34,7 @@ protected:
 
 
 	virtual void SetComponents() = 0;
-	std::vector<shared_ptr<IShaderComponent>> _components;
+	ShaderComponentManager _shaderComponentManager;
 
 protected:
 	wstring _vsFilename;

@@ -4,7 +4,7 @@ SplatMap::SplatMap()
 {
 }
 
-void SplatMap::LoadFromFile(D3DDevice device, D3DDeviceContext deviceContext, vector<wstring> textures)
+void SplatMap::LoadFromFile(D3DDevice device, D3DDeviceContext deviceContext, const vector<wstring>& textures)
 {
 	_textures = TextureArray(device, deviceContext, textures, true);
 }

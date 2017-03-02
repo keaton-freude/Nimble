@@ -7,7 +7,7 @@
 void DiffuseShader::SetDiffuseTexture(shared_ptr<Texture> texture)
 {
 	auto& comps = this->GetComponents();
-	auto ptr = static_cast<DiffuseShaderComponent*>(_components[2].get());
+	auto ptr = static_cast<DiffuseShaderComponent*>(_shaderComponentManager.GetComponents()[2].get());
 	ptr->SetTexture(texture);
 }
 
@@ -44,10 +44,7 @@ void DiffuseShader::GetPolygonLayout(shared_ptr<D3D11_INPUT_ELEMENT_DESC>& desc,
 
 void DiffuseShader::SetComponents()
 {
-	_components = std::vector<shared_ptr<IShaderComponent>>
-	({ 
-		make_shared<WVPShaderComponent>(), 
-		make_shared<SamplerStateShaderComponent>(StatesHelper::GetInstance().GetStates()->LinearWrap()),
-		make_shared<DiffuseShaderComponent>() 
-	});
+	_shaderComponentManager.Add(make_shared<WVPShaderComponent>());
+	_shaderComponentManager.Add(make_shared<SamplerStateShaderComponent>(StatesHelper::GetInstance().GetStates()->LinearWrap()));
+	_shaderComponentManager.Add(make_shared<DiffuseShaderComponent>());
 }

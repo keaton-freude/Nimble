@@ -25,14 +25,16 @@ bool BasicShader::Load()
 
 	this->SetComponents();
 
-	for (auto& component : _components)
-	{
-		if (!component->Load(_device, _deviceContext))
-		{
-			LOG_ERROR("Failed to load a component.");
-			return false;
-		}
-	}
+
+
+	//for (auto& component : _components)
+	//{
+	//	if (!component->Load(_device, _deviceContext))
+	//	{
+	//		LOG_ERROR("Failed to load a component.");
+	//		return false;
+	//	}
+	//}
 
 	unsigned int numElements;
 	shared_ptr<D3D11_INPUT_ELEMENT_DESC> polygonLayout;
@@ -140,29 +142,15 @@ bool BasicShader::Compile(ComPtr<ID3D10Blob>& vertexShaderBuffer)
 	return true;
 }
 
-std::vector<shared_ptr<IShaderComponent>>& BasicShader::GetComponents()
-{
-	return _components;
-}
-
 void BasicShader::SetComponents()
 {
 	// create components
-	_components = std::vector<shared_ptr<IShaderComponent>>
-	({ 
-		make_shared<WVPShaderComponent>() 
-	});
+	_shaderComponentManager.Add(make_shared<WVPShaderComponent>());
 }
 
 bool BasicShader::SetShaderParameters()
 {
-	for(auto& component: _components)
-	{
-		if (!component->Apply(_device, _deviceContext))
-		{
-			LOG_ERROR("Failed to load component.");
-			return false;
-		}
-	}
+	_shaderComponentManager.Apply(_device, _deviceContext);
+
 	return false;
 }

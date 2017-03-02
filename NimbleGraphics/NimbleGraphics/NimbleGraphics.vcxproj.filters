@@ -237,6 +237,15 @@
     <ClInclude Include="include\LightShaderComponent.h">
       <Filter>Header Files\Rendering\Shaders\Components</Filter>
     </ClInclude>
+    <ClInclude Include="include\SplatMapShaderComponent.h">
+      <Filter>Header Files\Rendering\Shaders\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ShaderComponentManager.h">
+      <Filter>Header Files\Rendering\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ShaderComponentManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Shaders\Color.ps">
@@ -381,6 +390,9 @@
       <Filter>Header Files\Rendering\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="src\LightShaderComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SplatMapShaderComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

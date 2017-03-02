@@ -7,7 +7,7 @@ TextureArray::TextureArray()
 {
 }
 
-TextureArray::TextureArray(D3DDevice device, D3DDeviceContext deviceContext, std::vector<wstring> texture_paths, bool splatMap)
+TextureArray::TextureArray(D3DDevice device, D3DDeviceContext deviceContext, const std::vector<wstring>& texture_paths, bool splatMap)
 	: _numTextures(texture_paths.size())
 {
 	if (splatMap)
@@ -40,7 +40,7 @@ ID3D11Resource* TextureArray::GetTexture(unsigned index)
 	return _textures[index];
 }
 
-void TextureArray::Create(D3DDevice device, D3DDeviceContext deviceContext, vector<wstring> texture_paths)
+void TextureArray::Create(D3DDevice device, D3DDeviceContext deviceContext, const vector<wstring>& texture_paths)
 {
 	unsigned int i = 0;
 
@@ -57,7 +57,7 @@ void TextureArray::Create(D3DDevice device, D3DDeviceContext deviceContext, vect
 	}
 }
 
-void TextureArray::CreateForSplat(D3DDevice device, D3DDeviceContext deviceContext, vector<wstring> texture_paths)
+void TextureArray::CreateForSplat(D3DDevice device, D3DDeviceContext deviceContext, const vector<wstring>& texture_paths)
 {
 	// This version assumes that the 0th, 5th, 10th, 15th, etc image should be loaded as Dynamic, which means not
 	// generating mip maps, which means not passing in deviceContext.

@@ -17,7 +17,8 @@ void TileShader::SetComponents()
 	({
 		make_shared<WVPShaderComponent>(),
 		make_shared<SamplerStateShaderComponent>(StatesHelper::GetInstance().GetStates()->LinearWrap()),
-		make_shared<DiffuseShaderComponent>()
+		make_shared<DiffuseShaderComponent>(),
+		make_shared<LightShaderComponent>()
 	});
 }
 

@@ -51,8 +51,10 @@
     <ClInclude Include="include\RenderObject.h" />
     <ClInclude Include="include\RenderSystem.h" />
     <ClInclude Include="include\SamplerStateShaderComponent.h" />
+    <ClInclude Include="include\ShaderComponentManager.h" />
     <ClInclude Include="include\Singleton.h" />
     <ClInclude Include="include\SplatMap.h" />
+    <ClInclude Include="include\SplatMapShaderComponent.h" />
     <ClInclude Include="include\spline.h" />
     <ClInclude Include="include\TerrainCell.h" />
     <ClInclude Include="include\TerrainChunk.h" />
@@ -71,6 +73,7 @@
     <ClInclude Include="include\Typedefs.h" />
     <ClInclude Include="include\Mesh.h" />
     <ClInclude Include="include\WVPShaderComponent.h" />
+    <ClInclude Include="src\ShaderComponentManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Shaders\Color.ps" />
@@ -87,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\LightShaderComponent.cpp" />
+    <ClCompile Include="src\SplatMapShaderComponent.cpp" />
     <ClCompile Include="src\Tile.cpp" />
     <ClCompile Include="include\TileShader.h" />
     <ClCompile Include="src\BasicShader.cpp" />

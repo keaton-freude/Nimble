@@ -17,7 +17,6 @@ public:
 
 	void Draw(int indexCount) override;
 	bool Load() override;
-	std::vector<shared_ptr<IShaderComponent>>& GetComponents() override;
 private:
 	bool Compile(ComPtr<ID3D10Blob>& vertexShaderBuffer);
 

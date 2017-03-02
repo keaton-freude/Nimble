@@ -9,5 +9,6 @@ bool SamplerStateShaderComponent::Apply(D3DDevice& device, D3DDeviceContext& dev
 
 bool SamplerStateShaderComponent::Load(D3DDevice& device, D3DDeviceContext& deviceContext)
 {
+
 	return true;
 }
