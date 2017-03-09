@@ -1,4 +1,3 @@
-#pragma once
 #include "ShaderComponentManager.h"
 #include "Logger.h"
 

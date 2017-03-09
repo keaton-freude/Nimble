@@ -5,7 +5,9 @@
 class TileShader : public BasicShader
 {
 public:
-	TileShader(const D3DDevice& device, const D3DDeviceContext& deviceContext)
+	TileShader() = default;
+
+	TileShader(D3DDevice device, D3DDeviceContext deviceContext)
 		: BasicShader(device, deviceContext)
 	{
 		this->_vsFilename = L"..\\Assets\\Shaders\\TileShader.vs";

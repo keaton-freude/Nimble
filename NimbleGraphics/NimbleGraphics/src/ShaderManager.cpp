@@ -1,6 +1,7 @@
 #include "ShaderManager.h"
 #include "DiffuseShader.h"
 #include "TileShader.h"
+#include "Logger.h"
 
 ShaderManager::ShaderManager()
 {
@@ -20,6 +21,7 @@ void ShaderManager::Load(ComPtr<ID3D11Device> device, D3DDeviceContext deviceCon
 
 	auto pair = std::pair<SHADER, shared_ptr<IShader>>(SHADER::DIFFUSE,
 		make_shared<DiffuseShader>(device, deviceContext));
+
 	pair.second->Load();
 	_shaders.insert(pair);
 

@@ -63,3 +63,5 @@ NimbleGraphics/NimbleGraphics/x64/*
 *.autosave
 
 NimbleEditor/Release/*
+
+NimbleGraphics/packages/

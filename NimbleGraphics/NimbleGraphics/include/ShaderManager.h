@@ -1,13 +1,10 @@
 #pragma once
 #include "Typedefs.h"
 #include <unordered_map>
-#include <iostream>
-
 #include "IShader.h"
+#include "Singleton.h"
 
 using std::unordered_map;
-using std::cout;
-using std::endl;
 
 enum SHADER
 {

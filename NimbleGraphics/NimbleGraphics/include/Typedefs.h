@@ -3,7 +3,7 @@
 #include <SimpleMath.h>
 #include <wrl/client.h>
 #include <memory>
-//#include "../../packages/directxtk_desktop_2015.2016.10.6.1/build/native/include/SimpleMath.h"
+
 using DirectX::SimpleMath::Matrix;
 using DirectX::SimpleMath::Ray;
 using DirectX::SimpleMath::Vector2;
@@ -12,6 +12,7 @@ using DirectX::SimpleMath::Vector4;
 using DirectX::SimpleMath::Plane;
 using DirectX::SimpleMath::Color;
 using namespace DirectX::SimpleMath;
+
 
 using std::shared_ptr;
 using std::unique_ptr;

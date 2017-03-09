@@ -243,9 +243,6 @@
     <ClInclude Include="include\ShaderComponentManager.h">
       <Filter>Header Files\Rendering\Shaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\ShaderComponentManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Shaders\Color.ps">
@@ -266,7 +263,6 @@
     <None Include="..\..\Assets\Shaders\Terrain.vs">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="packages.config" />
     <None Include="..\..\Assets\Shaders\Diffuse.ps">
       <Filter>Shaders</Filter>
     </None>
@@ -279,6 +275,7 @@
     <None Include="TileShader.ps">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\placeholder.cpp">
@@ -298,9 +295,6 @@
     </ClCompile>
     <ClCompile Include="src\Light.cpp">
       <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\IShader.cpp">
-      <Filter>Source Files\Interfaces</Filter>
     </ClCompile>
     <ClCompile Include="src\Frustum.cpp">
       <Filter>Source Files\Misc</Filter>
@@ -393,6 +387,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\SplatMapShaderComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShaderComponentManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,5 +1,6 @@
 #include "BasicShader.h"
 #include "WVPShaderComponent.h"
+#include <d3dcompiler.h>
 
 BasicShader::BasicShader(D3DDevice device, D3DDeviceContext deviceContext)
 	: IShader(device, deviceContext)
@@ -25,16 +26,7 @@ bool BasicShader::Load()
 
 	this->SetComponents();
 
-
-
-	//for (auto& component : _components)
-	//{
-	//	if (!component->Load(_device, _deviceContext))
-	//	{
-	//		LOG_ERROR("Failed to load a component.");
-	//		return false;
-	//	}
-	//}
+	_shaderComponentManager.Load(_device, _deviceContext);
 
 	unsigned int numElements;
 	shared_ptr<D3D11_INPUT_ELEMENT_DESC> polygonLayout;
@@ -152,5 +144,9 @@ bool BasicShader::SetShaderParameters()
 {
 	_shaderComponentManager.Apply(_device, _deviceContext);
 
-	return false;
+	return true;
+}
+
+void BasicShader::GetPolygonLayout(shared_ptr<D3D11_INPUT_ELEMENT_DESC>& desc, unsigned& numElements)
+{
 }

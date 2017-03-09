@@ -1,7 +1,5 @@
 #pragma once
 #include "IShader.h"
-#include <vector>
-#include "IShaderComponent.h"
 
 
 /* 
@@ -13,20 +11,19 @@
 class BasicShader: public IShader
 {
 public:
-	explicit BasicShader(D3DDevice device, D3DDeviceContext deviceContext);
+	BasicShader() = default;
+	BasicShader(D3DDevice device, D3DDeviceContext deviceContext);
 
 	void Draw(int indexCount) override;
 	bool Load() override;
-private:
-	bool Compile(ComPtr<ID3D10Blob>& vertexShaderBuffer);
+	bool SetShaderParameters() override;
 
 protected:
-
-
 	void SetComponents() override;
-public:
-	bool SetShaderParameters() override;
+	void GetPolygonLayout(shared_ptr<D3D11_INPUT_ELEMENT_DESC>& desc, unsigned& numElements) override;
+
 private:
+	bool Compile(ComPtr<ID3D10Blob>& vertexShaderBuffer);
 	D3DInputLayout _layout;
 
 };

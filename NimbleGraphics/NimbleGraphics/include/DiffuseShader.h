@@ -10,7 +10,7 @@
 class DiffuseShader: public BasicShader
 {
 public:
-	DiffuseShader(const D3DDevice& device, const D3DDeviceContext& deviceContext)
+	DiffuseShader(D3DDevice device, D3DDeviceContext deviceContext)
 		: BasicShader(device, deviceContext)
 	{
 		this->_vsFilename = L"..\\Assets\\Shaders\\Diffuse.vs";
@@ -19,11 +19,6 @@ public:
 		this->_pixelShaderEntryPoint = "pixelMain";
 		this->_vsVersion = "vs_5_0";
 		this->_psVersion = "ps_5_0";
-	}
-
-	~DiffuseShader()
-	{
-		LOG_INFO("Diffuse Shader Destruct!");
 	}
 
 	void SetDiffuseTexture(shared_ptr<Texture> texture);

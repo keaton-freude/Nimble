@@ -4,15 +4,7 @@
 class IShaderComponent
 {
 public:
-	IShaderComponent()
-	{
-		
-	}
-
-	virtual ~IShaderComponent()
-	{
-		
-	}
+	virtual ~IShaderComponent() {}
 	
 	virtual bool Apply(D3DDevice& device, D3DDeviceContext& deviceContext) = 0;
 

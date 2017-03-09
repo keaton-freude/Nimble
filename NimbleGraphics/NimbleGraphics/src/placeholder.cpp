@@ -1,7 +1,10 @@
-#include "MemoryHeightmap.h"
+#include "ShaderManager.h"
+#include "DiffuseShader.h"
+#include "TileShader.h"
+#include "Logger.h"
 
 int main()
 {
-	MemoryHeightmap map;
+	ShaderComponentManager scm;
 	return 0;
 }

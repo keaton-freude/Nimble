@@ -1,32 +1,38 @@
 #pragma once
 #include "Typedefs.h"
-#include <wrl/client.h>
-#include <memory>
-#include <D3Dcompiler.h>
-#include "Logger.h"
 #include "IShaderComponent.h"
 #include <vector>
 #include "ShaderComponentManager.h"
 
-using DirectX::SimpleMath::Matrix;
 using std::string;
 using std::wstring;
-using Microsoft::WRL::ComPtr;
-using std::shared_ptr;
 using std::ofstream;
 
 class IShader
 {
 public:
-	IShader();
+	IShader()
+		: _device(nullptr), _deviceContext(nullptr)
+	{
+		
+	}
 
-	IShader(D3DDevice device, D3DDeviceContext deviceContext);
+	IShader(D3DDevice device, D3DDeviceContext deviceContext)
+		: _shaderComponentManager(), _device(device), _deviceContext(deviceContext)
+	{
+		
+	}
 
-	virtual ~IShader();
+	virtual ~IShader() = default;
 
 	virtual bool Load() = 0;
 	virtual void Draw(int indexCount) = 0;
 	virtual bool SetShaderParameters() = 0;
+
+	std::vector<shared_ptr<IShaderComponent>>& GetComponents()
+	{
+		return _shaderComponentManager.GetComponents();
+	}
 
 protected:
 	virtual void GetPolygonLayout(shared_ptr<D3D11_INPUT_ELEMENT_DESC>& desc, 
@@ -34,9 +40,9 @@ protected:
 
 
 	virtual void SetComponents() = 0;
+
 	ShaderComponentManager _shaderComponentManager;
 
-protected:
 	wstring _vsFilename;
 	wstring _psFilename;
 	string _vertexShaderEntryPoint;

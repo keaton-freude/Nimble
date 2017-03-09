@@ -2,8 +2,11 @@
 #include "Material.h"
 #include "MemoryHeightmap.h"
 #include "Light.h"
-#include "SplatMap.h"
 #include "TileShader.h"
+
+#include <vector>
+
+using std::vector;
 
 class TileMaterial: public Material
 {

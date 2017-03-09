@@ -72,7 +72,6 @@ private:
 private:
     NimbleD3D _D3D;
     Camera _camera;
-    shared_ptr<Terrain> terrain;
     Light _light0;
     Frustum _frustum;
     //ParticleEngine particleEngine;

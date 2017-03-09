@@ -22,7 +22,8 @@ public:
 
 	void Update(MatrixRef viewMatrix, MatrixRef projectionMatrix)
 	{
-		auto baseShader = dynamic_cast<BasicShader*>(_material->GetShader());
+		auto baseShader = _material->GetShader();
+		
 		auto componentPtr = static_cast<WVPShaderComponent*>(baseShader->GetComponents()[0].get());
 		componentPtr->SetMatrices(_transform.GetWorldMatrix(), viewMatrix, projectionMatrix);
 	}
