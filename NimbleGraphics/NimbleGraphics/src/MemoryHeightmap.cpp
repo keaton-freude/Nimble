@@ -1,6 +1,8 @@
 #include "MemoryHeightmap.h"
+#include "Helper.h"
 
-MemoryHeightmap::MemoryHeightmap(): highest_point(0.0f), _width(0), _height(0), _heightmap(), _vertex_field()
+MemoryHeightmap::MemoryHeightmap()
+	: highest_point(0.0f), _width(0), _height(0), _heightmap(), _vertex_field()
 {
 }
 
@@ -36,10 +38,7 @@ MemoryHeightmap::MemoryHeightmap(unsigned int width, unsigned int height, float 
 
 void MemoryHeightmap::CalculateTextureCoordinates()
 {
-	int incrementCount, tuCount, tvCount;
-	float incrementValue, tuCoordinate, tvCoordinate;
-
-	incrementValue = (float)TEXTURE_REPEAT / _width;
+	float incrementValue = static_cast<float>(TEXTURE_REPEAT) / _width;
 
 	float tu, tv;
 
@@ -76,9 +75,9 @@ void MemoryHeightmap::SmoothAdd(const Vector3& location, const float& radius, co
 	auto height = _vertex_field.GetHeight();
 	auto width = _vertex_field.GetWidth();
 
-	for (auto j = 0; j < height; ++j)
+	for (unsigned int j = 0; j < height; ++j)
 	{
-		for (auto i = 0; i < width; ++i)
+		for (unsigned int i = 0; i < width; ++i)
 		{
 			auto index = j * height + i;
 
@@ -108,17 +107,17 @@ std::vector<TerrainCell>& MemoryHeightmap::GetHeightmapData()
 	return _heightmap;
 }
 
-unsigned MemoryHeightmap::GetWidth() const
+Dimension MemoryHeightmap::GetWidth() const
 {
 	return _width;
 }
 
-unsigned MemoryHeightmap::GetHeight() const
+Dimension MemoryHeightmap::GetHeight() const
 {
 	return _height;
 }
 
-void MemoryHeightmap::AddImpl(int index, Vector3& normal, int faces)
+void MemoryHeightmap::AddImpl(Dimension index, Vector3& normal, int faces)
 {
 	auto& cell = _heightmap[index];
 	if (faces == 1)
@@ -132,7 +131,7 @@ void MemoryHeightmap::AddImpl(int index, Vector3& normal, int faces)
 	}
 }
 
-void MemoryHeightmap::AddDown(int i, int j, Vector3& normal, int faces)
+void MemoryHeightmap::AddDown(Dimension i, Dimension j, Vector3& normal, int faces)
 {
 	if (j != 0)
 	{
@@ -142,7 +141,7 @@ void MemoryHeightmap::AddDown(int i, int j, Vector3& normal, int faces)
 	}
 }
 
-void MemoryHeightmap::AddLeft(int i, int j, Vector3& normal, int faces)
+void MemoryHeightmap::AddLeft(Dimension i, Dimension j, Vector3& normal, int faces)
 {
 	if (i != 0)
 	{
@@ -152,7 +151,7 @@ void MemoryHeightmap::AddLeft(int i, int j, Vector3& normal, int faces)
 	}
 }
 
-void MemoryHeightmap::AddRight(int i, int j, Vector3& normal, int faces)
+void MemoryHeightmap::AddRight(Dimension i, Dimension j, Vector3& normal, int faces)
 {
 	if (i < (_width - 1))
 	{
@@ -161,7 +160,7 @@ void MemoryHeightmap::AddRight(int i, int j, Vector3& normal, int faces)
 	}
 }
 
-void MemoryHeightmap::AddUp(int i, int j, Vector3& normal, int faces)
+void MemoryHeightmap::AddUp(Dimension i, Dimension j, Vector3& normal, int faces)
 {
 	if (j < (_height - 1))
 	{
@@ -170,7 +169,7 @@ void MemoryHeightmap::AddUp(int i, int j, Vector3& normal, int faces)
 	}
 }
 
-void MemoryHeightmap::AddBottomLeft(int i, int j, Vector3& normal, int faces)
+void MemoryHeightmap::AddBottomLeft(Dimension i, Dimension j, Vector3& normal, int faces)
 {
 	if (i != 0 && j != 0)
 	{
@@ -180,7 +179,7 @@ void MemoryHeightmap::AddBottomLeft(int i, int j, Vector3& normal, int faces)
 	}
 }
 
-void MemoryHeightmap::AddBottomRight(int i, int j, Vector3& normal, int faces)
+void MemoryHeightmap::AddBottomRight(Dimension i, Dimension j, Vector3& normal, int faces)
 {
 	if (j != 0 && i < (_width - 1))
 	{
@@ -190,7 +189,7 @@ void MemoryHeightmap::AddBottomRight(int i, int j, Vector3& normal, int faces)
 	}
 }
 
-void MemoryHeightmap::AddUpperLeft(int i, int j, Vector3& normal, int faces)
+void MemoryHeightmap::AddUpperLeft(Dimension i, Dimension j, Vector3& normal, int faces)
 {
 	if (i != 0 && j < (_height - 1))
 	{
@@ -200,7 +199,7 @@ void MemoryHeightmap::AddUpperLeft(int i, int j, Vector3& normal, int faces)
 	}
 }
 
-void MemoryHeightmap::AddUpperRight(int i, int j, Vector3& normal, int faces)
+void MemoryHeightmap::AddUpperRight(Dimension i, Dimension j, Vector3& normal, int faces)
 {
 	if (j < (_height - 1) && i < (_width - 1))
 	{
@@ -286,7 +285,7 @@ bool MemoryHeightmap::CalculateNormalsDifferently(Vector3 position, float radius
 	return true;
 }
 
-unsigned int MemoryHeightmap::GetIndex(unsigned int chunk_y, unsigned int chunk_x, unsigned int chunk_width, unsigned int chunk_height, unsigned int j, unsigned int i)
+Dimension MemoryHeightmap::GetIndex(unsigned int chunk_y, unsigned int chunk_x, unsigned int chunk_width, unsigned int chunk_height, unsigned int j, unsigned int i)
 {
 	/* For this function we assume that the VertexField is partioned like such:
 	 
@@ -307,7 +306,7 @@ unsigned int MemoryHeightmap::GetIndex(unsigned int chunk_y, unsigned int chunk_
 
 	// We need an index which points to the first cell
 	// of a given chunk based on chunk_y, chunk_x, and their dimensions
-	unsigned int base_index = (chunk_x * chunk_width) + (chunk_y * (chunk_height)) * (_height + 1);
+	Dimension base_index = (chunk_x * chunk_width) + (chunk_y * (chunk_height)) * (_height + 1);
 
 	// Next, we can use i and j to select the element within our grid
 	// remembering that to move up a row, we must consider the entire height

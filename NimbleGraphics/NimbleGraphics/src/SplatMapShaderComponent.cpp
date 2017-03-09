@@ -1,4 +1,5 @@
 #include "SplatMapShaderComponent.h"
+#include "Logger.h"
 
 bool SplatMapShaderComponent::Apply(D3DDevice& device, D3DDeviceContext& deviceContext)
 {

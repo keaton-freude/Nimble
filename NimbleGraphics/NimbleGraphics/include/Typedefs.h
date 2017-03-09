@@ -36,5 +36,7 @@ using D3DBuffer = ComPtr<ID3D11Buffer>;
 using D3DInputLayout = ComPtr<ID3D11InputLayout>;
 using D3DSamplerState = ComPtr<ID3D11SamplerState>;
 
+using Dimension = size_t;
+
 #define NIMBLE_TEXTURE_W(x) L"..\\Assets\\Textures\\"#x
 #define NIMBLE_TEXTURE(x) "..\\Assets\\Textures\\"#x

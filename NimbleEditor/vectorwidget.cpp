@@ -24,11 +24,6 @@ Vector2Widget::Vector2Widget(QWidget* parent)
    // groupBox->setTitle();
 }
 
-Vector2Widget::Vector2Widget(const Vector2Widget &other)
-{
-
-}
-
 Vector2Widget::~Vector2Widget()
 {
     if (texts)

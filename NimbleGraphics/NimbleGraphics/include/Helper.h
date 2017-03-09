@@ -5,12 +5,11 @@
 #include "Logger.h"
 #include "Singleton.h"
 #include <direct.h>
-#include <vector>
-#include "TerrainVertex.h"
 
 using DirectX::CommonStates;
 using std::unique_ptr;
 
+#define UNUSED(expr) do { (void)(expr); } while (0)
 
 inline void SetD3DDebugName(ID3D11DeviceChild* child, const std::string& name)
 {

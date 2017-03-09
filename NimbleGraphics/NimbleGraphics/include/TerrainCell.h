@@ -1,5 +1,4 @@
 #pragma once
-#include "Typedefs.h"
 #include "TerrainVertex.h"
 
 
@@ -37,79 +36,23 @@ public:
 
 	// TerrainData must be initialized with TerrainVertex, so we can't allow default construction
 	TerrainCell() = delete;
-	TerrainCell(TerrainVertex& upperLeft, TerrainVertex& upperRight, TerrainVertex& bottomLeft, TerrainVertex& bottomRight)
-		: data(upperLeft, upperRight, bottomLeft, bottomRight)
-	{
-	}
+	TerrainCell(TerrainVertex& upperLeft, TerrainVertex& upperRight, TerrainVertex& bottomLeft, TerrainVertex& bottomRight);
 
 	/* This face is upperLeft, upperRight1, bottomLeft1 */
-	void UpdateFaceNormal1()
-	{
-		Vector3 P1 = data.upperLeft.position;
-		Vector3 P2 = data.upperRight.position;
-		Vector3 P3 = data.bottomLeft.position;
-
-		Vector3 U = P2 - P1;
-		Vector3 V = P3 - P1;
-
-		FaceNormal1 = U.Cross(V);
-	}
+	void UpdateFaceNormal1();
 
 	/* This face is bottomLeft, upperRight2, bottomRight2*/
-	void UpdateFaceNormal2()
-	{
-		Vector3 P1 = data.bottomLeft.position;
-		Vector3 P2 = data.upperRight.position;
-		Vector3 P3 = data.bottomRight.position;
+	void UpdateFaceNormal2();
 
-		Vector3 U = P2 - P1;
-		Vector3 V = P3 - P1;
+	void ClearNormals();
 
-		FaceNormal2 = U.Cross(V);
-	}
+	void SetNormal();
 
-	void ClearNormals()
-	{
-		data.upperLeft.normal = Vector3::Zero;
-		data.upperRight.normal = Vector3::Zero;
-		data.bottomRight.normal = Vector3::Zero;
-		data.bottomLeft.normal = Vector3::Zero;
-	}
+	void NormalizeNormals();
 
-	void SetNormal()
-	{
-		// Need to set the normals for all 4 of our Vertices
-		UpdateFaceNormal1();
-		UpdateFaceNormal2();
+	const Vector3& GetFaceNormal1() const;
 
-		data.upperLeft.normal = FaceNormal1;
-		data.upperRight.normal = (FaceNormal1 + FaceNormal2);
-		data.upperRight.normal.Normalize();
-		data.bottomLeft.normal = (FaceNormal1 + FaceNormal2);
-		data.bottomLeft.normal.Normalize();
-		data.bottomRight.normal = FaceNormal2;
-	}
+	const Vector3& GetFaceNormal2() const;
 
-	void NormalizeNormals()
-	{
-		data.upperLeft.normal.Normalize();
-		data.upperRight.normal.Normalize();
-		data.bottomLeft.normal.Normalize();
-		data.bottomRight.normal.Normalize();
-	}
-
-	const Vector3& GetFaceNormal1() const
-	{
-		return FaceNormal1;
-	}
-
-	const Vector3& GetFaceNormal2() const
-	{
-		return FaceNormal2;
-	}
-
-	Vector3 GetAveragePosition() const
-	{
-		return data.GetAveragePosition();
-	}
+	Vector3 GetAveragePosition() const;
 };

@@ -243,6 +243,9 @@
     <ClInclude Include="include\ShaderComponentManager.h">
       <Filter>Header Files\Rendering\Shaders</Filter>
     </ClInclude>
+    <ClInclude Include="include\TileShader.h">
+      <Filter>Header Files\Rendering\Shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Shaders\Color.ps">
@@ -356,9 +359,6 @@
     <ClCompile Include="src\TileMaterial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\TileShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\BasicShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -380,9 +380,6 @@
     <ClCompile Include="src\WVPShaderComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\TileShader.h">
-      <Filter>Header Files\Rendering\Shaders</Filter>
-    </ClCompile>
     <ClCompile Include="src\LightShaderComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -391,6 +388,15 @@
     </ClCompile>
     <ClCompile Include="src\ShaderComponentManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TileShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TerrainCell.cpp">
+      <Filter>Source Files\Terrain</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

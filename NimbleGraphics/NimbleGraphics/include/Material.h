@@ -1,6 +1,5 @@
 #pragma once
 
-#include <string>
 #include "ShaderManager.h"
 
 using std::string;

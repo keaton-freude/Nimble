@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::graphClicked(QMouseEvent* evt)
 {
+	UNUSED(evt);
 }
 
 MainWindow::~MainWindow()

@@ -25,7 +25,7 @@ ID3D11ShaderResourceView** TextureArray::GetTextureViews()
 	return _textureViews;
 }
 
-unsigned TextureArray::GetNumberOfTextures()
+size_t TextureArray::GetNumberOfTextures()
 {
 	return _numTextures;
 }

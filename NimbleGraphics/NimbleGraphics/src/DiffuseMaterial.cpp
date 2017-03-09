@@ -12,7 +12,6 @@ DiffuseMaterial::DiffuseMaterial(shared_ptr<Texture> texture)
 	_shader = ShaderManager::GetInstance().GetShader<DiffuseShader>(SHADER::DIFFUSE);
 }
 
-
 void DiffuseMaterial::Apply(D3DDeviceContext deviceContext)
 {
 	_shader.lock()->SetDiffuseTexture(_texture);

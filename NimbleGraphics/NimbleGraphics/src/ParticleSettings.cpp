@@ -2,6 +2,7 @@
 #include <rapidjson/writer.h>
 #include <rapidjson/document.h>
 #include <rapidjson/stringbuffer.h>
+#include <fstream>
 
 ParticleSettings::ParticleSettings(): texture_name("..\\Assets\\Textures\\smoke_particle.tga"), max_particles(2000000),
                                       particles_per_second(0.0f), duration(12.0f), duration_randomness(3.0f), min_velocity(Vector3(-5.0f, -5.0f, -5.0f)),

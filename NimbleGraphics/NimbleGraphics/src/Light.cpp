@@ -1,4 +1,5 @@
 #include "Light.h"
+#include "Logger.h"
 
 Light::Light(): _lightBuffer()
 {

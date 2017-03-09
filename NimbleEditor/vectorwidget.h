@@ -11,7 +11,7 @@ class Vector2Widget : public QWidget
     Q_OBJECT
 public:
     Vector2Widget(QWidget* parent);
-    Vector2Widget(const Vector2Widget& other);
+    Vector2Widget(const Vector2Widget& other) = default;
     ~Vector2Widget();
 
     float myVecX();

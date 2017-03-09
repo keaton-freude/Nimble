@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include "Structs.h"
 #include "TerrainCell.h"
 
 /* This class represents the actual vertices for a terrain.
@@ -17,18 +16,18 @@ class TerrainVertexField
 {
 public:
 	TerrainVertexField();
-	TerrainVertexField(unsigned int width, unsigned int height, float resolution);
+	TerrainVertexField(Dimension width, Dimension height, float resolution);
 	~TerrainVertexField();
 
 	std::vector<TerrainVertex>& GetVertices();
 
-	unsigned int GetWidth() const;
-	unsigned int GetHeight() const;
+	Dimension GetWidth() const;
+	Dimension GetHeight() const;
 	TerrainVertex& GetVert(int i, int j);
-	unsigned int GetVertIndex(int i, int j) const;
+	Dimension GetVertIndex(int i, int j) const;
 
 private:
 	std::vector<TerrainVertex> _vertices;
-	unsigned int width;
-	unsigned int height;
+	Dimension width;
+	Dimension height;
 };

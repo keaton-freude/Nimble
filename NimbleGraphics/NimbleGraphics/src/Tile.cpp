@@ -4,7 +4,7 @@
 //{
 //}
 //
-//Tile::Tile(D3DDevice device, unsigned width, unsigned height, float resolution)
+//Tile::Tile(D3DDevice device, unsigned int width, unsigned int height, float resolution)
 //	: _heightmap(width, height, resolution)
 //{
 //	// Create the mesh

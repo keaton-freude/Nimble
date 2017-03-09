@@ -7,13 +7,9 @@ class DiffuseMaterial: public Material
 public:
 	DiffuseMaterial();
 	explicit DiffuseMaterial(shared_ptr<Texture> texture);
-	~DiffuseMaterial()
-	{
-		
-	}
+	~DiffuseMaterial() = default;
 
 	void Apply(D3DDeviceContext deviceContext) override;
-
 
 private:
 	std::weak_ptr<DiffuseShader> _shader;

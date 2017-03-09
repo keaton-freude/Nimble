@@ -1,14 +1,16 @@
 #include "TerrainVertexField.h"
+#include "Logger.h"
 
 TerrainVertexField::TerrainVertexField(): _vertices(), width(0), height(0)
 {
 }
 
-TerrainVertexField::TerrainVertexField(unsigned width, unsigned height, float resolution): _vertices(width * height), width(width), height(height)
+TerrainVertexField::TerrainVertexField(Dimension width, Dimension height, float resolution)
+	: _vertices(width * height), width(width), height(height)
 {
-	for (auto j = 0; j < height; ++j)
+	for (Dimension j = 0; j < height; ++j)
 	{
-		for (auto i = 0; i < width; ++i)
+		for (Dimension i = 0; i < width; ++i)
 		{
 			auto index = j * height + i;
 			auto new_i = i * resolution;
@@ -31,12 +33,12 @@ std::vector<TerrainVertex>& TerrainVertexField::GetVertices()
 	return _vertices;
 }
 
-unsigned TerrainVertexField::GetWidth() const
+Dimension TerrainVertexField::GetWidth() const
 {
 	return width;
 }
 
-unsigned TerrainVertexField::GetHeight() const
+Dimension TerrainVertexField::GetHeight() const
 {
 	return height;
 }
@@ -47,7 +49,7 @@ TerrainVertex& TerrainVertexField::GetVert(int i, int j)
 	return _vertices[index];
 }
 
-unsigned TerrainVertexField::GetVertIndex(int i, int j) const
+Dimension TerrainVertexField::GetVertIndex(int i, int j) const
 {
 	return j * height + i;
 }

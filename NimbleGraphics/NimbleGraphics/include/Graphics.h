@@ -12,7 +12,6 @@
 #include "ParticleEngine.h"
 #include "RayHit.h"
 #include "SimpleMath.h"
-#include "Terrain.h"
 #include "Tile.h"
 #include <CommonStates.h>
 #include "RenderSystem.h"
@@ -21,6 +20,7 @@ using DirectX::CommonStates;
 using DirectX::SimpleMath::Vector3;
 using DirectX::SimpleMath::Color;
 using DirectX::SimpleMath::Matrix;
+using DirectX::SimpleMath::Ray;
 using std::shared_ptr;
 using std::string;
 using Microsoft::WRL::ComPtr;
@@ -49,7 +49,6 @@ public:
     NimbleD3D& GetD3D();
     void SetDT(float new_dt);
     float GetDT() const;
-    shared_ptr<Terrain> GetTerrain();
     const Light& GetLight() const;
     RayHit IsRayIntersectingTerrain(Ray r);
 	RayHit CastRay(const Ray& ray);

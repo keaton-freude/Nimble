@@ -27,7 +27,7 @@ public:
 	~SplatMap();
 
 	ID3D11ShaderResourceView** GetTextureViews();
-	int GetNumberOfViews();
+	size_t GetNumberOfViews();
 	ID3D11Resource* GetSplat(int texture_index);
 	int GetColorComponent(int texture_index);
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "LightShaderComponent.h"
 #include "Light.h"
+#include "Logger.h"
 
 bool LightShaderComponent::Apply(D3DDevice& device, D3DDeviceContext& deviceContext)
 {

@@ -84,6 +84,7 @@ shared_ptr<Graphics> D3DRenderWidget::GetGraphics()
 
 void D3DRenderWidget::paintEvent(QPaintEvent* evt)
 {
+	UNUSED(evt);
     this->UpdateFPSTitle();
 
     float dt = fps_calc->Tick();
@@ -101,6 +102,7 @@ void D3DRenderWidget::paintEvent(QPaintEvent* evt)
 
 void D3DRenderWidget::resizeEvent(QResizeEvent * evt)
 {
+	UNUSED(evt);
     if (this->objectName() == "minimap")
         return;
 
@@ -221,12 +223,10 @@ void D3DRenderWidget::mousePressEvent(QMouseEvent *evt)
     float pointX, pointY;
 
     pointX = ((2.0f * static_cast<float>(evt->x())) / static_cast<float>(this->width())) - 1.0f;
-
     pointY = (((2.0f * static_cast<float>(evt->y())) / static_cast<float>(this->height())) -1.0f) * -1.0f;
 
     if (evt->buttons() == Qt::MouseButton::LeftButton)
     {
-
         Matrix projectionMatrix = graphics->GetD3D().GetProjectionMatrix();
 
         Ray ray = graphics->GetCamera().GetMouseRay(Vector2(pointX, pointY), projectionMatrix);
@@ -237,6 +237,8 @@ void D3DRenderWidget::mousePressEvent(QMouseEvent *evt)
         {
 			float intensity = std::stof(ui->hm_intensity->text().toStdString());
 			float radius = std::stof(ui->hm_radius->text().toStdString());
+			UNUSED(intensity);
+			UNUSED(radius);
 			//graphics->HeightmapAdd(hit.hit_location, radius, intensity);
 			LOG_INFO(hit.hit_location.x, "\t", hit.hit_location.y, "\t", hit.hit_location.z);
 			//graphics->GetTerrain()->SplatTexture(graphics->GetD3D().GetDevice(), graphics->GetD3D().GetDeviceContext(), hit.hit_location, .5f, 10, 2);

@@ -18,7 +18,7 @@ ID3D11ShaderResourceView** SplatMap::GetTextureViews()
 	return _textures.GetTextureViews();
 }
 
-int SplatMap::GetNumberOfViews()
+size_t SplatMap::GetNumberOfViews()
 {
 	return _textures.GetNumberOfTextures();
 }

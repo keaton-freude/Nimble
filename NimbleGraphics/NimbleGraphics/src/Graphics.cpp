@@ -1,6 +1,5 @@
 #include "Graphics.h"
 #include "TileMaterial.h"
-#include "WVPShaderComponent.h"
 #include "SamplerStateShaderComponent.h"
 #include "DiffuseMaterial.h"
 
@@ -30,7 +29,7 @@ void Graphics::HeightmapAdd(Vector3 location, float radius, float intensity)
 
 bool Graphics::Init(int screenWidth, int screenHeight, HWND hwnd, bool fullscreen, bool vSyncEnabled, float screenDepth, float screenNear)
 {
-    srand(time(nullptr));
+    srand(static_cast<unsigned int>(time(nullptr)));
 
     _D3D = NimbleD3D(screenWidth, screenHeight, vSyncEnabled, hwnd, fullscreen, screenDepth, screenNear);
     _camera = Camera(Vector3(0.0f, 5.0f, 0.0f), Vector3(0.78f, 0.0f, 0.0f));
@@ -102,11 +101,6 @@ void Graphics::SetDT(float new_dt)
 float Graphics::GetDT() const
 {
     return _dt;
-}
-
-shared_ptr<Terrain> Graphics::GetTerrain()
-{
-	return nullptr;
 }
 
 const Light& Graphics::GetLight() const
