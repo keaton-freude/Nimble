@@ -36,7 +36,7 @@ public:
 	void LoadFromHeightmap(D3DDevice device, MemoryHeightmap& mem_heightmap);
 
 	template<typename T>
-	void Load(D3DDevice device, vector<T>& vertices, vector<Dimension>& indicies, bool dynamic);
+	void Load(D3DDevice device, vector<T>& vertices, vector<unsigned long>& indicies, bool dynamic);
 
 
 	// Note: The vertexSize * vertexCount must not exceed sizeof(UINT)
@@ -74,7 +74,7 @@ unique_ptr<Mesh> Mesh::Create(D3DDevice device, vector<T>& vertices, vector<unsi
 }
 
 template<typename T>
-void Mesh::Load(D3DDevice device, vector<T>& vertices, vector<Dimension>& indicies, bool dynamic)
+void Mesh::Load(D3DDevice device, vector<T>& vertices, vector<unsigned long>& indicies, bool dynamic)
 {
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	D3D11_SUBRESOURCE_DATA vertexData, indexData;
