@@ -1,11 +1,12 @@
-#include "TerrainVertexField.h"
+#include "TileVertexField.h"
 #include "Logger.h"
 
-TerrainVertexField::TerrainVertexField(): _vertices(), width(0), height(0)
+TileVertexField::TileVertexField()
+	: _vertices(), width(0), height(0)
 {
 }
 
-TerrainVertexField::TerrainVertexField(Dimension width, Dimension height, float resolution)
+TileVertexField::TileVertexField(Dimension width, Dimension height, float resolution)
 	: _vertices(width * height), width(width), height(height)
 {
 	for (Dimension j = 0; j < height; ++j)
@@ -23,33 +24,33 @@ TerrainVertexField::TerrainVertexField(Dimension width, Dimension height, float 
 	}
 }
 
-TerrainVertexField::~TerrainVertexField()
+TileVertexField::~TileVertexField()
 {
 	LOG_INFO("Terrain Vertex Field destruct!");
 }
 
-std::vector<TerrainVertex>& TerrainVertexField::GetVertices()
+std::vector<TileVertex>& TileVertexField::GetVertices()
 {
 	return _vertices;
 }
 
-Dimension TerrainVertexField::GetWidth() const
+Dimension TileVertexField::GetWidth() const
 {
 	return width;
 }
 
-Dimension TerrainVertexField::GetHeight() const
+Dimension TileVertexField::GetHeight() const
 {
 	return height;
 }
 
-TerrainVertex& TerrainVertexField::GetVert(int i, int j)
+TileVertex& TileVertexField::GetVert(int i, int j)
 {
 	auto index = j * height + i;
 	return _vertices[index];
 }
 
-Dimension TerrainVertexField::GetVertIndex(int i, int j) const
+Dimension TileVertexField::GetVertIndex(int i, int j) const
 {
 	return j * height + i;
 }

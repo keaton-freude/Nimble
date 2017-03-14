@@ -29,7 +29,7 @@ MemoryHeightmap::MemoryHeightmap(unsigned int width, unsigned int height, float 
 			auto urIndex = (j + 1) * vf_height + (i + 1);
 
 			// Create _symbolic_ links to the underlying verts.
-			_heightmap.push_back(TerrainCell(p_verts[ulIndex], p_verts[urIndex], p_verts[blIndex], p_verts[brIndex]));
+			_heightmap.push_back(TileCell(p_verts[ulIndex], p_verts[urIndex], p_verts[blIndex], p_verts[brIndex]));
 		}
 	}
 
@@ -81,7 +81,7 @@ void MemoryHeightmap::SmoothAdd(const Vector3& location, const float& radius, co
 		{
 			auto index = j * height + i;
 
-			TerrainVertex& vert = p_verts[index];
+			TileVertex& vert = p_verts[index];
 
 			auto distance = Vector2XZDistance(location, vert.position);
 
@@ -102,7 +102,7 @@ float MemoryHeightmap::GetHighestPoint() const
 	return highest_point;
 }
 
-std::vector<TerrainCell>& MemoryHeightmap::GetHeightmapData()
+std::vector<TileCell>& MemoryHeightmap::GetHeightmapData()
 {
 	return _heightmap;
 }
@@ -315,9 +315,49 @@ Dimension MemoryHeightmap::GetIndex(unsigned int chunk_y, unsigned int chunk_x, 
 	return base_index;
 }
 
-TerrainVertexField* MemoryHeightmap::GetVertexField()
+TileVertexField* MemoryHeightmap::GetVertexField()
 {
 	return &_vertex_field;
+}
+
+RayHit MemoryHeightmap::IsRayIntersectingVerts(const Ray& ray)
+{	
+	for (int i = 0; i < _height * _width; ++i)
+	{
+	    // every cell has 2 triangles
+	    auto& current_cell = _heightmap[i];
+	
+	    Vector3 triangle1[3];
+	    Vector3 triangle2[3];
+	
+	    triangle1[0] = current_cell.data.upperLeft.position;
+	    triangle1[1] = current_cell.data.upperRight.position;
+	    triangle1[2] = current_cell.data.bottomLeft.position;
+	
+	    triangle2[0] = current_cell.data.bottomLeft.position;
+	    triangle2[1] = current_cell.data.upperRight.position;
+	    triangle2[2] = current_cell.data.bottomRight.position;
+	
+	    float distance;
+	
+	    if (rayTriangleIntersect(ray, triangle1, distance))
+	    {
+	        // log_info("ray triangle intersect. distance: ", distance);
+	
+	        Vector3 hit_location = (ray.position + (ray.direction * distance));
+	        return RayHit(ray.position, hit_location, distance, true);
+	    }
+	
+	    if (rayTriangleIntersect(ray, triangle2, distance))
+	    {
+	        // og_info("ray triangle intersect. distance: ", distance);
+	
+	        Vector3 hit_location = (ray.position + (ray.direction * distance));
+	        return RayHit(ray.position, hit_location, distance, true);
+	    }
+	}
+	
+	return RayHit::NoHit();
 }
 
 void MemoryHeightmap::CalculateHighestPoint()

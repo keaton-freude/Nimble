@@ -12,9 +12,9 @@
 #include "ParticleEngine.h"
 #include "RayHit.h"
 #include "SimpleMath.h"
-#include "Tile.h"
 #include <CommonStates.h>
 #include "RenderSystem.h"
+#include "Tile.h"
 
 using DirectX::CommonStates;
 using DirectX::SimpleMath::Vector3;
@@ -74,7 +74,7 @@ private:
     Light _light0;
     Frustum _frustum;
     //ParticleEngine particleEngine;
-    //shared_ptr<Tile> tile;
+    shared_ptr<Tile> tile;
 	shared_ptr<RenderSystem> renderSystem;
 
     // How much time has passed since the last frame, used for smooth

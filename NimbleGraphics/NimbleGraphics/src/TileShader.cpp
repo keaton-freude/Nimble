@@ -22,8 +22,8 @@ TileShader::~TileShader()
 void TileShader::SetDiffuseTexture(shared_ptr<Texture> texture)
 {
 	auto& comps = this->GetComponents();
-	//auto ptr = static_cast<DiffuseShaderComponent*>(_components[2].get());
-	//ptr->SetTexture(texture);
+	auto ptr = static_cast<DiffuseShaderComponent*>(comps[2].get());
+	ptr->SetTexture(texture);
 }
 
 void TileShader::SetComponents()

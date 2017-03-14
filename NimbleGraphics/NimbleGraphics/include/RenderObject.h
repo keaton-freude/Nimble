@@ -9,10 +9,7 @@
 class RenderObject
 {
 public:
-	RenderObject()
-	{
-		
-	}
+	RenderObject() = default;
 
 	RenderObject(shared_ptr<Mesh> mesh, shared_ptr<Material> material, Transform transform)
 		: _mesh(mesh), _material(material), _transform(transform)

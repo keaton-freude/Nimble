@@ -7,11 +7,11 @@
 void DiffuseShader::SetDiffuseTexture(shared_ptr<Texture> texture)
 {
 	auto& comps = this->GetComponents();
-	auto ptr = static_cast<DiffuseShaderComponent*>(_shaderComponentManager.GetComponents()[2].get());
+	auto ptr = static_cast<DiffuseShaderComponent*>(comps[2].get());
 	ptr->SetTexture(texture);
 }
 
-void DiffuseShader::GetPolygonLayout(shared_ptr<D3D11_INPUT_ELEMENT_DESC>& desc, unsigned& numElements)
+void DiffuseShader::GetPolygonLayout(shared_ptr<D3D11_INPUT_ELEMENT_DESC>& desc, unsigned int& numElements)
 {
 	numElements = 3;
 

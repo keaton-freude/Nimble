@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include <DirectXColors.h>
 
 Mesh::Mesh()
 {
@@ -110,7 +111,7 @@ shared_ptr<Mesh> Mesh::CreateFromHeightmap(D3DDevice device, MemoryHeightmap& me
 
 void Mesh::LoadFromHeightmap(D3DDevice device, MemoryHeightmap& mem_heightmap)
 {
-	vector<TerrainVertex> vertices((mem_heightmap.GetWidth() + 1) * (mem_heightmap.GetHeight() + 1));
+	vector<TileVertex> vertices((mem_heightmap.GetWidth() + 1) * (mem_heightmap.GetHeight() + 1));
 	vector<unsigned long> indices(mem_heightmap.GetWidth() * 6 * mem_heightmap.GetHeight());
 	//_positionVertices.reserve((mem_heightmap.GetWidth() + 1) * (mem_heightmap.GetHeight() + 1));
 	_triangles.resize(mem_heightmap.GetWidth() * mem_heightmap.GetHeight() * 2);
@@ -140,7 +141,7 @@ void Mesh::LoadFromHeightmap(D3DDevice device, MemoryHeightmap& mem_heightmap)
 		}
 	}
 
-	Load<TerrainVertex>(device, mem_heightmap.GetVertexField()->GetVertices(), indices, true);
+	Load<TileVertex>(device, mem_heightmap.GetVertexField()->GetVertices(), indices, true);
 
 	//unsigned int i = 0;
 	//for (const auto& vert : mem_heightmap.GetVertexField()->GetVertices())

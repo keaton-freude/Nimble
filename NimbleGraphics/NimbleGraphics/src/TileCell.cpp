@@ -1,13 +1,13 @@
 #pragma once
-#include "TerrainCell.h"
+#include "TileCell.h"
 
-TerrainCell::TerrainCell(TerrainVertex& upperLeft, TerrainVertex& upperRight, TerrainVertex& bottomLeft, TerrainVertex& bottomRight)
+TileCell::TileCell(TileVertex& upperLeft, TileVertex& upperRight, TileVertex& bottomLeft, TileVertex& bottomRight)
 	: data(upperLeft, upperRight, bottomLeft, bottomRight)
 {
 }
 
 /* This face is upperLeft, upperRight1, bottomLeft1 */
-void TerrainCell::UpdateFaceNormal1()
+void TileCell::UpdateFaceNormal1()
 {
 	Vector3 P1 = data.upperLeft.position;
 	Vector3 P2 = data.upperRight.position;
@@ -20,7 +20,7 @@ void TerrainCell::UpdateFaceNormal1()
 }
 
 /* This face is bottomLeft, upperRight2, bottomRight2*/
-void TerrainCell::UpdateFaceNormal2()
+void TileCell::UpdateFaceNormal2()
 {
 	Vector3 P1 = data.bottomLeft.position;
 	Vector3 P2 = data.upperRight.position;
@@ -32,7 +32,7 @@ void TerrainCell::UpdateFaceNormal2()
 	FaceNormal2 = U.Cross(V);
 }
 
-void TerrainCell::ClearNormals()
+void TileCell::ClearNormals()
 {
 	data.upperLeft.normal = Vector3::Zero;
 	data.upperRight.normal = Vector3::Zero;
@@ -40,7 +40,7 @@ void TerrainCell::ClearNormals()
 	data.bottomLeft.normal = Vector3::Zero;
 }
 
-void TerrainCell::SetNormal()
+void TileCell::SetNormal()
 {
 	// Need to set the normals for all 4 of our Vertices
 	UpdateFaceNormal1();
@@ -54,7 +54,7 @@ void TerrainCell::SetNormal()
 	data.bottomRight.normal = FaceNormal2;
 }
 
-void TerrainCell::NormalizeNormals()
+void TileCell::NormalizeNormals()
 {
 	data.upperLeft.normal.Normalize();
 	data.upperRight.normal.Normalize();
@@ -62,17 +62,17 @@ void TerrainCell::NormalizeNormals()
 	data.bottomRight.normal.Normalize();
 }
 
-const Vector3& TerrainCell::GetFaceNormal1() const
+const Vector3& TileCell::GetFaceNormal1() const
 {
 	return FaceNormal1;
 }
 
-const Vector3& TerrainCell::GetFaceNormal2() const
+const Vector3& TileCell::GetFaceNormal2() const
 {
 	return FaceNormal2;
 }
 
-Vector3 TerrainCell::GetAveragePosition() const
+Vector3 TileCell::GetAveragePosition() const
 {
 	return data.GetAveragePosition();
 }

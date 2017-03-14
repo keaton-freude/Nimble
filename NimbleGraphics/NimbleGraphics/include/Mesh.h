@@ -4,7 +4,6 @@
 #include <memory>
 #include <vector>
 #include <wrl/client.h>
-#include <DirectXColors.h>
 #include "MemoryHeightmap.h"
 
 using DirectX::SimpleMath::Vector3;

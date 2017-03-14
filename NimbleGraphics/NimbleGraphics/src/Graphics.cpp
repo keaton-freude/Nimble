@@ -2,6 +2,7 @@
 #include "TileMaterial.h"
 #include "SamplerStateShaderComponent.h"
 #include "DiffuseMaterial.h"
+#include <DirectXColors.h>
 
 Graphics::Graphics()
     : _dt(0), _currentTime(0)
@@ -38,26 +39,23 @@ bool Graphics::Init(int screenWidth, int screenHeight, HWND hwnd, bool fullscree
 //    DebugLineManager::GetInstance().Load(_D3D.GetDevice());
 
 	vector<wstring> texture_paths = { NIMBLE_TEXTURE_W(grass1.tga), NIMBLE_TEXTURE_W(grass5.png), NIMBLE_TEXTURE_W(grass8.png), NIMBLE_TEXTURE_W(weird_texture.png) };
-    //tile = make_shared<Tile>();
 
 	renderSystem = std::make_shared<RenderSystem>(_D3D.GetDevice(), _D3D.GetDeviceContext());
-	shared_ptr<Texture> grassTexture = make_shared<Texture>(_D3D.GetDevice(), _D3D.GetDeviceContext(), NIMBLE_TEXTURE(grass5.tga));
+	//shared_ptr<Texture> grassTexture = make_shared<Texture>(_D3D.GetDevice(), _D3D.GetDeviceContext(), NIMBLE_TEXTURE(grass5.tga));
 
-	auto heightMapMaterial = std::make_shared<TileMaterial>(_D3D.GetDevice(), _D3D.GetDeviceContext(), texture_paths);
-	auto material = std::make_shared<DiffuseMaterial>(grassTexture);
+	//auto heightMapMaterial = std::make_shared<TileMaterial>(_D3D.GetDevice(), _D3D.GetDeviceContext(), texture_paths);
+	//auto material = std::make_shared<DiffuseMaterial>(grassTexture);
 
 	//shared_ptr<WVPShaderComponent> blah = make_shared<WVPShaderComponent>();
-	
-	
 
-	RenderObject renderObject(Mesh::CreateFromHeightmap(_D3D.GetDevice(), heightMapMaterial->GetHeightmap()), 
-		material, Transform(Vector3::Zero, Vector3::Zero, Vector3::One));
+	//RenderObject renderObject(Mesh::CreateFromHeightmap(_D3D.GetDevice(), heightMapMaterial->GetHeightmap()), 
+	//	material, Transform(Vector3::Zero, Vector3::Zero, Vector3::One));
 
-	renderSystem->AddObject(renderObject);
+	tile = std::make_shared<Tile>(16, 16, _D3D.GetDevice(), _D3D.GetDeviceContext(), texture_paths);
+
+	renderSystem->AddObject(tile->GetRenderObject());
     
-
     //terrain = make_shared<Terrain>(_D3D.GetDevice(), _D3D.GetDeviceContext(), 4, 4, texture_paths);
-	//tile = make_shared<Tile>(_D3D.GetDevice(), 64, 64, 0.25f);
     LOG_INFO("Graphics initialization complete.");
 
     return true;

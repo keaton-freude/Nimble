@@ -1,7 +1,9 @@
 #pragma once
 #include <vector>
 #include "DebugLineManager.h"
-#include "TerrainVertexField.h"
+#include "TileVertexField.h"
+#include "TileCell.h"
+#include "RayHit.h"
 
 namespace DirectX {
 	namespace SimpleMath {
@@ -19,7 +21,7 @@ public:
 	void CalculateTextureCoordinates();
 	void SmoothAdd(const Vector3& location, const float& radius, const float& intensity);
 	float GetHighestPoint() const;
-	std::vector<TerrainCell>& GetHeightmapData();
+	std::vector<TileCell>& GetHeightmapData();
 
 	Dimension GetWidth() const;
 	Dimension GetHeight() const;
@@ -41,13 +43,14 @@ public:
 	Dimension GetIndex( unsigned int chunk_y, unsigned int chunk_x, unsigned int chunk_width,
 						unsigned int chunk_height, unsigned int j, unsigned int i);
 
-	TerrainVertexField* GetVertexField();
+	TileVertexField* GetVertexField();
+	RayHit IsRayIntersectingVerts(const Ray& ray);
 
 private:
 	void CalculateHighestPoint();
 	float highest_point;
 	Dimension _width;
 	Dimension _height;
-	std::vector<TerrainCell> _heightmap;
-	TerrainVertexField _vertex_field;
+	std::vector<TileCell> _heightmap;
+	TileVertexField _vertex_field;
 };

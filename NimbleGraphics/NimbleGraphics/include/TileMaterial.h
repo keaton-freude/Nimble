@@ -1,7 +1,6 @@
 #pragma once
 #include "Material.h"
 #include "TileShader.h"
-#include "MemoryHeightmap.h"
 #include "Light.h"
 
 
@@ -15,12 +14,10 @@ public:
 	TileMaterial();
 
 	explicit TileMaterial(D3DDevice device, D3DDeviceContext deviceContext, vector<wstring> splatTextures);
-	MemoryHeightmap& GetHeightmap();
 	void Apply(D3DDeviceContext deviceContext) override;
 	//void Update()
 private:
 	shared_ptr<Texture> _texture;
-	MemoryHeightmap _heightmap;
 	//SplatMap _splatMap;
 	Light light;
 

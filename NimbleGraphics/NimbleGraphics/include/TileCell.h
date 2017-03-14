@@ -1,17 +1,17 @@
 #pragma once
-#include "TerrainVertex.h"
+#include "TileVertex.h"
 
 
 struct TerrainData
 {
-	TerrainVertex& upperLeft;
-	TerrainVertex& upperRight;
-	TerrainVertex& bottomLeft;
-	TerrainVertex& bottomRight;
+	TileVertex& upperLeft;
+	TileVertex& upperRight;
+	TileVertex& bottomLeft;
+	TileVertex& bottomRight;
 	Vector3 m_averagePosition;
 
-	TerrainData(TerrainVertex& upper_left, TerrainVertex& upper_right, TerrainVertex& bottom_left, 
-		TerrainVertex& bottom_right)
+	TerrainData(TileVertex& upper_left, TileVertex& upper_right, TileVertex& bottom_left, 
+		TileVertex& bottom_right)
 		: upperLeft(upper_left), upperRight(upper_right), bottomLeft(bottom_left), bottomRight(bottom_right)
 	{
 		auto vectorSum = upperLeft.position + upperRight.position + bottomLeft.position + bottomRight.position;
@@ -23,20 +23,18 @@ struct TerrainData
 	{
 		return m_averagePosition;
 	}
-
-
 };
 
-class TerrainCell
+class TileCell
 {
 public:
 	TerrainData data;
 	Vector3 FaceNormal1;
 	Vector3 FaceNormal2;
 
-	// TerrainData must be initialized with TerrainVertex, so we can't allow default construction
-	TerrainCell() = delete;
-	TerrainCell(TerrainVertex& upperLeft, TerrainVertex& upperRight, TerrainVertex& bottomLeft, TerrainVertex& bottomRight);
+	// TerrainData must be initialized with TileVertex, so we can't allow default construction
+	TileCell() = delete;
+	TileCell(TileVertex& upperLeft, TileVertex& upperRight, TileVertex& bottomLeft, TileVertex& bottomRight);
 
 	/* This face is upperLeft, upperRight1, bottomLeft1 */
 	void UpdateFaceNormal1();

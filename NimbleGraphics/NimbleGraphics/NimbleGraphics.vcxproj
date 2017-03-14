@@ -51,20 +51,22 @@
     <ClInclude Include="include\RenderObject.h" />
     <ClInclude Include="include\RenderSystem.h" />
     <ClInclude Include="include\SamplerStateShaderComponent.h" />
+    <ClInclude Include="include\SceneGraph.h" />
     <ClInclude Include="include\ShaderComponentManager.h" />
     <ClInclude Include="include\Singleton.h" />
     <ClInclude Include="include\SplatMap.h" />
     <ClInclude Include="include\SplatMapShaderComponent.h" />
     <ClInclude Include="include\spline.h" />
-    <ClInclude Include="include\TerrainCell.h" />
+    <ClInclude Include="include\TileCell.h" />
     <ClInclude Include="include\TerrainChunk.h" />
     <ClInclude Include="include\RayHit.h" />
     <ClInclude Include="include\ShaderManager.h" />
     <ClInclude Include="include\Structs.h" />
     <ClInclude Include="include\Terrain.h" />
     <ClInclude Include="include\TerrainMesh.h" />
-    <ClInclude Include="include\TerrainVertex.h" />
-    <ClInclude Include="include\TerrainVertexField.h" />
+    <ClInclude Include="include\TileMap.h" />
+    <ClInclude Include="include\TileVertex.h" />
+    <ClInclude Include="include\TileVertexField.h" />
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\TextureArray.h" />
     <ClInclude Include="include\Tile.h" />
@@ -89,11 +91,12 @@
     <None Include="TileShader.vs" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="src\LightShaderComponent.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\SceneGraph.cpp" />
     <ClCompile Include="src\ShaderComponentManager.cpp" />
     <ClCompile Include="src\SplatMapShaderComponent.cpp" />
-    <ClCompile Include="src\TerrainCell.cpp" />
+    <ClCompile Include="src\TileCell.cpp" />
     <ClCompile Include="src\Tile.cpp" />
     <ClCompile Include="src\BasicShader.cpp" />
     <ClCompile Include="src\Camera.cpp" />
@@ -121,7 +124,7 @@
     <ClCompile Include="src\SamplerStateShaderComponent.cpp" />
     <ClCompile Include="src\ShaderManager.cpp" />
     <ClCompile Include="src\SplatMap.cpp" />
-    <ClCompile Include="src\TerrainVertexField.cpp" />
+    <ClCompile Include="src\TileVertexField.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\TextureArray.cpp" />
     <ClCompile Include="src\TileMaterial.cpp" />

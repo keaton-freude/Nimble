@@ -23,14 +23,12 @@ public:
 	~Terrain();
 
 	void Load(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext);
-
 	void Draw(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext,
 	          const Matrix& viewMatrix, const Matrix& projectionMatrix, const Light& light, const Frustum& frustum);
 	void SmoothHeightmapAdd(const Vector3& location, const float& radius, const float& intensity, ComPtr<ID3D11DeviceContext> deviceContext,
 	                        ComPtr<ID3D11Device> device);
 
 	void SplatTexture(D3DDevice device, D3DDeviceContext deviceContext, Vector3 location, float radius, int intensity, int texture_number);
-
 	RayHit IsRayIntersectingTerrain(const Ray& r) const;
 
 	int GetVertexCount() const

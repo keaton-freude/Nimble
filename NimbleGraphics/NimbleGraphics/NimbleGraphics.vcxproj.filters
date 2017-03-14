@@ -82,6 +82,18 @@
     <Filter Include="Header Files\Rendering\Materials">
       <UniqueIdentifier>{2374f13c-ebd2-4b98-9ed3-34f8446fcfe5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Rendering">
+      <UniqueIdentifier>{4d1a7556-aeed-4440-9810-f2fb9ec4ef2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\Shaders">
+      <UniqueIdentifier>{6da4fbd8-d62b-42b1-acc6-29d977dafeab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\Materials">
+      <UniqueIdentifier>{da13829c-70e9-46a4-8bff-e1122861eebf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\Shaders\Components">
+      <UniqueIdentifier>{0c5c58b7-d79c-4940-9090-19fc35abca60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ShaderManager.h">
@@ -156,9 +168,6 @@
     <ClInclude Include="include\Singleton.h">
       <Filter>Header Files\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="include\TerrainVertexField.h">
-      <Filter>Header Files\Terrain</Filter>
-    </ClInclude>
     <ClInclude Include="include\Typedefs.h">
       <Filter>Header Files\Misc</Filter>
     </ClInclude>
@@ -167,12 +176,6 @@
     </ClInclude>
     <ClInclude Include="include\SplatMap.h">
       <Filter>Header Files\D3D</Filter>
-    </ClInclude>
-    <ClInclude Include="include\TerrainCell.h">
-      <Filter>Header Files\Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="include\TerrainVertex.h">
-      <Filter>Header Files\Terrain</Filter>
     </ClInclude>
     <ClInclude Include="include\D3D11Cache.h">
       <Filter>Header Files\Graphics</Filter>
@@ -245,6 +248,21 @@
     </ClInclude>
     <ClInclude Include="include\TileShader.h">
       <Filter>Header Files\Rendering\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SceneGraph.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TileCell.h">
+      <Filter>Header Files\Tilemap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TileVertex.h">
+      <Filter>Header Files\Tilemap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TileVertexField.h">
+      <Filter>Header Files\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TileMap.h">
+      <Filter>Header Files\Tilemap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -335,9 +353,6 @@
     <ClCompile Include="src\ParticleSystem.cpp">
       <Filter>Source Files\Particles</Filter>
     </ClCompile>
-    <ClCompile Include="src\TerrainVertexField.cpp">
-      <Filter>Source Files\Terrain</Filter>
-    </ClCompile>
     <ClCompile Include="src\TextureArray.cpp">
       <Filter>Source Files\D3D</Filter>
     </ClCompile>
@@ -350,52 +365,58 @@
     <ClCompile Include="src\Material.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\RenderSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\RenderObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TileMaterial.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\BasicShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\DiffuseShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\DiffuseShaderComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SamplerStateShaderComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\DiffuseMaterial.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Tile.cpp">
       <Filter>Source Files\Tilemap</Filter>
     </ClCompile>
-    <ClCompile Include="src\WVPShaderComponent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\RenderObject.cpp">
+      <Filter>Source Files\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="src\LightShaderComponent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\RenderSystem.cpp">
+      <Filter>Source Files\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="src\SplatMapShaderComponent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Mesh.cpp">
+      <Filter>Source Files\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="src\ShaderComponentManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\DiffuseMaterial.cpp">
+      <Filter>Source Files\Rendering\Materials</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\TileMaterial.cpp">
+      <Filter>Source Files\Rendering\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BasicShader.cpp">
+      <Filter>Source Files\Rendering\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DiffuseShader.cpp">
+      <Filter>Source Files\Rendering\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="src\TileShader.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Rendering\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="src\TerrainCell.cpp">
+    <ClCompile Include="src\DiffuseShaderComponent.cpp">
+      <Filter>Source Files\Rendering\Shaders\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LightShaderComponent.cpp">
+      <Filter>Source Files\Rendering\Shaders\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SamplerStateShaderComponent.cpp">
+      <Filter>Source Files\Rendering\Shaders\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SplatMapShaderComponent.cpp">
+      <Filter>Source Files\Rendering\Shaders\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WVPShaderComponent.cpp">
+      <Filter>Source Files\Rendering\Shaders\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShaderComponentManager.cpp">
+      <Filter>Source Files\Rendering\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneGraph.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TileCell.cpp">
+      <Filter>Source Files\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TileVertexField.cpp">
       <Filter>Source Files\Terrain</Filter>
     </ClCompile>
   </ItemGroup>
