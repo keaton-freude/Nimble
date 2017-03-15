@@ -17,18 +17,18 @@ class TileVertexField
 {
 public:
 	TileVertexField();
-	TileVertexField(Dimension width, Dimension height, float resolution);
+	TileVertexField(unsigned int width, unsigned int height, float resolution);
 	~TileVertexField();
 
 	std::vector<TileVertex>& GetVertices();
 
-	Dimension GetWidth() const;
-	Dimension GetHeight() const;
+	unsigned int GetWidth() const;
+	unsigned int GetHeight() const;
 	TileVertex& GetVert(int i, int j);
-	Dimension GetVertIndex(int i, int j) const;
+	unsigned int GetVertIndex(int i, int j) const;
 
 private:
 	std::vector<TileVertex> _vertices;
-	Dimension width;
-	Dimension height;
+	unsigned int width;
+	unsigned int height;
 };

@@ -121,9 +121,9 @@ void Mesh::LoadFromHeightmap(D3DDevice device, MemoryHeightmap& mem_heightmap)
 	auto p_map = mem_heightmap.GetVertexField()->GetVertices();
 
 	// indices
-	for (auto j = 0; j < height; ++j)
+	for (unsigned int j = 0; j < height; ++j)
 	{
-		for (auto i = 0; i < width; ++i)
+		for (unsigned int i = 0; i < width; ++i)
 		{
 			auto bottomLeft = (j * (height + 1)) + i;
 			auto bottomRight = (j * (height + 1)) + (i + 1);
@@ -151,9 +151,9 @@ void Mesh::LoadFromHeightmap(D3DDevice device, MemoryHeightmap& mem_heightmap)
 	auto& data = mem_heightmap.GetHeightmapData();
 
 	index = 0;
-	for (auto j = 0; j < height; ++j)
+	for (unsigned int j = 0; j < height; ++j)
 	{
-		for (auto i = 0; i < width; ++i)
+		for (unsigned int i = 0; i < width; ++i)
 		{
 			auto& cell = data[j * height + i];
 

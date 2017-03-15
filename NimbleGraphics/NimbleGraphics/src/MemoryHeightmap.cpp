@@ -107,17 +107,17 @@ std::vector<TileCell>& MemoryHeightmap::GetHeightmapData()
 	return _heightmap;
 }
 
-Dimension MemoryHeightmap::GetWidth() const
+unsigned int MemoryHeightmap::GetWidth() const
 {
 	return _width;
 }
 
-Dimension MemoryHeightmap::GetHeight() const
+unsigned int MemoryHeightmap::GetHeight() const
 {
 	return _height;
 }
 
-void MemoryHeightmap::AddImpl(Dimension index, Vector3& normal, int faces)
+void MemoryHeightmap::AddImpl(unsigned int index, Vector3& normal, int faces)
 {
 	auto& cell = _heightmap[index];
 	if (faces == 1)
@@ -131,7 +131,7 @@ void MemoryHeightmap::AddImpl(Dimension index, Vector3& normal, int faces)
 	}
 }
 
-void MemoryHeightmap::AddDown(Dimension i, Dimension j, Vector3& normal, int faces)
+void MemoryHeightmap::AddDown(unsigned int i, unsigned int j, Vector3& normal, int faces)
 {
 	if (j != 0)
 	{
@@ -141,7 +141,7 @@ void MemoryHeightmap::AddDown(Dimension i, Dimension j, Vector3& normal, int fac
 	}
 }
 
-void MemoryHeightmap::AddLeft(Dimension i, Dimension j, Vector3& normal, int faces)
+void MemoryHeightmap::AddLeft(unsigned int i, unsigned int j, Vector3& normal, int faces)
 {
 	if (i != 0)
 	{
@@ -151,7 +151,7 @@ void MemoryHeightmap::AddLeft(Dimension i, Dimension j, Vector3& normal, int fac
 	}
 }
 
-void MemoryHeightmap::AddRight(Dimension i, Dimension j, Vector3& normal, int faces)
+void MemoryHeightmap::AddRight(unsigned int i, unsigned int j, Vector3& normal, int faces)
 {
 	if (i < (_width - 1))
 	{
@@ -160,7 +160,7 @@ void MemoryHeightmap::AddRight(Dimension i, Dimension j, Vector3& normal, int fa
 	}
 }
 
-void MemoryHeightmap::AddUp(Dimension i, Dimension j, Vector3& normal, int faces)
+void MemoryHeightmap::AddUp(unsigned int i, unsigned int j, Vector3& normal, int faces)
 {
 	if (j < (_height - 1))
 	{
@@ -169,7 +169,7 @@ void MemoryHeightmap::AddUp(Dimension i, Dimension j, Vector3& normal, int faces
 	}
 }
 
-void MemoryHeightmap::AddBottomLeft(Dimension i, Dimension j, Vector3& normal, int faces)
+void MemoryHeightmap::AddBottomLeft(unsigned int i, unsigned int j, Vector3& normal, int faces)
 {
 	if (i != 0 && j != 0)
 	{
@@ -179,7 +179,7 @@ void MemoryHeightmap::AddBottomLeft(Dimension i, Dimension j, Vector3& normal, i
 	}
 }
 
-void MemoryHeightmap::AddBottomRight(Dimension i, Dimension j, Vector3& normal, int faces)
+void MemoryHeightmap::AddBottomRight(unsigned int i, unsigned int j, Vector3& normal, int faces)
 {
 	if (j != 0 && i < (_width - 1))
 	{
@@ -189,7 +189,7 @@ void MemoryHeightmap::AddBottomRight(Dimension i, Dimension j, Vector3& normal, 
 	}
 }
 
-void MemoryHeightmap::AddUpperLeft(Dimension i, Dimension j, Vector3& normal, int faces)
+void MemoryHeightmap::AddUpperLeft(unsigned int i, unsigned int j, Vector3& normal, int faces)
 {
 	if (i != 0 && j < (_height - 1))
 	{
@@ -199,7 +199,7 @@ void MemoryHeightmap::AddUpperLeft(Dimension i, Dimension j, Vector3& normal, in
 	}
 }
 
-void MemoryHeightmap::AddUpperRight(Dimension i, Dimension j, Vector3& normal, int faces)
+void MemoryHeightmap::AddUpperRight(unsigned int i, unsigned int j, Vector3& normal, int faces)
 {
 	if (j < (_height - 1) && i < (_width - 1))
 	{
@@ -213,9 +213,9 @@ bool MemoryHeightmap::CalculateNormalsDifferently(Vector3 position, float radius
 {
 	// Optimization: Only re-calculate normals if the cell is within Position + Radius + Buffer
 
-	for (auto j = 0; j < _height; ++j)
+	for (unsigned int j = 0; j < _height; ++j)
 	{
-		for (auto i = 0; i < _width; ++i)
+		for (unsigned int i = 0; i < _width; ++i)
 		{
 			auto index = j * _height + i;
 
@@ -231,9 +231,9 @@ bool MemoryHeightmap::CalculateNormalsDifferently(Vector3 position, float radius
 		}
 	}
 
-	for (auto j = 0; j < _height; ++j)
+	for (unsigned int j = 0; j < _height; ++j)
 	{
-		for (auto i = 0; i < _width; ++i)
+		for (unsigned int i = 0; i < _width; ++i)
 		{
 			auto index = j * _height + i;
 
@@ -285,7 +285,7 @@ bool MemoryHeightmap::CalculateNormalsDifferently(Vector3 position, float radius
 	return true;
 }
 
-Dimension MemoryHeightmap::GetIndex(unsigned int chunk_y, unsigned int chunk_x, unsigned int chunk_width, unsigned int chunk_height, unsigned int j, unsigned int i)
+unsigned int MemoryHeightmap::GetIndex(unsigned int chunk_y, unsigned int chunk_x, unsigned int chunk_width, unsigned int chunk_height, unsigned int j, unsigned int i)
 {
 	/* For this function we assume that the VertexField is partioned like such:
 	 
@@ -306,7 +306,7 @@ Dimension MemoryHeightmap::GetIndex(unsigned int chunk_y, unsigned int chunk_x, 
 
 	// We need an index which points to the first cell
 	// of a given chunk based on chunk_y, chunk_x, and their dimensions
-	Dimension base_index = (chunk_x * chunk_width) + (chunk_y * (chunk_height)) * (_height + 1);
+	unsigned int base_index = (chunk_x * chunk_width) + (chunk_y * (chunk_height)) * (_height + 1);
 
 	// Next, we can use i and j to select the element within our grid
 	// remembering that to move up a row, we must consider the entire height
@@ -322,7 +322,7 @@ TileVertexField* MemoryHeightmap::GetVertexField()
 
 RayHit MemoryHeightmap::IsRayIntersectingVerts(const Ray& ray)
 {	
-	for (int i = 0; i < _height * _width; ++i)
+	for (unsigned int i = 0; i < _height * _width; ++i)
 	{
 	    // every cell has 2 triangles
 	    auto& current_cell = _heightmap[i];

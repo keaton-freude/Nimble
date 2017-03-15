@@ -4,7 +4,7 @@ Tile::Tile(unsigned int width, unsigned int height, D3DDevice device, D3DDeviceC
 	: _heightmap(width, height, 1.0f), _material(std::make_shared<TileMaterial>(device, context, texture_paths)), _drawable(Mesh::CreateFromHeightmap(device, _heightmap)),
 	_renderObject(_drawable, _material, Transform(Vector3::Zero, Vector3::Zero, Vector3::One)), _boundingBox()
 {
-	BoundingBox::CreateFromPoints(_boundingBox, Vector3(0.0f, 0.0f, 0.0f), Vector3(_heightmap.GetWidth(), 1.0f, height));
+	BoundingBox::CreateFromPoints(_boundingBox, Vector3(0.0f, 0.0f, 0.0f), Vector3(static_cast<float>(_heightmap.GetWidth()), 1.0f, static_cast<float>(height)));
 }
 
 size_t Tile::GetWidth() const
